@@ -4,23 +4,26 @@ import os
 import networkx as nx
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
+import re
 
 
 # Set up Clang library and OpenAI API
-clang.cindex.Config.set_library_file("/usr/lib/llvm-10/lib/libclang.so.1")
+clang.cindex.Config.set_library_file("/opt/LLVM-17/lib/libclang.so")
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
+client = openai.OpenAI()
 
 cfg = nx.DiGraph()  # CFG graph
 allocations, freed_variables = {}, {}
+free_arguments = set()
 
 def load_dangerous_functions(file_path="criticalFunc.txt"):
     dangerous_functions = []
     try:
         with open(file_path, "r") as file:
             dangerous_functions = [line.strip() for line in file if line.strip()]
-        print(f"Loaded dangerous functions: {dangerous_functions}")
+        #print(f"Loaded dangerous functions: {dangerous_functions}")
     except FileNotFoundError:
         print(f"Warning: Dangerous functions file '{file_path}' not found.")
     return dangerous_functions
@@ -33,27 +36,38 @@ def analyze_code(file_path):
     analyze_ast(translation_unit.cursor)
 
 def analyze_ast(node):
-    if node.kind == clang.cindex.CursorKind.FUNCTION_DECL:
+    if node.kind == clang.cindex.CursorKind.CALL_EXPR:
         if node.spelling in DANGEROUS_FUNCTIONS:
             context_code = get_context_code(node)
             gpt_response = analyze_with_llm(node.spelling, context_code)
-            print(f"LLM Analysis for {node.spelling}:\n{gpt_response}")
+            print(f"\nLLM Analysis for {node.spelling}:\n{gpt_response}")
     for child in node.get_children():
         analyze_ast(child)
 
-def get_context_code(node, context_radius=3):
+def get_context_code(node, context_radius=2):
     start_line, end_line = max(0, node.location.line - context_radius), node.location.line + context_radius
     with open(node.location.file.name, 'r') as f:
         return ''.join(f.readlines()[start_line:end_line])
 
 def analyze_with_llm(function_name, context_code):
-    prompt = f"Analyze the following code:\n\nFunction: {function_name}\n\nCode:\n{context_code}"
+    prompt = f"""
+    Analyze the following code excerpt with a focus on the specific use of the function '{function_name}' in its immediate context. Provide a concise output that addresses:
+
+    1. *Contextual Issues*: Identify any specific bugs, security risks, or vulnerabilities associated with the current use of '{function_name}' here. Do not include general issues unless directly relevant to this use, and avoid giving corrected code.
+    2. *Context-Based Recommendations*: Give a brief recommendation only if improvements or safety checks are necessary. If the usage is potentially safe in this context, indicate it as 'potentially safe' without further explanation.
+
+    Function Name: {function_name}
+
+    Code Context:
+    {context_code}
+    """
     try:
-        response = openai.Completion.create(engine="gpt-4", prompt=prompt, max_tokens=150, temperature=0.3)
-        return response.choices[0].text.strip()
+        response = client.chat.completions.create(model="gpt-4o", messages=[{"role": "user", "content": prompt}], max_tokens=150, temperature=0.3)
+        return response.choices[0].message.content
     except Exception as e:
         print("Error calling GPT API:", e)
         return "Analysis could not be performed."
+
 
 def analyze_code_with_memory_checks(file_path):
     index = clang.cindex.Index.create()
@@ -61,39 +75,93 @@ def analyze_code_with_memory_checks(file_path):
     analyze_ast_with_memory(translation_unit.cursor)
 
 def analyze_ast_with_memory(node):
-    global allocations, freed_variables
+    global allocations, freed_variables, free_arguments
     if node.kind == clang.cindex.CursorKind.CALL_EXPR:
         function_name = node.spelling
         if function_name in ["malloc", "calloc", "realloc"]:
             variable_name = get_assigned_variable(node)
             if variable_name:
-                allocations[variable_name] = node.location.line
-                freed_variables.pop(variable_name, None)
+                if variable_name not in allocations:
+                    allocations[variable_name] = node.location.line
+                else:
+                    print(f"Double Allocations of variable '{variable_name}' at line {node.location.line}")
+                if variable_name in freed_variables:
+                    del freed_variables[variable_name]
         elif function_name == "free":
             variable_name = get_argument_variable(node)
             if variable_name in allocations:
-                if variable_name in freed_variables:
-                    print(f"Double-Free Warning: '{variable_name}' freed again at line {node.location.line}")
-                else:
-                    freed_variables[variable_name] = node.location.line
-                    del allocations[variable_name]
+                freed_variables[variable_name] = node.location.line
+                del allocations[variable_name]
+            elif variable_name in freed_variables:
+                print(f"Double-Free Warning: '{variable_name}' freed again at line {node.location.line}")
             else:
                 print(f"Warning: Attempt to free unallocated variable '{variable_name}' at line {node.location.line}")
     elif node.kind == clang.cindex.CursorKind.DECL_REF_EXPR:
-        if node.spelling in freed_variables:
-            print(f"Use-After-Free detected: '{node.spelling}' at line {freed_variables[node.spelling]}")
+        variable_name = node.spelling 
+        line = get_exact_line(node)
+        if variable_name in freed_variables and "free(" not in line:
+            print(f"Use-After-Free detected: '{variable_name}' at line {node.location.line}, originally freed at line {freed_variables[variable_name]}")
+
     for child in node.get_children():
         analyze_ast_with_memory(child)
 
 def get_assigned_variable(node):
-    parent = node.semantic_parent
-    return parent.spelling if parent and parent.kind == clang.cindex.CursorKind.VAR_DECL else None
+    file_path = node.location.file.name
+    line_number = node.location.line
+    
+    try:
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+            code_line = lines[line_number - 1].strip()  # line_number is 1-based index
+
+            match = re.match(r'''
+                ^\s*                                  # Optional leading whitespace
+                (?:[a-zA-Z_][a-zA-Z0-9_]*\s+)?        # Optional data type (e.g., "int")
+                (?:\*+)?                              # Optional pointer asterisk(s) (e.g., "*")
+                ([a-zA-Z_][a-zA-Z0-9_]*)              # Variable name
+                \s*=\s*                               # Assignment operator with optional spaces
+                .+;                                   # Rest of the statement ending with a semicolon
+            ''', code_line, re.VERBOSE)
+
+            if match:
+                variable_name = match.group(1)  
+                print(f"Assigned variable: {variable_name}")
+                return variable_name
+            else:
+                print("No variable assignment found.")
+                return None
+
+    except Exception as e:
+        print(f"Error reading file {file_path}: {e}")
+        return None
+
+def get_exact_line(node):
+    file_path = node.location.file.name
+    line_number = node.location.line
+    
+    try:
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+            code_line = lines[line_number - 1].strip()  # line_number is 1-based index
+            return code_line
+
+    except Exception as e:
+        print(f"Error reading file {file_path}: {e}")
+        return None
+
+
 
 def get_argument_variable(node):
-    for arg in node.get_arguments():
-        if arg.kind == clang.cindex.CursorKind.DECL_REF_EXPR:
-            return arg.spelling
-    return None
+    arguments = list(node.get_arguments()) 
+    if not arguments:
+        return None
+
+    arg = arguments[0]  
+    if arg.type.kind != clang.cindex.TypeKind.POINTER:
+        print(f"Incompatible type: {arg.type.kind}. Expected a pointer.")
+        return None
+
+    return arg.spelling 
 
 def analyze_code_with_cfg(file_path):
     index = clang.cindex.Index.create()
@@ -126,8 +194,8 @@ def plot_cfg():
     nx.draw(cfg, pos, with_labels=True, labels=labels, node_size=3000, node_color='lightblue', font_size=10, font_weight='bold')
     plt.show()
 
-file_path = "vuln.c"
-analyze_code(file_path)
+file_path = "vuln2.c"
+#analyze_code(file_path)
 analyze_code_with_memory_checks(file_path)
-analyze_code_with_cfg(file_path)
-plot_cfg()
+#analyze_code_with_cfg(file_path)
+#plot_cfg()
