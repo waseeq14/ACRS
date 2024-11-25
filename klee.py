@@ -29,7 +29,7 @@ def preprocess_code_with_llm(source_code_path, llm):
     prompt = PromptTemplate(
         template=(
             "DONT GO AGAINST THE INSTRUCTIONS"
-            "You are tasked with making the following C/C++ code compatible with KLEE for symbolic execution. "
+            "You are tasked with making the following C/C++ code compatible with KLEE for symbolic execution. If there is no main() function,define one."
             "Without wrapping it in triple backticks or any formatting. Just output the plain code."
             "The goal is to identify vulnerabilities such as buffer overflows, use-after-free, integer overflows or other memory-related issues. "
             "Replace any user input mechanisms (e.g., scanf, fgets) or external data sources with symbolic variables using KLEE's APIs. "
