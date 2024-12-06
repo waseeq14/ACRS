@@ -7,7 +7,7 @@ from langchain.chains import LLMChain
 from dotenv import load_dotenv
 from langchain.schema.runnable import RunnablePassthrough, RunnableSequence
 import re
-
+from langchain.chat_models import ChatOpenAI
 
 def fix_klee_includes(code):
     lines = code.splitlines()
@@ -29,7 +29,8 @@ def preprocess_code_with_llm(source_code_path, llm):
     prompt = PromptTemplate(
         template=(
             "DONT GO AGAINST THE INSTRUCTIONS"
-            "You are tasked with making the following C/C++ code compatible with KLEE for symbolic execution. "
+            "You are tasked with making the following C/C++ code compatible with KLEE for symbolic execution. If there is no main() function,define one."
+            "Without wrapping it in triple backticks or any formatting. Just output the plain code."
             "The goal is to identify vulnerabilities such as buffer overflows, use-after-free, integer overflows or other memory-related issues. "
             "Replace any user input mechanisms (e.g., scanf, fgets) or external data sources with symbolic variables using KLEE's APIs. "
             "Remove all printf statements which include symbolic variables or any variable which is their result"
@@ -136,7 +137,7 @@ def parse_klee_output(klee_output_dir, llm):
 if __name__ == "__main__":
     load_dotenv()
     OpenAI.api_key = os.getenv("OPENAI_API_KEY")
-    llm = OpenAI()
+    llm = ChatOpenAI(model="gpt-4o", temperature=0)
 
     source_code_file = "uaf.c"
 
