@@ -5,6 +5,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import re
 from clang.cindex import Config, CursorKind, Index
+import subprocess
 
 
 # Set up Clang library and OpenAI API
@@ -54,13 +55,13 @@ def analyze_file_functions(file_path):
         print("No 'main' function found.\n")
 
     # Analyze remaining functions
-    print("\nA[*] nalyzing remaining functions:")
+    print("\n[*]Analyzing remaining functions:")
     for function_name, function_node in defined_functions.items():
         analyze_function(function_node, defined_functions, call_graph)
 
     # Display function call graph
     print("\n[*] Function Call Graph:")
-    display_call_graph(call_graph)
+    fcg = display_call_graph(call_graph)
 
 def analyze_function(function_node, defined_functions, call_graph):
     print(f"\nAnalyzing function '{function_node.spelling}'")
@@ -101,6 +102,7 @@ def analyze_function_recursive(node, call_graph, current_function):
 def analyze_code(file_path):
     index = clang.cindex.Index.create()
     translation_unit = index.parse(file_path)
+    
     analyze_ast(translation_unit.cursor)
 
 def analyze_ast(node):
@@ -152,7 +154,9 @@ def analyze_ast_with_memory(node):
                 if variable_name not in allocations:
                     allocations[variable_name] = node.location.line
                 else:
-                    print(f"Double Allocations of variable '{variable_name}' at line {node.location.line}")
+                    result = f"Double Allocations of variable '{variable_name}' at line {node.location.line}"
+                    print(result)
+                    return result
                 if variable_name in freed_variables:
                     del freed_variables[variable_name]
         elif function_name == "free":
@@ -161,15 +165,20 @@ def analyze_ast_with_memory(node):
                 freed_variables[variable_name] = node.location.line
                 del allocations[variable_name]
             elif variable_name in freed_variables:
-                print(f"Double-Free Warning: '{variable_name}' freed again at line {node.location.line}")
+                result = f"Double-Free Warning: '{variable_name}' freed again at line {node.location.line}"
+                print(result)
+                return result
             else:
-                print(f"Warning: Attempt to free unallocated variable '{variable_name}' at line {node.location.line}")
+                result = f"Warning: Attempt to free unallocated variable '{variable_name}' at line {node.location.line}"
+                print(result)
+                return result
     elif node.kind == clang.cindex.CursorKind.DECL_REF_EXPR:
         variable_name = node.spelling 
         line = get_exact_line(node)
         if variable_name in freed_variables and "free(" not in line:
-            print(f"Use-After-Free detected: '{variable_name}' at line {node.location.line}, originally freed at line {freed_variables[variable_name]}")
-
+            result = f"Use-After-Free detected: '{variable_name}' at line {node.location.line}, originally freed at line {freed_variables[variable_name]}"
+            print(result)
+            return result
     for child in node.get_children():
         analyze_ast_with_memory(child)
 
@@ -216,8 +225,6 @@ def get_exact_line(node):
     except Exception as e:
         print(f"Error reading file {file_path}: {e}")
         return None
-
-
 
 def get_argument_variable(node):
     arguments = list(node.get_arguments()) 
@@ -268,12 +275,97 @@ def display_call_graph(call_graph):
     Display the function call graph in a simple textual format.
     """
     for function, calls in call_graph.items():
-        print(f"{function} -> {', '.join(calls) if calls else 'None'}")
+        result = f"{function} -> {', '.join(calls) if calls else 'None'}"
+        print(result)
+        return result
 
+
+def remove_include_statements(file_path):
+    
+    with open(file_path, 'r') as read_file:
+        with open('temp.c', 'w') as temp_file:
+            pattern = re.compile(r'#include\s?<')
+            lines = read_file.readlines()
+
+            for line in lines:
+                if not pattern.match(line):
+                    temp_file.write(line)
+
+
+def sanitizer(file_path):
+    """
+    Compiles and runs a C file with Clang's Address Sanitizer (ASan) enabled,
+    then displays the output to the user.
+
+    :param file_path: Path to the C program file
+    """
+    # Temporary executable file name
+    
+
+    try:
+        # Compile the file with ASan enabled
+        compile_command = [
+            "clang", "-fsanitize=address", "-O1", "-fno-omit-frame-pointer","-g" ,file_path
+        ]
+        print(f"Compiling {file_path} with Address Sanitizer...")
+        subprocess.run(compile_command, check=True)
+
+        # Run the compiled program
+        print(f"Running {file_path} with Address Sanitizer...")
+        run_command = ["./a.out"]
+        sans = subprocess.run(run_command, check=True)
+        return sans
+
+    except subprocess.CalledProcessError as e:
+        print(f"Error during compilation or execution: {e}")
+        return
+
+    finally:
+        # Cleanup: Remove the compiled executable
+        print("HABSHI")
+        return
+
+def final_analysis(file_path,memory,functions,sanitizer):
+    
+    with open(file_path, 'r') as file:
+        # Read the contents of the file
+        file_contents = file.read()
+        print(file_contents)
+
+    prompt = f"""
+    Analyze the given source code\n {file_contents} \n
+    To identify vulnerabilities related to memory management and potential privilege escalation risks:
+    You're given the following details
+    1.memory details: \n{memory}\n
+    2.function call graph details: \n{functions}\n
+    3.memory sanitizer info: \n{sanitizer}\n
+
+    based on this information
+    Identity:
+
+    1.Name of Vulnerability or Vulnerabilities in form e.g (bufferoverflow, read after write) etc
+    2.How can each lead to privledge escalation
+    3.Remediation techniques
+
+    Give very breif answers and be direct
+    
+    """
+    try:
+        response = client.chat.completions.create(model="gpt-4o", messages=[{"role": "user", "content": prompt}], max_tokens=150, temperature=0.3)
+        print(response.choices[0].message.content)
+        
+    except Exception as e:
+        print("Error calling GPT API:", e)
+        return "Analysis could not be performed."
 
 file_path = "doublefree.c"
 #analyze_code(file_path)
-analyze_code_with_memory_checks(file_path)
-analyze_file_functions(file_path)
+
+remove_include_statements(file_path)
+mem = analyze_code_with_memory_checks("temp.c")
+fcg = analyze_file_functions("temp.c")
+sani = sanitizer(file_path)
+final_analysis(file_path,mem,fcg,sani)
+
 #analyze_code_with_cfg(file_path)
 #plot_cfg()
