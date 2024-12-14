@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import styles from './styles.module.css'
 import { useNavigate } from 'react-router'
+
+import styles from './styles.module.css'
 
 export default function Loading() {
   const navigate = useNavigate()
@@ -33,7 +34,7 @@ export default function Loading() {
     <div className={styles.container}>
       <img
         className={styles.logo}
-        src='/static/images/logo.png'
+        src='/static/images/logo_transparent.png'
         alt='ACRS Logo'
       />
 
