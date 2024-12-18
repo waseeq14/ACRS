@@ -1,0 +1,152 @@
+import os
+import subprocess
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
+from langchain.chat_models import ChatOpenAI
+from dotenv import load_dotenv
+
+
+class KleeProcessor2:
+    def __init__(self, source_code_path, llm):
+        self.source_code_path = source_code_path
+        self.llm = llm
+        self.segment_files = []  # To store paths of KLEE-compatible code segments
+        self.bc_files = []       # To store paths of LLVM IR files
+
+    def extract_vulnerable_segments(self):
+        """Extract potentially vulnerable segments from large code using LLM."""
+        with open(self.source_code_path, "r") as file:
+            source_code = file.read()
+
+        print("Extracting potentially vulnerable segments...")
+        prompt = PromptTemplate(
+            template=(
+                "You are tasked with analyzing the following large C/C++ code for symbolic execution with KLEE."
+                "Identify all potentially vulnerable functions or regions. Examples include memory-related issues like "
+                "buffer overflows, use-after-free, or integer overflows. "
+                "For each vulnerable region, extract only the relevant function or code block. "
+                "Remember, we want to avoid path explosion, only test for functions that seem vulnerable to memory-related vulnerabilities."
+                "Output each segment as a separate block, only include CODE, no comments. "
+                "Dont change already initialized values in the code."
+                "The goal is to divide the code into small, testable pieces for KLEE. So that I can split them using split(\"###\")\n\n"
+                "Code:\n{source_code}\n\n"
+                "Extracted Vulnerable Segments:"
+            ),
+            input_variables=["source_code"]
+        )
+
+        llm_chain = LLMChain(llm=self.llm, prompt=prompt)
+        vulnerable_segments = llm_chain.run({"source_code": source_code})
+        vulnerable_segments = vulnerable_segments.split("###")  # Split segments by `###`
+
+        # Process each segment into KLEE-compatible code
+        for i, segment in enumerate(vulnerable_segments, start=1):
+            self.create_klee_compatible_code(segment, i)
+
+    def create_klee_compatible_code(self, segment, index):
+        """Convert an extracted code segment into KLEE-compatible format."""
+        prompt = PromptTemplate(
+            template=(
+                "You are tasked with converting the following C/C++ code segment into KLEE-compatible code for symbolic execution. "
+                "Ensure that:\n"
+                "1. A `main()` function is added to test this segment with symbolic inputs.\n"
+                "2. User input mechanisms are replaced with `klee_make_symbolic` calls.\n"
+                "3. Any print statements involving symbolic variables are removed or replaced with `klee_print_expr`.\n"
+                "4. The code includes `<klee/klee.h>`.\n"
+                "5. The code strictly adheres to KLEE compatibility.\n\n"
+                "6. DONT INCLUDE ANY COMMENTS, dont include any formatting, output as raw text."
+                "Segment:\n{segment}\n\n"
+                "KLEE-Compatible Code:"
+            ),
+            input_variables=["segment"]
+        )
+
+        llm_chain = LLMChain(llm=self.llm, prompt=prompt)
+        klee_code = llm_chain.run({"segment": segment}).replace("```c", "").replace("```", "").strip()
+
+        # Save the KLEE-compatible code to a file
+        output_path = f"segment_{index}_klee.c"
+        with open(output_path, "w") as output_file:
+            output_file.write(klee_code)
+        print(f"Segment {index} written to {output_path}")
+        self.segment_files.append(output_path)
+
+    def generate_llvm_ir_for_segments(self):
+        """Generate LLVM IR files for all KLEE-compatible code segments."""
+        for segment_file in self.segment_files:
+            bc_file = segment_file.replace(".c", ".bc")
+            clang_command = f"clang -emit-llvm -I /snap/klee/10/usr/local/include -g -fsanitize=signed-integer-overflow -fsanitize=undefined -fsanitize=signed-integer-overflow -c -o {bc_file} {segment_file}"
+            subprocess.run(clang_command, shell=True, check=True)
+            print(f"Generated LLVM bitcode for {segment_file}: {bc_file}")
+            self.bc_files.append(bc_file)
+
+    def run_klee_on_segments(self):
+        """Run KLEE on each LLVM IR file."""
+        klee_output_dir = "./klee-last"
+        for bc_file in self.bc_files:
+            klee_command = f"klee --libc=uclibc --posix-runtime {bc_file}"
+            print(f"Running KLEE on {bc_file}...")
+            subprocess.run(klee_command, shell=True, check=True)
+            print(f"KLEE execution completed for {bc_file}")
+            self.parse_klee_output(klee_output_dir)
+
+    def parse_klee_output(self, klee_output_dir):
+        """Parse KLEE output directory for test cases and errors."""
+        test_cases = []
+        error_files = [file for file in os.listdir(klee_output_dir) if file.endswith(".err")]
+
+        for err_file in error_files:
+            test_case_base = err_file.split(".")[0]
+
+            ktest_file = os.path.join(klee_output_dir, f"{test_case_base}.ktest")
+            err_file_path = os.path.join(klee_output_dir, err_file)
+
+            if os.path.exists(ktest_file):
+                try:
+                    ktest_output = subprocess.check_output(
+                        f"ktest-tool {ktest_file}", shell=True, text=True
+                    )
+
+                    with open(err_file_path, "r") as f:
+                        err_content = f.read()
+
+                    test_cases.append({
+                        "ktest_file": ktest_file,
+                        "err_file": err_file_path,
+                        "ktest_output": ktest_output,
+                        "err_content": err_content
+                    })
+                except subprocess.CalledProcessError as e:
+                    print(f"Error reading {ktest_file} or {err_file}: {e}")
+
+        if test_cases:
+            prompt = PromptTemplate(
+                template=(
+                    "You are analyzing KLEE error reports to identify vulnerabilities. "
+                    "For each error, provide a concise summary of the vulnerability, the test case name, and the input that caused it "
+                    "(check the input from ktest output given to you). For example:\n\n"
+                    "Vulnerability:\nTest Case Name:\nInput that triggered it:\n"
+                    "Do not write unnecessary details.\n\n"
+                    "Test Cases and Errors:\n{test_cases}"
+                ),
+                input_variables=["test_cases"]
+            )
+
+            formatted_test_cases = [
+                f"Test Case: {case['ktest_file']}\nInput: {case['ktest_output']}\nError: {case['err_content']}"
+                for case in test_cases
+            ]
+
+            llm_chain = LLMChain(llm=self.llm, prompt=prompt)
+            try:
+                summary = llm_chain.run({
+                    "test_cases": "\n\n".join(formatted_test_cases)
+                })
+                print("LLM Analysis:\n", summary)
+                with open('klee_output.txt', 'w') as llm_analysis_output:
+                    llm_analysis_output.write(summary)
+            except Exception as e:
+                print(f"Error during LLM analysis: {e}")
+
+
+
