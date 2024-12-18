@@ -1,0 +1,91 @@
+from langchain.prompts import PromptTemplate
+from langchain_openai import OpenAI
+from langchain.chains import LLMChain
+from langchain.chat_models import ChatOpenAI
+from dotenv import load_dotenv
+import os
+import csv
+from rapidfuzz import fuzz, process
+
+class ClassifyVuln:
+    def __init__(self, llm, sourceCode):
+        self.kleeFile = "klee_output.txt"
+        self.asanFile = "asan_analysis.txt"
+        self.rulesFile = "rules_analysis_results.csv"
+        self.llm = llm
+        self.vulnerabilities = None
+        self.matching_cwes = []
+        self.sourceCode = sourceCode
+
+    def getVulns(self):
+        try:
+            with open(self.kleeFile, "r") as file:
+                klee = file.read()
+        except FileNotFoundError:
+            klee = None
+            print(f"Error: File '{self.kleeFile}' not found.")
+
+        try:
+            with open(self.asanFile, "r") as file:
+                asan = file.read()
+        except FileNotFoundError:
+            asan = None
+            print(f"Error: File '{self.asanFile}' not found.")
+
+        try:
+            with open(self.rulesFile, "r") as file:
+                rules = file.read()
+        except FileNotFoundError:
+            rules = None
+            print(f"Error: File '{self.rulesFile}' not found.")
+
+        with open(self.sourceCode, "r") as file:
+            source_code_contents = file.read()
+        
+
+        prompt = PromptTemplate(
+            template=(
+                "The following are the results of various analysis tools for a piece of source code. "
+                "Your task is to analyze the results and list all potential vulnerabilities that are mentioned in each of these reports.\n\n"
+                "DO NOT ADD ANY EXTRA INFORMATION OTHER THAN THE ONE I TELL YOU TO ADD!"
+                "Here is the source code for you help: \n{sourceCode}\n"
+                "1st analysis:\n{output1}\n\n"
+                "2nd analysis:\n{output2}\n\n"
+                "3rd analysis:\n{output3}\n\n"
+                "Based on the above analysis, list all potential vulnerabilities in the form of a list."
+                "Incase of overflow vulnerability, check the source code given to you, and identify if it's stack-based buffer overflow, integer overflow or heap-based buffer overflow."
+                "Keep the name concise and generic"
+                "Your reply must be in the form:"
+                "Vulnerbilities Identified: vuln1,vuln2,vuln3..."
+
+            ),
+            input_variables=["output1","output2","output3","sourceCode"]
+        )
+
+        llm_chain = LLMChain(llm=self.llm, prompt=prompt)
+        self.vulnerabilities = llm_chain.run({"output1": klee, "output2": asan, "output3": rules, "sourceCode":source_code_contents})
+        return self.vulnerabilities
+
+    def getCWE(self):
+        _, vulnerabilities_part = self.vulnerabilities.split(":", 1)
+
+        vulnerabilities_list = [vuln.strip() for vuln in vulnerabilities_part.split(",")]
+
+        for vuln in vulnerabilities_list:
+            self.parseCSV(vuln)
+        
+        return self.matching_cwes
+
+    def parseCSV(self, keyword, threshold=80):
+        try:
+            print("Keyword: ",keyword)
+            with open("658.csv", mode='r', newline='', encoding='utf-8') as file:
+                reader = csv.DictReader(file)
+                for row in reader:
+                    # Apply fuzzy matching to the 'Name' column
+                    similarity = fuzz.partial_ratio(keyword.strip().lower(), row['Name'].strip().lower())
+                    if similarity >= threshold:
+                        if not row['CWE-ID'] in self.matching_cwes:
+                            self.matching_cwes.append((row['CWE-ID'], row['Name'], similarity))
+        except Exception as e:
+            print(f"An error occurred: {e}")
