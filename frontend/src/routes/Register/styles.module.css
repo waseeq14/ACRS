@@ -22,15 +22,17 @@
 }
 
 .headingText {
+  font-family: 'Jersey 20';
   margin: 0;
-  font-size: 36px;
+  font-size: 64px;
   color: white;
   font-weight: bold;
 }
 
 .subText {
+  font-family: 'Jersey 20';
   margin: 0;
-  font-size: 24px;
+  font-size: 36px;
   color: white;
   font-weight: bold;
 }
