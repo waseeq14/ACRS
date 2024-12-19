@@ -12,7 +12,11 @@ export default function Login() {
   const handleLoginSubmit = e => {
     e.preventDefault()
 
-    navigate('/dashboard')
+    if (username === 'admin' && password === 'admin') {
+      navigate('/dashboard')
+    } else {
+      alert('Invalid Credentials')
+    }
   }
 
   return (
