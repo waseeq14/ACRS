@@ -1,6 +1,7 @@
+import { NavLink, Outlet } from 'react-router'
 import styles from './styles.module.css'
 
-export default function Dashboard() {
+export default function Dashboard({ navigationLinks }) {
   return (
     <>
       <div className={styles.appbar}>
@@ -25,26 +26,21 @@ export default function Dashboard() {
       <div className={styles.sidebar}>
         <div className={styles.bar}></div>
         <ul>
-          <li>
-            <a href='#'>Vulnerability Assessment</a>
-          </li>
-          <li>
-            <a href='#'>Exploit Generation</a>
-          </li>
-          <li>
-            <a href='#'>Patch Suggestion</a>
-          </li>
-          <li>
-            <a href='#'>Pentester Mode</a>
-          </li>
-          <li>
-            <a href='#'>Reports</a>
-          </li>
+          {navigationLinks.map(link => (
+            <li>
+              <NavLink
+                className={({ isActive }) => (isActive ? styles.active : '')}
+                to={`/dashboard${link.path}`}
+              >
+                {link.name}
+              </NavLink>
+            </li>
+          ))}
         </ul>
       </div>
 
       <div className={styles.content}>
-        <h1>Dashboard</h1>
+        <Outlet />
       </div>
     </>
   )

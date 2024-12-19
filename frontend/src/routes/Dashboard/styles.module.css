@@ -82,6 +82,10 @@
   font-size: 1rem;
 }
 
+.sidebar ul li:has(a.active) {
+  background-color: #d03739;
+}
+
 .content {
   margin-left: 250px;
   padding: 2rem;
