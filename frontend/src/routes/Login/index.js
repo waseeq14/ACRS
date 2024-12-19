@@ -1,14 +1,18 @@
 import { useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 import styles from './styles.module.css'
 
 export default function Login() {
+  const navigate = useNavigate()
+
   const [username, setUsername] = useState()
   const [password, setPassword] = useState()
 
   const handleLoginSubmit = e => {
     e.preventDefault()
+
+    navigate('/dashboard')
   }
 
   return (

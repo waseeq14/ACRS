@@ -1,0 +1,89 @@
+.appbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #282828;
+  color: white;
+  padding: 0rem 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.appbar .appbarLeft {
+  display: flex;
+  align-items: center;
+}
+
+.appbar .logo {
+  height: 60px;
+  width: 60px;
+}
+
+.appbar .title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.appbar .menu {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.appbar .menu a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.appbar .userImg {
+  height: 48px;
+  width: 48px;
+}
+
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #282828;
+  color: white;
+  /* padding: 1rem; */
+  position: fixed;
+  top: 60px; /* Adjusted for app bar height */
+  left: 0;
+  overflow-y: auto;
+}
+
+.sidebar .bar {
+  height: 6px;
+
+  background: #d03739;
+}
+
+.sidebar ul {
+  list-style-type: none;
+
+  text-align: left;
+
+  margin-top: 1rem;
+}
+
+.sidebar ul li {
+  padding: 0.75rem 1rem;
+
+  margin: 0;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.content {
+  margin-left: 250px;
+  padding: 2rem;
+  margin-top: 60px; /* Adjusted for app bar height */
+}
