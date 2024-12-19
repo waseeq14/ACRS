@@ -1,0 +1,70 @@
+.cards {
+  display: flex;
+  gap: 1.5rem;
+
+  height: calc(100vh - 4rem - 60px);
+}
+
+.card {
+  text-align: left;
+  background-color: #2b2a28;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  flex: 1;
+}
+
+.card h2 {
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.card table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.card table th,
+.card table td {
+  background-color: #2b2a28;
+  color: white;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.card table th {
+  font-size: 18px;
+}
+
+.card textarea {
+  color: white;
+  width: 100%;
+  height: calc(100% - 4rem - 18px);
+  border: none;
+  background-color: transparent;
+  resize: none;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  padding: 0;
+  overflow-y: auto;
+}
+
+.card textarea:focus {
+  outline: none;
+}
+
+.card button {
+  background-color: #bb3537;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 18px;
+  border-radius: 10px;
+}
+
+.card p {
+  color: #555;
+}

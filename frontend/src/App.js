@@ -3,6 +3,7 @@ import Loading from './routes/Loading'
 import Login from './routes/Login'
 import Register from './routes/Register'
 import Dashboard from './routes/Dashboard'
+import DashboardHome from './routes/DashboardHome'
 import VulnerabilityAssessment from './routes/VulnerabilityAssessment'
 import ExploitGeneration from './routes/ExploitGeneration'
 import PatchSuggestion from './routes/PatchSuggestion'
@@ -12,6 +13,10 @@ import Reports from './routes/Reports'
 import './App.css'
 
 const navigationLinks = [
+  {
+    path: '',
+    name: 'Dashboard'
+  },
   {
     path: '/va',
     name: 'Vulnerability Assessment'
@@ -46,6 +51,7 @@ function App() {
             path='dashboard'
             element={<Dashboard navigationLinks={navigationLinks} />}
           >
+            <Route index element={<DashboardHome />} />
             <Route path='va' element={<VulnerabilityAssessment />} />
             <Route path='exploit' element={<ExploitGeneration />} />
             <Route path='patch' element={<PatchSuggestion />} />

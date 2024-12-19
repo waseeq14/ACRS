@@ -31,6 +31,7 @@ export default function Dashboard({ navigationLinks }) {
               <NavLink
                 className={({ isActive }) => (isActive ? styles.active : '')}
                 to={`/dashboard${link.path}`}
+                end
               >
                 {link.name}
               </NavLink>
