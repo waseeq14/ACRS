@@ -1,0 +1,3 @@
+Vulnerability: Out of bound pointer access in the function `read_array`.
+Test Case Name: vulnerability_analysis/klee-last/test000001.ktest
+Input that triggered it: Integer value 5 for the object named 'index'.

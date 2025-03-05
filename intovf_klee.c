@@ -16,10 +16,8 @@ int main() {
     int discount = calculate_discount(price, percentage);
 
     if (discount < 0) {
-        klee_print_expr("Invalid discount percentage.", discount);
     } else {
         int final_price = price - discount;
-        klee_print_expr("Final price after discount:", final_price);
     }
 
     return 0;
