@@ -13,7 +13,7 @@ from vulnerability_analysis.VA import VA
 def run_analysis(request):
 	if request.method == "POST":
 		# file_path = request.POST.get("file_path")
-		file_path = '/home/parrot/Desktop/fyp/backend/vulnerability_analysis/aflSetup/bank_management/bms.cpp'
+		file_path = '/home/parrot/Desktop/fyp/testFiles/semgrepTest.c'
 		analysis_type = request.POST.get("analysis_type")
 
 		print(analysis_type)
@@ -22,10 +22,13 @@ def run_analysis(request):
 		va.setupEnv()
 		result = va.startAnalysis(analysis_type)
 
-		if analysis_type in ['symbolic']:
+		if analysis_type == 'symbolic':
 			return JsonResponse({"result": result[0], 'code': result[1]})
 
-		if analysis_type in ['asan']:
+		if analysis_type == 'symbolic2':
+			return JsonResponse({"result": result[0], 'segments': result[1]})
+
+		if analysis_type == 'asan':
 			return JsonResponse({"result": result[0], 'code': result[1], 'seeds': result[2]})
 
 		# return render(request, "run_analysis.html", {"result": result})

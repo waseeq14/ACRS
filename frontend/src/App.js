@@ -6,6 +6,7 @@ import Dashboard from './routes/Dashboard'
 import DashboardHome from './routes/DashboardHome'
 import VulnerabilityAssessment from './routes/VulnerabilityAssessment'
 import RunKLEE from './routes/RunKLEE'
+import RunKLEE2 from './routes/RunKLEE2'
 import Fuzzer from './routes/Fuzzer'
 import ExploitGeneration from './routes/ExploitGeneration'
 import PatchSuggestion from './routes/PatchSuggestion'
@@ -27,6 +28,10 @@ const navigationLinks = [
   {
     path: '/va/klee',
     name: 'KLEE'
+  },
+  {
+    path: '/va/advanced_klee',
+    name: 'Priotize Code Paths',
   },
   {
     path: '/va/fuzzer',
@@ -67,6 +72,7 @@ function App() {
               <Route path='va'>
                 <Route index element={<VulnerabilityAssessment />} />
                 <Route path='klee' element={<RunKLEE />} />
+                <Route path='advanced_klee' element={<RunKLEE2 />} />
                 <Route path='fuzzer' element={<Fuzzer />} />
               </Route>
               <Route path='exploit' element={<ExploitGeneration />} />

@@ -30,13 +30,11 @@ void copy_string(char *dest, const char *src, size_t max_len) {
 
 int main() {
     char str[50] = "Hello, World!";
-    klee_print_expr("Original string", str[0]);
     reverse_string(str);
-    klee_print_expr("Reversed string", str[0]);
 
     int numbers[] = {1, 2, 3, 4, 5};
     int size = sizeof(numbers) / sizeof(numbers[0]);
-    klee_print_expr("Sum of array", sum_array(numbers, size));
+    sum_array(numbers, size);
 
     int index;
     klee_make_symbolic(&index, sizeof(index), "index");
@@ -44,7 +42,6 @@ int main() {
 
     char dest[50];
     copy_string(dest, str, sizeof(dest));
-    klee_print_expr("Copied string", dest[0]);
 
     return 0;
 }
