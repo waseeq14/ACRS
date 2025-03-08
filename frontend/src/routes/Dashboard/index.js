@@ -1,7 +1,12 @@
+import { useContext } from 'react'
 import { NavLink, Outlet } from 'react-router'
+import { AppContext } from '../../context/AppContext'
+
 import styles from './styles.module.css'
 
 export default function Dashboard({ navigationLinks }) {
+  const { appState } = useContext(AppContext)
+
   return (
     <>
       <div className={styles.appbar}>
@@ -26,17 +31,25 @@ export default function Dashboard({ navigationLinks }) {
       <div className={styles.sidebar}>
         <div className={styles.bar}></div>
         <ul>
-          {navigationLinks.map(link => (
-            <li>
-              <NavLink
-                className={({ isActive }) => (isActive ? styles.active : '')}
-                to={`/dashboard${link.path}`}
-                end
-              >
-                {link.name}
-              </NavLink>
-            </li>
-          ))}
+          {navigationLinks.map(link => {
+            if (link.condition && !link.condition(appState)) {
+              return null
+            } else {
+              return (
+                <li>
+                  <NavLink
+                    className={({ isActive }) =>
+                      isActive ? styles.active : ''
+                    }
+                    to={`/dashboard${link.path}`}
+                    end
+                  >
+                    {link.name}
+                  </NavLink>
+                </li>
+              )
+            }
+          })}
         </ul>
       </div>
 

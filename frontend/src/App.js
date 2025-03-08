@@ -19,39 +19,48 @@ import './App.css'
 const navigationLinks = [
   {
     path: '',
-    name: 'Dashboard'
+    name: 'Dashboard',
+    condition: null
   },
   {
     path: '/va',
-    name: 'Vulnerability Assessment'
+    name: 'Vulnerability Assessment',
+    condition: null
   },
   {
     path: '/va/klee',
-    name: 'KLEE'
+    name: 'KLEE',
+    condition: state => state.kleeResult !== undefined
   },
   {
     path: '/va/advanced_klee',
     name: 'Priotize Code Paths',
+    condition: state => state.advancedKleeResult !== undefined
   },
   {
     path: '/va/fuzzer',
-    name: 'Fuzzer'
+    name: 'Fuzzer',
+    condition: state => state.fuzzerResult !== undefined
   },
   {
     path: '/exploit',
-    name: 'Exploit Generation'
+    name: 'Exploit Generation',
+    condition: null
   },
   {
     path: '/patch',
-    name: 'Patch Suggestion'
+    name: 'Patch Suggestion',
+    condition: null
   },
   {
     path: '/pentester-mode',
-    name: 'Pentester Mode'
+    name: 'Pentester Mode',
+    condition: null
   },
   {
     path: '/reports',
-    name: 'Reports'
+    name: 'Reports',
+    condition: null
   }
 ]
 
