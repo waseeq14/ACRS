@@ -8,17 +8,19 @@ const code =
 
 export default function PatchSuggestion() {
   return (
-    <div class={styles.cards}>
-      <div class={styles.card}>
+    <div className={styles.cards}>
+      <div className={styles.card}>
         <h2>Changes Made</h2>
-        <textarea readOnly={true}>{changedMade}</textarea>
+        <textarea readOnly={true} value={changedMade}></textarea>
         <button>Redo</button>
       </div>
-      <div class={styles.card}>
+      <div className={styles.card}>
         <h2>Patched Code</h2>
-        <textarea className={styles.whiteTextArea} readOnly={true}>
-          {code}
-        </textarea>
+        <textarea
+          className={styles.whiteTextArea}
+          readOnly={true}
+          value={code}
+        ></textarea>
         <button>Apply</button>
       </div>
     </div>

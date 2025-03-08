@@ -6,8 +6,8 @@ import styles from './styles.module.css'
 export default function Login() {
   const navigate = useNavigate()
 
-  const [username, setUsername] = useState()
-  const [password, setPassword] = useState()
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleLoginSubmit = e => {
     e.preventDefault()

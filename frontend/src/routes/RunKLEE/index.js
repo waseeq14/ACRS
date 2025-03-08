@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import { AppContext } from '../../context/AppContext'
+import Markdown from 'react-markdown'
 
 import styles from './styles.module.css'
 
@@ -10,10 +11,7 @@ export default function RunKLEE() {
     <>
       <div className={styles.card}>
         <h2>Analysis: </h2>
-        <textarea
-          readOnly={true}
-          value={appState.kleeResult ? appState.kleeResult.analysis : ''}
-        ></textarea>
+        <Markdown>{appState.kleeResult.analysis}</Markdown>
       </div>
       <div style={{ height: '1rem' }}></div>
       <div className={styles.card}>

@@ -27,7 +27,7 @@ export default function DashboardHome() {
   }
   return (
     <>
-      <div class={styles.card}>
+      <div className={styles.card}>
         <h2>Last Scan</h2>
         <Chart
           chartType='PieChart'
@@ -38,8 +38,8 @@ export default function DashboardHome() {
         />
       </div>
       <div style={{ height: '1rem' }}></div>
-      <div class={styles.cards}>
-        <div class={styles.card}>
+      <div className={styles.cards}>
+        <div className={styles.card}>
           <h2>Recent Activity</h2>
           <table>
             <thead>
@@ -60,7 +60,7 @@ export default function DashboardHome() {
             </tbody>
           </table>
         </div>
-        <div class={styles.card}>
+        <div className={styles.card}>
           <h2>Identified Vulnerabilities</h2>
           <table>
             <thead>

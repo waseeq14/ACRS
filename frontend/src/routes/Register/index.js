@@ -3,10 +3,10 @@ import { useState } from 'react'
 import styles from './styles.module.css'
 
 export default function Register() {
-  const [username, setUsername] = useState()
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
-  const [confirmPassword, setConfirmPassword] = useState()
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
   const handleLoginSubmit = e => {
     e.preventDefault()

@@ -1,5 +1,6 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, Fragment } from 'react'
 import { AppContext } from '../../context/AppContext'
+import Markdown from 'react-markdown'
 
 import styles from './styles.module.css'
 
@@ -26,7 +27,7 @@ export default function RunKLEE2() {
         <div style={{ textAlign: 'left' }}>
           <pre style={{ display: 'inline', color: 'white' }}>Segment: |</pre>
           {appState.advancedKleeResult.segments.map((_, index) => (
-            <>
+            <Fragment key={index}>
               <pre
                 style={{ display: 'inline', color: 'white', cursor: 'pointer' }}
                 onClick={e => setSelectedIndex(index)}
@@ -35,21 +36,14 @@ export default function RunKLEE2() {
                 {index + 1}
               </pre>
               <pre style={{ display: 'inline', color: 'white' }}> |</pre>
-            </>
+            </Fragment>
           ))}
         </div>
       ) : null}
       <div style={{ height: '1rem' }}></div>
       <div className={styles.card}>
         <h2>Analysis: </h2>
-        <textarea
-          readOnly={true}
-          value={
-            appState.advancedKleeResult
-              ? appState.advancedKleeResult.analysis
-              : ''
-          }
-        ></textarea>
+        <Markdown>{appState.advancedKleeResult.analysis}</Markdown>
       </div>
     </>
   )
