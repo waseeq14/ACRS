@@ -24,8 +24,16 @@ export default function RunKLEE2() {
       </div>
       <div style={{ height: '1rem' }}></div>
       {appState.advancedKleeResult ? (
-        <div style={{ textAlign: 'left' }}>
-          <pre style={{ display: 'inline', color: 'white' }}>Segment: |</pre>
+        <div style={{ textAlign: 'right' }}>
+          {selectedIndex > 0 && (
+            <pre
+              style={{ display: 'inline', color: 'white', cursor: 'pointer' }}
+              onClick={e => setSelectedIndex(index => index - 1)}
+            >
+              &lt;&lt;Prev
+            </pre>
+          )}
+          <pre style={{ display: 'inline', color: 'white' }}> |</pre>
           {appState.advancedKleeResult.segments.map((_, index) => (
             <Fragment key={index}>
               <pre
@@ -38,6 +46,15 @@ export default function RunKLEE2() {
               <pre style={{ display: 'inline', color: 'white' }}> |</pre>
             </Fragment>
           ))}
+          {selectedIndex + 1 < appState.advancedKleeResult.segments.length && (
+            <pre
+              style={{ display: 'inline', color: 'white', cursor: 'pointer' }}
+              onClick={e => setSelectedIndex(index => index + 1)}
+            >
+              {' '}
+              Next&gt;&gt;
+            </pre>
+          )}
         </div>
       ) : null}
       <div style={{ height: '1rem' }}></div>
