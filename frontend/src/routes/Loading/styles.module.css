@@ -1,0 +1,31 @@
+.container {
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(359.47deg, #7f2626 0.04%, #d03739 71.96%);
+}
+
+.logo {
+  height: 75vh;
+}
+
+.loadingBar {
+  height: 24px;
+  width: 800px;
+
+  border: 1px solid white;
+
+  margin: 0 auto;
+}
+
+.loadingBar > * {
+  background-color: white;
+  height: 100%;
+}
+
+.text {
+  font-size: 24px;
+  color: white;
+  font-weight: bold;
+
+  margin: 16px 0;
+}

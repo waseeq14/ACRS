@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Analysis</title>
+</head>
+<body>
+    <h2>Run Vulnerability Analysis</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="file_path">File Path:</label>
+        <input type="text" id="file_path" name="file_path" required><br><br>
+
+        <label for="analysis_type">Analysis Type:</label>
+        <select id="analysis_type" name="analysis_type" required>
+            <option value="asan">ASAN</option>
+            <option value="rules">RULES</option>
+            <option value="symbolic">SYMBOLIC</option>
+            <option value="cwe">CWE</option>
+        </select><br><br>
+
+        <button type="submit">Run Analysis</button>
+    </form>
+
+    {% if result %}
+    <h3>Analysis Result:</h3>
+    <p>{{ result }}</p>
+    {% endif %}
+</body>
+</html>
