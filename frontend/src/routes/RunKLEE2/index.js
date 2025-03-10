@@ -12,7 +12,7 @@ export default function RunKLEE2() {
   return (
     <>
       <div className={styles.card}>
-        <h2>Sus Segments: </h2>
+        <h2>Extracted Segments: </h2>
         <textarea
           readOnly={true}
           value={
