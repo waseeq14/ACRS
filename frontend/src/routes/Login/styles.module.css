@@ -84,6 +84,7 @@
 
 .form > input:focus {
   outline: none;
+  border-bottom: 3px solid white;
 }
 
 .form > input::placeholder {
@@ -105,6 +106,13 @@
 
   font-size: 16px;
   font-weight: bold;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form > button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .createAccountView {

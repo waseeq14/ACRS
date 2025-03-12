@@ -9,23 +9,22 @@ export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    const response = await fetch("http://127.0.0.1:8000/login/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-  
-    const data = await response.json();
+  const handleLoginSubmit = async e => {
+    e.preventDefault()
+    const response = await fetch('http://127.0.0.1:8000/login/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    })
+
+    const data = await response.json()
     if (response.ok) {
-      alert("Login Successful");
-      navigate("/dashboard");
+      alert('Login Successful')
+      navigate('/dashboard')
     } else {
-      alert(data.error);
+      alert(data.error)
     }
-  };
-  
+  }
 
   return (
     <div className={styles.container}>
