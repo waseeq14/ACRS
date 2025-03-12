@@ -5,10 +5,40 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import importlib.util
-import os
 from vulnerability_analysis.VA import VA
 import uuid
+import json
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
 
+
+@api_view(["POST"])
+def register_user(request):
+    data = json.loads(request.body)
+    username = data.get("username")
+    email = data.get("email")
+    password = data.get("password")
+    
+    if User.objects.filter(username=username).exists():
+        return JsonResponse({"error": "Username already taken"}, status=400)
+
+    user = User.objects.create_user(username=username, email=email, password=password)
+    return JsonResponse({"message": "User registered successfully"})
+
+@api_view(["POST"])
+def login_user(request):
+    data = json.loads(request.body)
+    username = data.get("username")
+    password = data.get("password")
+
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return JsonResponse({"message": "Login successful"})
+    else:
+        return JsonResponse({"error": "Invalid credentials"}, status=400)
 
 
 @api_view(['POST'])
