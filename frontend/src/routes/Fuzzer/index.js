@@ -1,11 +1,13 @@
-import { useContext } from 'react'
+import { useContext, useState, Fragment } from 'react'
 import { AppContext } from '../../context/AppContext'
 import Markdown from 'react-markdown'
+import classNames from 'classnames'
 
 import styles from './styles.module.css'
 
 export default function RunKLEE() {
   const { appState } = useContext(AppContext)
+  const [selectedIndex, setSelectedIndex] = useState(0)
 
   return (
     <>
@@ -25,10 +27,46 @@ export default function RunKLEE() {
         ></textarea>
       </div>
       <div style={{ height: '1rem' }}></div>
-      <div className={styles.card}>
+      <div className={classNames(styles.card, styles.noHeight, styles.white)}>
         <h2>Analysis: </h2>
-        <Markdown>{appState.fuzzerResult.analysis}</Markdown>
+        <Markdown>{appState.fuzzerResult.analysis[selectedIndex]}</Markdown>
       </div>
+      <div style={{ height: '1rem' }}></div>
+      {appState.fuzzerResult ? (
+        <div style={{ textAlign: 'right' }}>
+          {selectedIndex > 0 && (
+            <pre
+              style={{ display: 'inline', color: 'white', cursor: 'pointer' }}
+              onClick={e => setSelectedIndex(index => index - 1)}
+            >
+              &lt;&lt;Prev
+            </pre>
+          )}
+          <pre style={{ display: 'inline', color: 'white' }}> |</pre>
+          {appState.fuzzerResult.segments.map((_, index) => (
+            <Fragment key={index}>
+              <pre
+                style={{ display: 'inline', color: 'white', cursor: 'pointer' }}
+                onClick={e => setSelectedIndex(index)}
+              >
+                {' '}
+                {index + 1}
+              </pre>
+              <pre style={{ display: 'inline', color: 'white' }}> |</pre>
+            </Fragment>
+          ))}
+          {selectedIndex + 1 < appState.fuzzerResult.segments.length && (
+            <pre
+              style={{ display: 'inline', color: 'white', cursor: 'pointer' }}
+              onClick={e => setSelectedIndex(index => index + 1)}
+            >
+              {' '}
+              Next&gt;&gt;
+            </pre>
+          )}
+        </div>
+      ) : null}
+
     </>
   )
 }
