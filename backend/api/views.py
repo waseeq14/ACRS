@@ -40,6 +40,16 @@ def login_user(request):
     else:
         return JsonResponse({"error": "Invalid credentials"}, status=400)
 
+@api_view(["GET"])
+def is_authenticated(request):
+    if request.method == "GET":
+        if request.user.is_authenticated:
+            return JsonResponse({'is_authenticated': True, 'message': 'User is authenticated'})
+        else:
+            return JsonResponse({'is_authenticated': False, 'message': 'User is not authenticated'})
+    else:
+        return JsonResponse({'error': 'Invalid method. GET required.'}, status=400)
+
 
 @api_view(['POST'])
 def file_save(request):

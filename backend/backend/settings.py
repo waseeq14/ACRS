@@ -42,11 +42,12 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework.authtoken',
     'django.contrib.sites',
-    'rest_framework_simplejwt',
+    # 'rest_framework_simplejwt',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
 }
 MIDDLEWARE = [
@@ -149,3 +150,20 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React frontend
     # "https://your-frontend.com",  # Production frontend
 ]
+
+CORS_ALLOW_CREDENTIALS = True
+
+############
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# Session settings
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Uses database-backed sessions
+
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
