@@ -73,3 +73,7 @@
 .hidden {
   display: none;
 }
+
+.white {
+  color: white;
+}

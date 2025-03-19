@@ -65,6 +65,11 @@
   border-radius: 10px;
 }
 
+.card button:hover {
+  background-color: #bb5153;
+  cursor: pointer;
+}
+
 .card p {
   color: #555;
 }

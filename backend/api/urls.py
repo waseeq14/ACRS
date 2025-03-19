@@ -1,7 +1,9 @@
 from django.urls import path
-from .views import run_analysis, file_save
+from .views import run_analysis, file_save, register_user, login_user
 
 urlpatterns = [
     path('', run_analysis, name='run-analysis'),
-    path('file-save/', file_save, name="file-save")
+    path('file-save/', file_save, name="file-save"),
+    path('register/', register_user, name="register"),
+    path('login/', login_user, name="login"),
 ]

@@ -9,13 +9,20 @@ export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleLoginSubmit = e => {
+  const handleLoginSubmit = async e => {
     e.preventDefault()
+    const response = await fetch('http://127.0.0.1:8000/login/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    })
 
-    if (username === 'admin' && password === 'admin') {
+    const data = await response.json()
+    if (response.ok) {
+      alert('Login Successful')
       navigate('/dashboard')
     } else {
-      alert('Invalid Credentials')
+      alert(data.error)
     }
   }
 

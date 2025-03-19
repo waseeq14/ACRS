@@ -1,15 +1,29 @@
 import { useState } from 'react'
-
+import { useNavigate } from 'react-router'
 import styles from './styles.module.css'
 
 export default function Register() {
+  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
-  const handleLoginSubmit = e => {
+  const handleRegisterSubmit = async e => {
     e.preventDefault()
+    const response = await fetch('http://127.0.0.1:8000/register/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, email, password })
+    })
+
+    const data = await response.json()
+    if (response.ok) {
+      alert('Registration Successful')
+      navigate('/login')
+    } else {
+      alert(data.error)
+    }
   }
 
   return (
@@ -26,7 +40,7 @@ export default function Register() {
       <div>
         <div className={styles.modal}>
           <h2>SIGN UP</h2>
-          <form className={styles.form} onSubmit={e => handleLoginSubmit(e)}>
+          <form className={styles.form} onSubmit={e => handleRegisterSubmit(e)}>
             <input
               type='text'
               placeholder='Username'
