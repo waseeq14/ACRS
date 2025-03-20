@@ -9,9 +9,10 @@ from vulnerability_analysis.VA import VA
 import uuid
 import json
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
+from rest_framework.authtoken.models import Token
 
 
 @api_view(["POST"])
@@ -49,6 +50,15 @@ def is_authenticated(request):
             return JsonResponse({'is_authenticated': False, 'message': 'User is not authenticated'})
     else:
         return JsonResponse({'error': 'Invalid method. GET required.'}, status=400)
+
+@api_view(["GET"])
+def logout_user(request):
+	if request.method == "GET":
+		if request.user.is_authenticated:
+			logout(request)
+			return JsonResponse({'message': 'Successfully logged out!'}, status=200)
+	else:
+		return JsonResponse({'error': 'Invalid method. GET required.'}, status=400)
 
 
 @api_view(['POST'])

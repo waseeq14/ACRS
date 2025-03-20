@@ -16,7 +16,7 @@ export default function Login() {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await api.get('/is_authenticated', {
+        const response = await api.get('/is-authenticated', {
           withCredentials: true,
         });
 

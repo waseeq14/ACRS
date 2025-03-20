@@ -15,9 +15,9 @@ export default function Dashboard({ navigationLinks }) {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await api.get('/is_authenticated', {
+        const response = await api.get('/is-authenticated', {
           withCredentials: true,
-        });
+        })
 
         if (response.data.is_authenticated) {
           setLoading(false)
@@ -25,7 +25,7 @@ export default function Dashboard({ navigationLinks }) {
           navigate('/login')
         }
       } catch (error) {
-        console.error('Error checking authentication', error);
+        console.error('Error checking authentication', error)
         setLoading(false)
         setError(true)
         // TODO: Showing some sort of error. (Flash message of some sort)
@@ -34,6 +34,20 @@ export default function Dashboard({ navigationLinks }) {
 
     checkAuthentication();
   }, [navigate])
+
+  const handleLogout = async () => {
+    try {
+      const response = await api.get('/logout', {
+        withCredentials: true,
+      })
+
+      if (response.status === 200) {
+        navigate('/login')
+      }
+    } catch (error) {
+      console.error('Error logging out', error)
+    }
+  }
 
   if (loading || error) {
     <></>
@@ -50,12 +64,15 @@ export default function Dashboard({ navigationLinks }) {
             <h2 className={styles.title}>ACRS</h2>
           </div>
           <div className={styles.menu}>
-            <p>admin</p>
+            {/* <p>admin</p>
             <img
               className={styles.userImg}
               src='/static/images/user.png'
               alt='User'
-            />
+            /> */}
+            <button type='button' onClick={handleLogout}>
+              Logout
+            </button>
           </div>
         </div>
   
