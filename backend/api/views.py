@@ -9,11 +9,12 @@ from vulnerability_analysis.VA import VA
 import uuid
 import json
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer
+from django.views.decorators.csrf import csrf_exempt
 
 
 @api_view(["POST"])
@@ -62,6 +63,34 @@ def logout_user(request):
 			return JsonResponse({'message': 'Successfully logged out!'}, status=200)
 	else:
 		return JsonResponse({'error': 'Invalid method. GET required.'}, status=400)
+
+@api_view(['POST'])
+def change_password(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            password = data.get('password')
+            new_password = data.get('new_password')
+
+            if not password or not new_password:
+                return JsonResponse({'success': False, 'message': 'Password not provided.', 'user': None})
+
+            user = authenticate(request, username=request.user.username, password=password)
+
+            if not user:
+                return JsonResponse({'success': False, 'message': 'Old password not correct.', 'user': None})
+
+            user.set_password(password)
+            user.save()
+            update_session_auth_hash(request, user)
+
+            serializer = UserSerializer(user)
+
+            return JsonResponse({'success': True, 'message': 'Password changed.', 'user': serializer.data})
+        else:
+            return JsonResponse({'success': False, 'message': 'User is not authenticated', 'user': None})
+    else:
+        return JsonResponse({'error': 'Invalid method. GET required.'}, status=400)
 
 
 @api_view(['POST'])
