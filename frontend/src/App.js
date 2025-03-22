@@ -12,6 +12,7 @@ import ExploitGeneration from './routes/ExploitGeneration'
 import PatchSuggestion from './routes/PatchSuggestion'
 import PentesterMode from './routes/PentesterMode'
 import Reports from './routes/Reports'
+import Profile from './routes/Profile'
 import { AppProvider } from './context/AppContext'
 
 import './App.css'
@@ -88,6 +89,7 @@ function App() {
               <Route path='patch' element={<PatchSuggestion />} />
               <Route path='pentester-mode' element={<PentesterMode />} />
               <Route path='reports' element={<Reports />} />
+              <Route path='profile' element={<Profile />} />
             </Route>
           </Routes>
         </Router>

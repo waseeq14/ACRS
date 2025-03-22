@@ -13,6 +13,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
+from .serializers import UserSerializer
 
 
 @api_view(["POST"])
@@ -37,7 +38,8 @@ def login_user(request):
     user = authenticate(username=username, password=password)
     if user is not None:
         login(request, user)
-        return JsonResponse({"message": "Login successful"})
+        serializer = UserSerializer(user)
+        return JsonResponse({"message": "Login successful", 'user': serializer.data})
     else:
         return JsonResponse({"error": "Invalid credentials"}, status=400)
 
@@ -45,9 +47,10 @@ def login_user(request):
 def is_authenticated(request):
     if request.method == "GET":
         if request.user.is_authenticated:
-            return JsonResponse({'is_authenticated': True, 'message': 'User is authenticated'})
+            serializer = UserSerializer(request.user)
+            return JsonResponse({'is_authenticated': True, 'message': 'User is authenticated', 'user': serializer.data})
         else:
-            return JsonResponse({'is_authenticated': False, 'message': 'User is not authenticated'})
+            return JsonResponse({'is_authenticated': False, 'message': 'User is not authenticated', 'user': None})
     else:
         return JsonResponse({'error': 'Invalid method. GET required.'}, status=400)
 

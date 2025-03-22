@@ -39,6 +39,36 @@
   font-size: 1rem;
 }
 
+.appbar .menu .subMenu {
+  display: none;
+  position: absolute;
+  list-style-type: none;
+  top: 100%;
+  right: 0;
+  min-width: 180px;
+  background-color: #282828;
+  z-index: 1;
+  padding: 8px;
+}
+
+.appbar .menu .subMenu li {
+  padding: 8px 4px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.appbar .menu .subMenu li:hover {
+  background-color: #787878;
+}
+
+.appbar .menu:hover .subMenu {
+  display: block;
+}
+
+.appbar .menu .subMenu:hover {
+  display: block;
+}
+
 .appbar .userImg {
   height: 48px;
   width: 48px;

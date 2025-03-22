@@ -1,11 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Link, useNavigate } from 'react-router'
+import { AppContext } from '../../context/AppContext'
 import api from '../../utils/api'
 
 import styles from './styles.module.css'
 
 export default function Login() {
   const navigate = useNavigate()
+
+  const { appState, setAppState } = useContext(AppContext)
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -21,6 +24,7 @@ export default function Login() {
         });
 
         if (response.data.is_authenticated) {
+          setAppState({ ...appState, user: response.data.user })
           navigate('/dashboard')          
         } else {
           setLoading(false)
@@ -45,7 +49,8 @@ export default function Login() {
       })
   
       if (response.status === 200) {
-        alert('Login Successful')
+        setAppState({ ...appState, user: response.data.user })
+        alert(response.data.message)
         navigate('/dashboard')
       }
     } catch (error) {

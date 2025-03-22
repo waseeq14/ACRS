@@ -47,7 +47,7 @@ export default function Register() {
       })
 
       if (response.status === 200) {
-        alert('Registration Sucessful')
+        alert(response.data.message)
         navigate('/login')
       }
     } catch (error) {

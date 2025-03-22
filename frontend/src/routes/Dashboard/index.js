@@ -8,7 +8,7 @@ import styles from './styles.module.css'
 export default function Dashboard({ navigationLinks }) {
   const navigate = useNavigate()
 
-  const { appState } = useContext(AppContext)
+  const { appState, setAppState } = useContext(AppContext)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
@@ -20,6 +20,7 @@ export default function Dashboard({ navigationLinks }) {
         })
 
         if (response.data.is_authenticated) {
+          setAppState({ ...appState, user: response.data.user })
           setLoading(false)
         } else {
           navigate('/login')
@@ -64,15 +65,19 @@ export default function Dashboard({ navigationLinks }) {
             <h2 className={styles.title}>ACRS</h2>
           </div>
           <div className={styles.menu}>
-            {/* <p>admin</p>
+            <p>{appState.user.username}</p>
             <img
               className={styles.userImg}
               src='/static/images/user.png'
               alt='User'
-            /> */}
-            <button type='button' onClick={handleLogout}>
+            />
+            <ul className={styles.subMenu}>
+              <li onClick={() => navigate('/dashboard/profile')}>Profile</li>
+              <li onClick={handleLogout}>Logout</li>
+            </ul>
+            {/* <button type='button' onClick={handleLogout}>
               Logout
-            </button>
+            </button> */}
           </div>
         </div>
   
