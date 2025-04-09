@@ -22,6 +22,8 @@ class Code(models.Model):
         on_delete=models.CASCADE,
         help_text="Foreign Key of the User"
     )
+
+    # TODO: Fix this. Change this to be a foreign key of the model Report.
     generatedReport = models.CharField(
         max_length=100,
         null=True,
@@ -34,12 +36,6 @@ class Code(models.Model):
 
 
 class Vulnerability(models.Model):
-    SEVERITY_CHOICES = [
-        ('High', 'High'),
-        ('Medium', 'Medium'),
-        ('Low', 'Low'),
-    ]
-
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -50,18 +46,6 @@ class Vulnerability(models.Model):
         max_length=50,
         help_text="CWE (Common Weakness Enumeration) identifier associated with this vulnerability"
     )
-    cvssScore = models.DecimalField(
-        max_digits=3,
-        decimal_places=1,
-        null=True,
-        blank=True,
-        help_text="CVSS (Common Vulnerability Scoring System) score, ranging from 0.0 to 10.0"
-    )
-    severity = models.CharField(
-        max_length=6,
-        choices=SEVERITY_CHOICES,
-        help_text="Severity classification of the vulnerability"
-    )
     description = models.TextField(
         blank=True,
         help_text="Detailed description of the vulnerability"
@@ -71,6 +55,10 @@ class Vulnerability(models.Model):
         on_delete=models.CASCADE,
         related_name="vulnerabilities",
         help_text="Foreign Key of Code"
+    )
+    analysis_type = models.CharField(
+        max_length=20,
+        help_text="The type of analysis run to get the vulnerability"
     )
 
     def __str__(self):
