@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-@cyfho@msg-t#x=--wkc1!*weyt9o(aa^ko2)9a^_wvuia=c74
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -158,6 +158,28 @@ CORS_ALLOW_CREDENTIALS = True
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'root': {
+#         'handlers': ['console'],
+#         'level': 'DEBUG',
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 # Session settings
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Uses database-backed sessions

@@ -9,10 +9,12 @@ export default function RunKLEE() {
 
   return (
     <>
-      <div className={styles.card}>
-        <h2>Analysis: </h2>
+    <div className={styles.card}>
+      <h2>Analysis: </h2>
+      <div className={styles.scrollableArea}>
         <Markdown>{appState.kleeResult.analysis}</Markdown>
       </div>
+    </div>
       <div style={{ height: '1rem' }}></div>
       <div className={styles.card}>
         <h2>KLEE Friendly Code: </h2>

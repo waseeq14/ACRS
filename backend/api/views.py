@@ -16,6 +16,7 @@ from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer
 from django.views.decorators.csrf import csrf_exempt
 from .models import Code, Vulnerability
+from django.contrib.auth.decorators import login_required
 
 
 @api_view(["POST"])
@@ -94,6 +95,7 @@ def change_password(request):
         return JsonResponse({'error': 'Invalid method. GET required.'}, status=400)
 
 
+@login_required
 @api_view(['POST'])
 def file_save(request):
 	if request.method == "POST":

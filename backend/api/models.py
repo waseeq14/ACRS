@@ -58,7 +58,8 @@ class Vulnerability(models.Model):
     )
     analysis_type = models.CharField(
         max_length=20,
-        help_text="The type of analysis run to get the vulnerability"
+        help_text="The type of analysis run to get the vulnerability",
+        default="Analysis"
     )
 
     def __str__(self):

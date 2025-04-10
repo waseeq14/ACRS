@@ -14,7 +14,12 @@
   height: 400px;
   flex: 1;
 }
-
+.scrollableArea {
+  max-height: 300px; /* or adjust as needed */
+  overflow-y: auto;
+  padding-right: 1rem; /* optional for scrollbar space */
+  color: white;
+}
 .noHeight {
   height: auto;
 }

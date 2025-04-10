@@ -58,10 +58,12 @@ export default function RunKLEE2() {
         </div>
       ) : null}
       <div style={{ height: '1rem' }}></div>
-      <div className={styles.card}>
-        <h2>Analysis: </h2>
+    <div className={styles.card}>
+      <h2>Analysis: </h2>
+      <div className={styles.scrollableArea}>
         <Markdown>{appState.advancedKleeResult.analysis}</Markdown>
       </div>
+    </div>
     </>
   )
 }
