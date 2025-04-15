@@ -16,7 +16,7 @@ from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer
 from django.views.decorators.csrf import csrf_exempt
-from .models import Code, Vulnerability, Patch
+from .models import Code, Vulnerability, Patch, Exploit
 from django.contrib.auth.decorators import login_required
 
 
@@ -173,5 +173,31 @@ def apply_patch(request):
         Patch.objects.create(patchedCode=patched_code, code=code, description="")
 
         return JsonResponse({"result": patched_code})
+
+    return JsonResponse({"error": "Invalid request method"}, status=400)
+
+@api_view(['POST'])
+def generate_exploit_path(request):
+    if request.method == 'POST':
+        file_path = request.POST.get('file_path')
+
+        folder_path = os.path.dirname(file_path)
+        code_id = folder_path.split("/")[-1]
+        code = Code.objects.get(id=code_id)
+
+        vulnerabilities = Vulnerability.objects.filter(code=code)
+
+        vulns = []
+        for obj in vulnerabilities:
+            vulns.append(obj.description)
+
+        patch = PatchGenerator(code.code, str(vulns))
+        patch.setupEnv()
+
+        exploit_path = patch.generate_exploit_path()
+
+        Exploit.objects.create(description=exploit_path, code=code)
+
+        return JsonResponse({"result": exploit_path})
 
     return JsonResponse({"error": "Invalid request method"}, status=400)

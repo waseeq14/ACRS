@@ -16,7 +16,9 @@ export default function PatchSuggestion() {
   const [changesMade, setChangesMade] = useState("")
 
   useEffect(() => {
-    setCode(appState.patchResult.code)
+    if (appState.patchResult !== undefined) {
+      setCode(appState.patchResult.code)
+    }
   }, [])
 
   return (
