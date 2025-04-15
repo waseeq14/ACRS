@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import run_analysis, file_save, register_user, login_user, is_authenticated, logout_user, change_password
+from .views import run_analysis, file_save, register_user, login_user, is_authenticated, logout_user, change_password, apply_patch
 
 urlpatterns = [
     path('', run_analysis, name='run-analysis'),
+    path('patch/', apply_patch, name='apply-patch'),
     path('file-save/', file_save, name="file-save"),
     path('register/', register_user, name="register"),
     path('login/', login_user, name="login"),

@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import importlib.util
 from vulnerability_analysis.VA import VA
+from vulnerability_analysis.patch import PatchGenerator
 import uuid
 import json
 from django.contrib.auth.models import User
@@ -15,7 +16,7 @@ from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer
 from django.views.decorators.csrf import csrf_exempt
-from .models import Code, Vulnerability
+from .models import Code, Vulnerability, Patch
 from django.contrib.auth.decorators import login_required
 
 
@@ -149,3 +150,28 @@ def run_analysis(request):
 	# return render(request, "run_analysis.html")
 	return JsonResponse({"error": "Invalid request method"}, status=400)
 
+@api_view(['POST'])
+def apply_patch(request):
+    if request.method == 'POST':
+        file_path = request.POST.get('file_path')
+
+        folder_path = os.path.dirname(file_path)
+        code_id = folder_path.split("/")[-1]
+        code = Code.objects.get(id=code_id)
+
+        vulnerabilities = Vulnerability.objects.filter(code=code)
+
+        vulns = []
+        for obj in vulnerabilities:
+            vulns.append(obj.description)
+
+        patch = PatchGenerator(code.code, str(vulns))
+        patch.setupEnv()
+
+        patched_code = patch.generate_patched_code()
+
+        Patch.objects.create(patchedCode=patched_code, code=code, description="")
+
+        return JsonResponse({"result": patched_code})
+
+    return JsonResponse({"error": "Invalid request method"}, status=400)
