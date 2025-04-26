@@ -45,7 +45,7 @@ const navigationLinks = [
   },
   {
     path: '/exploit',
-    name: 'Exploit Generation',
+    name: 'Exploitability',
     condition: null
   },
   {

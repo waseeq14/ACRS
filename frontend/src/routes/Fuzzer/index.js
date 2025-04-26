@@ -43,7 +43,7 @@ export default function RunKLEE() {
             </pre>
           )}
           <pre style={{ display: 'inline', color: 'white' }}> |</pre>
-          {appState.fuzzerResult.segments.map((_, index) => (
+          {appState.fuzzerResult.analysis.map((_, index) => (
             <Fragment key={index}>
               <pre
                 style={{ display: 'inline', color: 'white', cursor: 'pointer' }}
@@ -55,7 +55,7 @@ export default function RunKLEE() {
               <pre style={{ display: 'inline', color: 'white' }}> |</pre>
             </Fragment>
           ))}
-          {selectedIndex + 1 < appState.fuzzerResult.segments.length && (
+          {selectedIndex + 1 < appState.fuzzerResult.analysis.length && (
             <pre
               style={{ display: 'inline', color: 'white', cursor: 'pointer' }}
               onClick={e => setSelectedIndex(index => index + 1)}
