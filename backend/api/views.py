@@ -18,6 +18,7 @@ from .serializers import UserSerializer
 from django.views.decorators.csrf import csrf_exempt
 from .models import Code, Vulnerability, Patch, Exploit
 from django.contrib.auth.decorators import login_required
+from pentest.pentest import Pentest
 
 
 @api_view(["POST"])
@@ -199,5 +200,34 @@ def generate_exploit_path(request):
         Exploit.objects.create(description=exploit_path, code=code)
 
         return JsonResponse({"result": exploit_path})
+
+    return JsonResponse({"error": "Invalid request method"}, status=400)
+
+@api_view(['POST'])
+def pentest_scan(request):
+    if request.method == "POST":
+        ssh_host = request.POST.get('host')
+        ssh_user = request.POST.get('username')
+        ssh_pass = request.POST.get('password')
+
+    if not ssh_host or not ssh_user or not ssh_pass:
+        return JsonResponse({'error': 'Missing SSH connection details'}, status=400)
+
+    pentest = Pentest(ssh_host, ssh_user, ssh_pass)
+
+    try:
+        pentest.connect()
+        if pentest.ssh_client is None:
+            return JsonResponse({'error': 'SSH connection failed'}, status=500)
+
+        pentest.run_enum_scripts()
+        pentest.download_file("/tmp/enum_results.txt", "enum_results.txt")
+        pentest.setupEnv()
+        result = pentest.analyze_vulns("enum_results.txt")
+        return JsonResponse({'result': result})
+
+    except Exception as e:
+        pentest.disconnect()
+        return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
