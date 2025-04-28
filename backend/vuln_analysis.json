@@ -1,0 +1,14 @@
+[
+    {
+        "vulnerability_name": "Sudo Baron Samedit Vulnerability",
+        "description": "A heap-based buffer overflow in the sudo utility that allows local users to escalate privileges to root by exploiting the vulnerability in the command line parsing logic",
+        "location": "sudo",
+        "cve": "CVE-2021-3156"
+    },
+    {
+        "vulnerability_name": "PwnKit Vulnerability",
+        "description": "A vulnerability in the pkexec component of Polkit that allows local users to escalate privileges to root due to incorrect handling of argument vectors",
+        "location": "pkexec",
+        "cve": "CVE-2021-4034"
+    }
+]

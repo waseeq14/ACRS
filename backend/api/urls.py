@@ -9,7 +9,9 @@ from .views import (
     change_password,
     apply_patch,
     generate_exploit_path,
-    pentest_scan
+    pentest_scan,
+    pentest_scan_exploit,
+    pentest_scan_patch
 )
 
 urlpatterns = [
@@ -18,6 +20,8 @@ urlpatterns = [
     path('exploit/', generate_exploit_path, name='generate-exploit-path'),
     path('file-save/', file_save, name="file-save"),
     path('pentest-scan/', pentest_scan, name="pentest-scan"),
+    path('pentest-exploit/', pentest_scan_exploit, name="pentest-scan-exploit"),
+    path('pentest-patch/', pentest_scan_patch, name="pentest-scan-patch"),
     path('register/', register_user, name="register"),
     path('login/', login_user, name="login"),
     path('is-authenticated/', is_authenticated, name="is-authenticated"),

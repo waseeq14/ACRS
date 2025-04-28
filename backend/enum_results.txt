@@ -1,0 +1,185 @@
+[+] Running LinPEAS
+
+
+[1;34m          LinPEAS-ng [1;33mby carlospolop
+[0m
+[1;33mADVISORY: [1;34mThis script should be used for authorized penetration testing and/or educational purposes only. Any misuse of this software will not be the responsibility of the author or of any other collaborator. Use it at your own computers and/or with the computer owner's permission.
+[0m
+[1;34mLinux Privesc Checklist: [1;33mhttps://book.hacktricks.wiki/en/linux-hardening/linux-privilege-escalation-checklist.html
+[0m [1;4mLEGEND[0m:
+  [1;31;103mRED/YELLOW[0m: 95% a PE vector
+  [1;31mRED[0m: You should take a look to it
+  [1;96mLightCyan[0m: Users with console
+  [1;34mBlue[0m: Users without console & mounted devs
+  [1;32mGreen[0m: Common things (users, groups, SUID/SGID, mounts, .sh scripts, cronjobs) 
+  [1;95mLightMagenta[0m: Your username
+
+ [1;90mStarting LinPEAS. Caching Writable Folders...[0m
+[1;34m                               ╔═══════════════════╗
+═══════════════════════════════╣ [1;32mBasic information[1;34m ╠═══════════════════════════════
+[1;34m                               ╚═══════════════════╝[0m
+[1;37mOS: [0mLinux version 6.11+parrot-amd64 (palinuro@parrotsec.org) (x86_64-linux-gnu-gcc-12 (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Debian 6.11.5-1parrot1 (2024-12-13)
+[1;37mUser & Groups: [0muid=1000(parrot) gid=1004(parrot) groups=1004(parrot),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),108(netdev),116(bluetooth),1000(lpadmin),1001(scanner),1002(docker),1003(autologin)
+[1;37mHostname: [0mparrot
+
+[1;33m[+] [1;32m/usr/bin/fping[1;34m is available for network discovery[1;37m (LinPEAS can discover hosts, learn more with -h)
+[0m[1;33m[+] [1;32m/usr/bin/bash[1;34m is available for network discovery, port scanning and port forwarding[1;37m (LinPEAS can discover hosts, scan ports, and forward ports. Learn more with -h)
+[1;33m[+] [1;32m/usr/bin/nc[1;34m is available for network discovery & port scanning[1;37m (LinPEAS can discover hosts and scan ports, learn more with -h)
+[0m[1;33m[+] [1;32mnmap[1;34m is available for network discovery & port scanning, you should use it yourself
+[0m
+
+[1;34m                              ╔════════════════════╗
+══════════════════════════════╣ [1;32mSystem Information[1;34m ╠══════════════════════════════
+[1;34m                              ╚════════════════════╝[0m
+[1;34m╔══════════╣ [1;32mOperative system
+[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#kernel-exploits
+[0mLinux version 6.11+parrot-amd64 (palinuro@parrotsec.org) (x86_64-linux-gnu-gcc-12 (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Debian 6.11.5-1parrot1 (2024-12-13)
+Distributor ID:	Debian
+Description:	Parrot Security 6.3 (lorikeet)
+Release:	6.3
+Codename:	lory
+
+[1;34m╔══════════╣ [1;32mSudo version
+[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#sudo-version
+[0mSudo version 1.9.13p3
+
+
+[1;34m╔══════════╣ [1;32mPATH
+[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#writable-path-abuses
+[0m[1;31;103m/home/parrot/.nvm/versions/node[0m/v22.8.0/bin:[1;31;103m/home/parrot/.cargo/bin[0m:/usr/local/bin:/usr/bin:/bin:/usr/games:[1;31;103m/home/parrot/.rvm/bin[0m:[1;31;103m/home/parrot/go/bin[0m:[1;31;103m/home/parrot/tools/debug/pwninit[0m:[1;31;103m/home/parrot/go/bin[0m:[1;31;103m/home/parrot/.foundry/bin[0m:/snap/klee/10/usr/local/bin
+
+[1;34m╔══════════╣ [1;32mDate & uptime
+[0mMon 28 Apr 14:41:13 BST 2025
+ 14:41:13 up  2:29,  1 user,  load average: 1.01, 0.75, 0.61
+
+[1;34m╔══════════╣ [1;32mUnmounted file-system?
+[0m[1;34m╚ [1;34m[3mCheck if you can mount umounted devices
+[0mUUID=CA5E-7691                            [1;34m/boot/efi[0m      vfat    defaults,noatime,nodiratime 0 2
+[1;34mUUID=e168ae3a-2088-42c9-8a60-deba11db3c5f[0m [1;34m/[0m              btrfs   subvol=@,defaults,noatime,nodiratime,autodefrag,compress=zstd,discard 0 1
+[1;34mUUID=e168ae3a-2088-42c9-8a60-deba11db3c5f[0m [1;34m/home[0m          btrfs   subvol=@home,defaults,noatime,nodiratime,autodefrag,compress=zstd,discard 0 2
+
+[1;34m╔══════════╣ [1;32mAny sd*/disk* disk in /dev? (limit 20)
+[0mdisk
+sda
+sda1
+sda2
+
+[1;34m╔══════════╣ [1;32mEnvironment
+[0m[1;34m╚ [1;34m[3mAny private information inside environment variables?
+[0mSHELL=/bin/bash
+NVM_INC=/home/parrot/.nvm/versions/node/v22.8.0/include/node
+LC_ADDRESS=en_GB.UTF-8
+LC_NAME=en_GB.UTF-8
+LC_MONETARY=en_GB.UTF-8
+[1;31mPWD[0m=/home/parrot
+LOGNAME=parrot
+XDG_SESSION_TYPE=tty
+MOTD_SHOWN=pam
+HOME=/home/parrot
+LC_PAPER=en_GB.UTF-8
+LANG=en_GB.UTF-8
+SSH_CONNECTION=127.0.0.1 50024 127.0.0.1 22
+NVM_DIR=/home/parrot/.nvm
+XDG_SESSION_CLASS=user
+LC_IDENTIFICATION=en_GB.UTF-8
+USER=parrot
+SHLVL=2
+NVM_CD_FLAGS=
+LC_TELEPHONE=en_GB.UTF-8
+LC_MEASUREMENT=en_GB.UTF-8
+XDG_SESSION_ID=45
+XDG_RUNTIME_DIR=/run/user/1000
+SSH_CLIENT=127.0.0.1 50024 22
+LC_TIME=en_GB.UTF-8
+PATH=/home/parrot/.nvm/versions/node/v22.8.0/bin:/home/parrot/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/games:/home/parrot/.rvm/bin:/home/parrot/go/bin:/home/parrot/tools/debug/pwninit:/home/parrot/go/bin:/home/parrot/.foundry/bin:/snap/klee/10/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+NVM_BIN=/home/parrot/.nvm/versions/node/v22.8.0/bin
+LC_NUMERIC=en_GB.UTF-8
+_=/usr/bin/env
+
+[1;34m╔══════════╣ [1;32mSearching Signature verification failed in dmesg
+[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#dmesg-signature-verification-failed
+[0m[1;90mdmesg Not Found
+[0m
+[1;34m╔══════════╣ [1;32mExecuting Linux Exploit Suggester
+[0m[1;34m╚ [1;34m[3mhttps://github.com/mzet-/linux-exploit-suggester
+[0m[+] [1;31m[CVE-2022-2586] nft_object UAF[0m
+
+   Details: https://www.openwall.com/lists/oss-security/2022/08/29/5
+   Exposure: less probable
+   Tags: ubuntu=(20.04){kernel:5.12.13}
+   Download URL: https://www.openwall.com/lists/oss-security/2022/08/29/5/1
+   Comments: kernel.unprivileged_userns_clone=1 required (to obtain CAP_NET_ADMIN)
+
+[+] [1;31m[CVE-2021-4034] PwnKit[0m
+
+   Details: https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
+   Exposure: less probable
+   Tags: ubuntu=10|11|12|13|14|15|16|17|18|19|20|21,debian=7|8|9|10|11,fedora,manjaro
+   Download URL: https://codeload.github.com/berdav/CVE-2021-4034/zip/main
+
+[+] [1;31m[CVE-2021-3156] sudo Baron Samedit[0m
+
+   Details: https://www.qualys.com/2021/01/26/cve-2021-3156/baron-samedit-heap-based-overflow-sudo.txt
+   Exposure: less probable
+   Tags: mint=19,ubuntu=18|20, debian=10
+   Download URL: https://codeload.github.com/blasty/CVE-2021-3156/zip/main
+
+[+] [1;31m[CVE-2021-3156] sudo Baron Samedit 2[0m
+
+   Details: https://www.qualys.com/2021/01/26/cve-2021-3156/baron-samedit-heap-based-overflow-sudo.txt
+   Exposure: less probable
+   Tags: centos=6|7|8,ubuntu=14|16|17|18|19|20, debian=9|10
+   Download URL: https://codeload.github.com/worawit/CVE-2021-3156/zip/main
+
+[+] [1;31m[CVE-2021-22555] Netfilter heap out-of-bounds write[0m
+
+   Details: https://google.github.io/security-research/pocs/linux/cve-2021-22555/writeup.html
+   Exposure: less probable
+   Tags: ubuntu=20.04{kernel:5.8.0-*}
+   Download URL: https://raw.githubusercontent.com/google/security-research/master/pocs/linux/cve-2021-22555/exploit.c
+   ext-url: https://raw.githubusercontent.com/bcoles/kernel-exploits/master/CVE-2021-22555/exploit.c
+   Comments: ip_tables kernel module must be loaded
+
+[+] [1;31m[CVE-2017-5618] setuid screen v4.5.0 LPE[0m
+
+   Details: https://seclists.org/oss-sec/2017/q1/184
+   Exposure: less probable
+   Download URL: https://www.exploit-db.com/download/https://www.exploit-db.com/exploits/41154
+
+
+[1;34m╔══════════╣ [1;32mProtections
+[0m[1;34m═╣ [1;32mAppArmor enabled? .............. [0m[0mYou do not have enough privilege to read the profile set.
+apparmor module is loaded.
+[1;34m═╣ [1;32mAppArmor profile? .............. [0m[0m[1;31munconfined[0m
+[1;34m═╣ [1;32mis linuxONE? ................... [0m[0m[1;90ms390x Not Found
+[0m[1;34m═╣ [1;32mgrsecurity present? ............ [0m[0m[1;90mgrsecurity Not Found
+[0m[1;34m═╣ [1;32mPaX bins present? .............. [0m[0m[1;90mPaX Not Found
+[0m[1;34m═╣ [1;32mExecshield enabled? ............ [0m[0m[1;90mExecshield Not Found
+[0m[1;34m═╣ [1;32mSELinux enabled? ............... [0m[0mSELinux status:                 [1;31mdisabled[0m
+[1;34m═╣ [1;32mSeccomp enabled? ............... [0m[0m[1;31mdisabled[0m
+[1;34m═╣ [1;32mUser namespace? ................ [0m[0m[1;32menabled[0m
+[1;34m═╣ [1;32mCgroup2 enabled? ............... [0m[0m[1;32menabled[0m
+[1;34m═╣ [1;32mIs ASLR enabled? ............... [0m[0m[1;32mYes[0m
+[1;34m═╣ [1;32mPrinter? ....................... [0m[0m[1;90mNo
+[0m[1;34m═╣ [1;32mIs this a virtual machine? ..... [0m[0m[1;31mYes (oracle)[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[+] LinPEAS execution complete.

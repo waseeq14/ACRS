@@ -19,6 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Code, Vulnerability, Patch, Exploit
 from django.contrib.auth.decorators import login_required
 from pentest.pentest import Pentest
+from pentest.exploit import PentestExploitAI
 
 
 @api_view(["POST"])
@@ -209,9 +210,13 @@ def pentest_scan(request):
         ssh_host = request.POST.get('host')
         ssh_user = request.POST.get('username')
         ssh_pass = request.POST.get('password')
+        option = request.POST.get('option')
 
     if not ssh_host or not ssh_user or not ssh_pass:
         return JsonResponse({'error': 'Missing SSH connection details'}, status=400)
+
+    if not option:
+        return JsonResponse({'error': 'Missing Option'}, status=400)
 
     pentest = Pentest(ssh_host, ssh_user, ssh_pass)
 
@@ -220,7 +225,7 @@ def pentest_scan(request):
         if pentest.ssh_client is None:
             return JsonResponse({'error': 'SSH connection failed'}, status=500)
 
-        pentest.run_enum_scripts()
+        pentest.run_enum_scripts(option)
         pentest.download_file("/tmp/enum_results.txt", "enum_results.txt")
         pentest.setupEnv()
         result = pentest.analyze_vulns("enum_results.txt")
@@ -231,3 +236,37 @@ def pentest_scan(request):
         return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
+
+@api_view(['POST'])
+def pentest_scan_exploit(request):
+    if request.method == 'POST':
+        index = request.POST.get('index')
+
+    if not index:
+        return JsonResponse({'error': 'Index not provided'}, status=400)
+
+    pentest = PentestExploitAI('vuln_analysis.json')
+    pentest.setupEnv()
+
+    try:
+        result = pentest.run(int(index))
+        return JsonResponse({'result': result})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+@api_view(['POST'])
+def pentest_scan_patch(request):
+    if request.method == 'POST':
+        index = request.POST.get('index')
+
+    if not index:
+        return JsonResponse({'error': 'Index not provided'}, status=400)
+
+    pentest = PentestExploitAI('vuln_analysis.json')
+    pentest.setupEnv()
+
+    try:
+        result = pentest.run(int(index))
+        return JsonResponse({'result': result})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
