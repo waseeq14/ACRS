@@ -227,7 +227,7 @@ class PentestExploit(models.Model):
     )
 
     def __str__(self):
-        return f"Exploit for {self.project.name}"
+        return f"Exploit for {self.vulnerability.name}"
 
 class PentestPatch(models.Model):
     id = models.UUIDField(
@@ -246,4 +246,4 @@ class PentestPatch(models.Model):
         help_text="Foreign Key of the Vulnerability"
     )
     def __str__(self):
-        return f"Patch for {self.project.name}"
+        return f"Patch for {self.vulnerability.name}"

@@ -1,14 +1,14 @@
 [
     {
-        "vulnerability_name": "Sudo Baron Samedit Heap-Based Overflow",
-        "description": "A vulnerability in the sudo utility allows a local user to gain root privileges by exploiting a heap-based buffer overflow which exists due to improper handling of command line arguments",
-        "location": "Sudo version 1.9.9",
-        "cve": "CVE-2021-3156"
+        "vulnerability_name": "SUID Binary Exploitation",
+        "description": "The binary /usr/bin/bash has the SUID bit set which allows it to be executed with elevated privileges enabling a local user to gain root access by executing a shell with root privileges",
+        "location": "/usr/bin/bash",
+        "cve": "Not Found"
     },
     {
-        "vulnerability_name": "PwnKit Local Privilege Escalation",
-        "description": "A vulnerability in the pkexec utility of the Polkit package allows a local user to gain root privileges by exploiting an out-of-bounds write which occurs due to improper handling of environment variables",
-        "location": "Polkit package",
-        "cve": "CVE-2021-4034"
+        "vulnerability_name": "Misconfigured Sudoers Entry",
+        "description": "The user aerys is part of the sudo group which allows them to execute commands as root without providing a password enabling privilege escalation by executing any command with root privileges",
+        "location": "/etc/sudoers",
+        "cve": "Not Found"
     }
 ]

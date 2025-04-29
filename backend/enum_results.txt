@@ -18,11 +18,11 @@
 [1;34m                               ╔═══════════════════╗
 ═══════════════════════════════╣ [1;32mBasic information[1;34m ╠═══════════════════════════════
 [1;34m                               ╚═══════════════════╝[0m
-[1;37mOS: [0mLinux version 6.8.0-52-generic (buildd@lcy02-amd64-099) (x86_64-linux-gnu-gcc-12 (Ubuntu 12.3.0-1ubuntu1~22.04) 12.3.0, GNU ld (GNU Binutils for Ubuntu) 2.38) #53~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Wed Jan 15 19:18:46 UTC 2
-[1;37mUser & Groups: [0muid=1000(aerys) gid=1000(aerys) groups=1000(aerys),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),122(lpadmin),134(lxd),135(sambashare)
-[1;37mHostname: [0maerys-virtual-machine
+[1;37mOS: [0mLinux version 6.11.2-amd64 (devel@kali.org) (x86_64-linux-gnu-gcc-14 (Debian 14.2.0-6) 14.2.0, GNU ld (GNU Binutils for Debian) 2.43.1) #1 SMP PREEMPT_DYNAMIC Kali 6.11.2-1kali1 (2024-10-15)
+[1;37mUser & Groups: [0muid=1000(aerys) gid=1000(aerys) groups=1000(aerys),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),100(users),101(netdev),117(bluetooth),121(wireshark),127(scanner),134(kaboxer)
+[1;37mHostname: [0mAerys
 
-[1;33m[+] [1;32m/usr/bin/ping[1;34m is available for network discovery[1;37m (LinPEAS can discover hosts, learn more with -h)
+[1;33m[+] [1;32m/usr/bin/fping[1;34m is available for network discovery[1;37m (LinPEAS can discover hosts, learn more with -h)
 [0m[1;33m[+] [1;32m/usr/bin/bash[1;34m is available for network discovery, port scanning and port forwarding[1;37m (LinPEAS can discover hosts, scan ports, and forward ports. Learn more with -h)
 [1;33m[+] [1;32m/usr/bin/nc[1;34m is available for network discovery & port scanning[1;37m (LinPEAS can discover hosts and scan ports, learn more with -h)
 [0m[1;33m[+] [1;32mnmap[1;34m is available for network discovery & port scanning, you should use it yourself
@@ -33,67 +33,60 @@
 [1;34m                              ╚════════════════════╝[0m
 [1;34m╔══════════╣ [1;32mOperative system
 [0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#kernel-exploits
-[0mLinux version 6.8.0-52-generic (buildd@lcy02-amd64-099) (x86_64-linux-gnu-gcc-12 (Ubuntu 12.3.0-1ubuntu1~22.04) 12.3.0, GNU ld (GNU Binutils for Ubuntu) 2.38) #53~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Wed Jan 15 19:18:46 UTC 2
-Distributor ID:	Ubuntu
-Description:	Ubuntu 22.04.1 LTS
-Release:	22.04
-Codename:	jammy
+[0mLinux version 6.11.2-amd64 (devel@kali.org) (x86_64-linux-gnu-gcc-14 (Debian 14.2.0-6) 14.2.0, GNU ld (GNU Binutils for Debian) 2.43.1) #1 SMP PREEMPT_DYNAMIC Kali 6.11.2-1kali1 (2024-10-15)
+Distributor ID:	Kali
+Description:	Kali GNU/Linux Rolling
+Release:	2024.4
+Codename:	kali-rolling
 
 [1;34m╔══════════╣ [1;32mSudo version
 [0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#sudo-version
-[0mSudo version 1.9.9
+[0mSudo version 1.9.16p1
 
-[1;34m╔══════════╣ [1;32mUSBCreator
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/d-bus-enumeration-and-command-injection-privilege-escalation.html
-[0m
+
 [1;34m╔══════════╣ [1;32mPATH
 [0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#writable-path-abuses
-[0m/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+[0m/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games
 
 [1;34m╔══════════╣ [1;32mDate & uptime
-[0mو 17:10:26 PKT ت 29 اپریل 2025
- 17:10:26 up  5:26,  1 user,  load average: 0.08, 0.02, 0.01
+[0mTue Apr 29 07:36:21 CDT 2025
+ 07:36:21 up  5:54,  3 users,  load average: 0.79, 0.86, 0.90
 
 [1;34m╔══════════╣ [1;32mUnmounted file-system?
 [0m[1;34m╚ [1;34m[3mCheck if you can mount umounted devices
-[0m[1;34mUUID=23c07cfa-1238-4bd4-b410-f33dc698c55e[0m [1;34m/[0m               ext4    errors=remount-ro 0       1
-UUID=2B15-2DBE  [1;34m/boot/efi[0m       vfat    umask=0077      0       1
-[1;34m/[0m[1;32mswap[0mfile                                 none            [1;32mswap[0m    sw              0       0
+[0m[1;34mUUID=37091058-7dc7-4ff0-bd6f-9e04e1ece78b[0m [1;34m/[0m               ext4    errors=remount-ro 0       1
+UUID=f4ff9960-04d3-44f1-b768-ba2b4aef1dbb none            [1;32mswap[0m    sw              0       0
+[1;34m/dev[0m[1;34m/[0msr0        [1;34m/[0mmedia[1;32m[1;34m/[0mcdrom[0m0   udf,iso9660[1;31m user[0m,noauto     0       0
 
 [1;34m╔══════════╣ [1;32mAny sd*/disk* disk in /dev? (limit 20)
 [0mdisk
 sda
 sda1
 sda2
-sda3
+sda5
 
 [1;34m╔══════════╣ [1;32mEnvironment
 [0m[1;34m╚ [1;34m[3mAny private information inside environment variables?
-[0mSHELL=/bin/bash
-LC_ADDRESS=ur_PK
-LC_NAME=ur_PK
-LC_MONETARY=ur_PK
+[0mSHELL=/usr/bin/zsh
+POWERSHELL_UPDATECHECK=Off
+POWERSHELL_TELEMETRY_OPTOUT=1
+DOTNET_CLI_TELEMETRY_OPTOUT=1
 [1;31mPWD[0m=/home/aerys
 LOGNAME=aerys
 XDG_SESSION_TYPE=tty
 MOTD_SHOWN=pam
+COMMAND_NOT_FOUND_INSTALL_PROMPT=1
 HOME=/home/aerys
-LC_PAPER=ur_PK
-LANG=en_US.UTF-8
-SSH_CONNECTION=192.168.64.142 45752 192.168.64.144 22
+SSH_CONNECTION=127.0.0.1 46692 127.0.0.1 22
 XDG_SESSION_CLASS=user
-LC_IDENTIFICATION=ur_PK
 USER=aerys
 SHLVL=2
-LC_TELEPHONE=ur_PK
-LC_MEASUREMENT=ur_PK
-XDG_SESSION_ID=32
+XDG_SESSION_ID=76
 XDG_RUNTIME_DIR=/run/user/1000
-SSH_CLIENT=192.168.64.142 45752 22
-LC_TIME=ur_PK
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+SSH_CLIENT=127.0.0.1 46692 22
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games
 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
-LC_NUMERIC=ur_PK
+OLD[1;31mPWD[0m=/home/aerys
 _=/usr/bin/env
 
 [1;34m╔══════════╣ [1;32mSearching Signature verification failed in dmesg
@@ -109,27 +102,6 @@ _=/usr/bin/env
    Tags: ubuntu=(20.04){kernel:5.12.13}
    Download URL: https://www.openwall.com/lists/oss-security/2022/08/29/5/1
    Comments: kernel.unprivileged_userns_clone=1 required (to obtain CAP_NET_ADMIN)
-
-[+] [1;31m[CVE-2021-4034] PwnKit[0m
-
-   Details: https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
-   Exposure: less probable
-   Tags: ubuntu=10|11|12|13|14|15|16|17|18|19|20|21,debian=7|8|9|10|11,fedora,manjaro
-   Download URL: https://codeload.github.com/berdav/CVE-2021-4034/zip/main
-
-[+] [1;31m[CVE-2021-3156] sudo Baron Samedit[0m
-
-   Details: https://www.qualys.com/2021/01/26/cve-2021-3156/baron-samedit-heap-based-overflow-sudo.txt
-   Exposure: less probable
-   Tags: mint=19,ubuntu=18|20, debian=10
-   Download URL: https://codeload.github.com/blasty/CVE-2021-3156/zip/main
-
-[+] [1;31m[CVE-2021-3156] sudo Baron Samedit 2[0m
-
-   Details: https://www.qualys.com/2021/01/26/cve-2021-3156/baron-samedit-heap-based-overflow-sudo.txt
-   Exposure: less probable
-   Tags: centos=6|7|8,ubuntu=14|16|17|18|19|20, debian=9|10
-   Download URL: https://codeload.github.com/worawit/CVE-2021-3156/zip/main
 
 [+] [1;31m[CVE-2021-22555] Netfilter heap out-of-bounds write[0m
 

@@ -14,7 +14,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
-from .serializers import UserSerializer, PentestVulnerabilitySerializer, PentestExploitSerializer
+from .serializers import UserSerializer, PentestVulnerabilitySerializer, PentestExploitSerializer, PentestPatchSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.middleware.csrf import get_token
 from .models import (
@@ -295,20 +295,33 @@ def pentest_scan_exploit(request):
 @api_view(['POST'])
 def pentest_scan_patch(request):
     if request.method == 'POST':
-        index = request.POST.get('index')
-        md_content = request.POST.get('content')
+        id = request.POST.get('id')
     else:
         return JsonResponse({"error": "Invalid request method"}, status=400)
 
-    if not index:
-        return JsonResponse({'error': 'Index not provided'}, status=400)
+    if not id:
+        return JsonResponse({'error': 'Id not provided'}, status=400)
+    
+    vulnerability = PentestVulnerability.objects.filter(id=id).first()
+
+    if not vulnerability:
+        return JsonResponse({'error': 'Id not valid'}, status=400)
+    
+    exploit = vulnerability.exploits.filter().first()
+
+    if not exploit:
+        return JsonResponse({'error': 'Run the exploit first'}, status=400)
 
     pentest = PentestExploitAI('vuln_analysis.json')
     pentest.setupEnv()
 
     try:
-        result = pentest.generate_patch(md_content)
-        return JsonResponse({'result': result})
+        result = pentest.generate_patch(exploit.description)
+
+        patch = PentestPatch.objects.create(description=result, vulnerability=vulnerability)
+        serializer = PentestPatchSerializer(patch)
+
+        return JsonResponse({'result': serializer.data})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
