@@ -14,9 +14,19 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
-from .serializers import UserSerializer
+from .serializers import UserSerializer, PentestVulnerabilitySerializer, PentestExploitSerializer
 from django.views.decorators.csrf import csrf_exempt
-from .models import Code, Vulnerability, Patch, Exploit
+from django.middleware.csrf import get_token
+from .models import (
+    Code,
+    Vulnerability,
+    Patch,
+    Exploit,
+    PentestProject,
+    PentestVulnerability,
+    PentestExploit,
+    PentestPatch
+)
 from django.contrib.auth.decorators import login_required
 from pentest.pentest import Pentest
 from pentest.exploit import PentestExploitAI
@@ -211,6 +221,8 @@ def pentest_scan(request):
         ssh_user = request.POST.get('username')
         ssh_pass = request.POST.get('password')
         option = request.POST.get('option')
+    else:
+        return JsonResponse({"error": "Invalid request method"}, status=400)
 
     if not ssh_host or not ssh_user or not ssh_pass:
         return JsonResponse({'error': 'Missing SSH connection details'}, status=400)
@@ -229,28 +241,54 @@ def pentest_scan(request):
         pentest.download_file("/tmp/enum_results.txt", "enum_results.txt")
         pentest.setupEnv()
         result = pentest.analyze_vulns("enum_results.txt")
-        return JsonResponse({'result': result})
+
+        project = PentestProject.objects.create(
+            host=ssh_host, username=ssh_user, password=ssh_pass, scan_type=option, submittedBy=request.user
+        )
+
+        vulnerabilties = [
+            PentestVulnerability(
+                name=vuln['vulnerability_name'], description=vuln['description'], location=vuln['location'], cve=vuln['cve'], project=project
+            ) for vuln in result
+        ]
+
+        final_vulns = PentestVulnerability.objects.bulk_create(vulnerabilties)
+
+        vuln_serializer = PentestVulnerabilitySerializer(final_vulns, many=True)
+
+        return JsonResponse({'result': vuln_serializer.data, 'id': project.id})
 
     except Exception as e:
         pentest.disconnect()
         return JsonResponse({'error': str(e)}, status=500)
 
-    return JsonResponse({"error": "Invalid request method"}, status=400)
-
 @api_view(['POST'])
 def pentest_scan_exploit(request):
     if request.method == 'POST':
-        index = request.POST.get('index')
+        id = request.POST.get('id')
+    else:
+        return JsonResponse({"error": "Invalid request method"}, status=400)
 
-    if not index:
-        return JsonResponse({'error': 'Index not provided'}, status=400)
+    if not id:
+        return JsonResponse({'error': 'Id not provided'}, status=400)
+    
+    vulnerability = PentestVulnerability.objects.filter(id=id).first()
+
+    if not vulnerability:
+        return JsonResponse({'error': 'Id not valid'}, status=400)
 
     pentest = PentestExploitAI('vuln_analysis.json')
     pentest.setupEnv()
 
+    vuln_serializer = PentestVulnerabilitySerializer(vulnerability)
+
     try:
-        result = pentest.run(int(index))
-        return JsonResponse({'result': result})
+        result = pentest.run(vuln_serializer.data)
+
+        exploit = PentestExploit.objects.create(description=result, vulnerability=vulnerability)
+        serializer = PentestExploitSerializer(exploit)
+
+        return JsonResponse({'result': serializer.data})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
@@ -258,6 +296,9 @@ def pentest_scan_exploit(request):
 def pentest_scan_patch(request):
     if request.method == 'POST':
         index = request.POST.get('index')
+        md_content = request.POST.get('content')
+    else:
+        return JsonResponse({"error": "Invalid request method"}, status=400)
 
     if not index:
         return JsonResponse({'error': 'Index not provided'}, status=400)
@@ -266,7 +307,10 @@ def pentest_scan_patch(request):
     pentest.setupEnv()
 
     try:
-        result = pentest.run(int(index))
+        result = pentest.generate_patch(md_content)
         return JsonResponse({'result': result})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+def csrf_token_view(request):
+    return JsonResponse({'csrfToken': get_token(request)})

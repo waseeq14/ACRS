@@ -10,9 +10,15 @@ const api = axios.create({
   withCredentials: true,
 });
 
+const fetchCSRFToken = async () => {
+  const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/get-csrf-token`, { withCredentials: true} );
+  return response.data.csrfToken;
+};
+
 // Intercept requests to add CSRF token
-api.interceptors.request.use((config) => {
-  const csrfToken = getCSRFToken();
+api.interceptors.request.use(async (config) => {
+  // const csrfToken = getCSRFToken();
+  const csrfToken = await fetchCSRFToken();
   if (csrfToken) {
     config.headers['X-CSRFToken'] = csrfToken;
   }

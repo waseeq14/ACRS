@@ -145,3 +145,105 @@ class Report(models.Model):
     def __str__(self):
         return f"Report for Code ID: {self.code.id} - Format: {self.format}"
 
+class PentestProject(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text="Primary Key"
+    )
+    host = models.CharField(
+        max_length=20,
+        help_text="Host IP of the target machine"
+    )
+    username = models.CharField(
+        max_length=50,
+        help_text="Username of the target machine"
+    )
+    password = models.CharField(
+        max_length=100,
+        help_text="Password of the target machine"
+    )
+    scan_type = models.CharField(
+        max_length=100,
+        help_text="The scan type performed by the user"
+    )
+    submittedBy = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        help_text="Foreign Key of the User"
+    )
+
+    def __str__(self):
+        return f"{self.host} ({self.username})"
+
+class PentestVulnerability(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text="Primary Key"
+    )
+    name = models.CharField(
+        max_length=150,
+        help_text="Name of the vulnerability"
+    )
+    description = models.TextField(
+        help_text="The description of the vulnerability"
+    )
+    location = models.CharField(
+        max_length=250,
+        help_text="Location where the vulnerability exists"
+    )
+    cve = models.CharField(
+        max_length=20,
+        help_text="CVE Number"
+    )
+    project = models.ForeignKey(
+        PentestProject,
+        on_delete=models.CASCADE,
+        related_name="vulnerabilities",
+        help_text="Foreign Key of the Project"
+    )
+
+    def __str__(self):
+        return f"{self.name} - {self.cve}"
+
+class PentestExploit(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text="Primary Key"
+    )
+    description = models.TextField(
+        help_text="The description of the exploit"
+    )
+    vulnerability = models.ForeignKey(
+        PentestVulnerability,
+        on_delete=models.CASCADE,
+        related_name="exploits",
+        help_text="Foreign Key of the Vulnerability"
+    )
+
+    def __str__(self):
+        return f"Exploit for {self.project.name}"
+
+class PentestPatch(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text="Primary Key"
+    )
+    description = models.TextField(
+        help_text="The description of the patch"
+    )
+    vulnerability = models.ForeignKey(
+        PentestVulnerability,
+        on_delete=models.CASCADE,
+        related_name="patches",
+        help_text="Foreign Key of the Vulnerability"
+    )
+    def __str__(self):
+        return f"Patch for {self.project.name}"

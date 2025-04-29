@@ -11,7 +11,8 @@ from .views import (
     generate_exploit_path,
     pentest_scan,
     pentest_scan_exploit,
-    pentest_scan_patch
+    pentest_scan_patch,
+    csrf_token_view
 )
 
 urlpatterns = [
@@ -26,5 +27,6 @@ urlpatterns = [
     path('login/', login_user, name="login"),
     path('is-authenticated/', is_authenticated, name="is-authenticated"),
     path('logout/', logout_user, name='logout'),
-    path('update-password/', change_password, name='update-password')
+    path('update-password/', change_password, name='update-password'),
+    path('get-csrf-token/', csrf_token_view),
 ]
