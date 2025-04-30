@@ -143,7 +143,7 @@ export default function DashboardHome() {
               <table>
                 <tbody>
                   {appState.projects && appState.projects.map(project => (
-                    <tr className={styles.grope} key={project.id} onClick={() => loadProject(project.id)}>
+                    <tr className={styles.grope} key={project.id}>
                       <td>{project.title}</td>
                     </tr>
                   ))}
