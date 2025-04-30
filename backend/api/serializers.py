@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import PentestVulnerability, PentestExploit, PentestPatch
+from .models import PentestVulnerability, PentestExploit, PentestPatch, PentestProject, Code
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,3 +21,13 @@ class PentestPatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = PentestPatch
         fields = ['id', 'description']
+
+# class PentestProjectSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = PentestProject
+#         fields = ['id', '']
+
+# class CodeSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Code
+#         fields = []

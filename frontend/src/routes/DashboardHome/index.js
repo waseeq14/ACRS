@@ -1,8 +1,16 @@
+import { useContext, useEffect } from 'react'
+import api from '../../utils/api'
+import { AppContext } from '../../context/AppContext'
 import { Chart } from 'react-google-charts'
+import { useNavigate } from 'react-router'
 
 import styles from './styles.module.css'
 
 export default function DashboardHome() {
+  const navigate = useNavigate()
+
+  const { appState, setAppState } = useContext(AppContext)
+
   const data = [
     ['Vulnerability', 'Occurances'],
     ['Use After Free', 7],
@@ -25,6 +33,42 @@ export default function DashboardHome() {
     },
     colors: ['#810002', '#D91B1E', '#D46061', '#EDAFB0']
   }
+
+  const fetchProjects = async () => {
+    try {
+      const response = await api.get('/projects/')
+
+      setAppState({
+        ...appState,
+        pentestProjects: response.data.result.pentestProjects,
+        projects: response.data.result.projects
+      })
+    } catch (e) {
+      console.error('An error occurred.')
+    }
+  }
+
+  const loadPentestProject = async id => {
+    try {
+      const response = await api.get(`/load-pentest-projects?id=${id}`)
+
+      setAppState({
+        ...appState,
+        pentest: response.data.result.pentest,
+        pentestExploit: response.data.result.pentestExploit,
+        pentestPatch: response.data.result.pentestPatch
+      })
+
+      navigate('/dashboard/pentester-mode')
+    } catch (e) {
+      console.error('An error occurred.')
+    }
+  }
+
+  useEffect(() => {
+    fetchProjects()
+  }, [])
+
   return (
     <>
       <div className={styles.card}>
@@ -90,6 +134,39 @@ export default function DashboardHome() {
           </table>
         </div>
       </div>
+      {(appState.pentestProjects || appState.projects) && (
+        <>
+          <div style={{ height: '1rem' }}></div>
+          <div className={styles.cards}>
+            <div className={styles.card}>
+              <h2>Code Analysis Projects</h2>
+              <table>
+                <tbody>
+                  <tr>
+                  {appState.projects && appState.projects.map(project => (
+                    <tr className={styles.grope} key={project.id}>
+                      <td>{project.title}</td>
+                    </tr>
+                  ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className={styles.card}>
+              <h2>Pentest Projects</h2>
+              <table>
+                <tbody>
+                  {appState.pentestProjects && appState.pentestProjects.map(project => (
+                    <tr className={styles.grope} key={project.id} onClick={() => loadPentestProject(project.id)}>
+                      <td>{project.title}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
     </>
   )
 }

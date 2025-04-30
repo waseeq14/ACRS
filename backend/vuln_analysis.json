@@ -1,14 +1,20 @@
 [
     {
-        "vulnerability_name": "SUID Binary Exploitation",
-        "description": "The binary /usr/bin/bash has the SUID bit set which allows it to be executed with elevated privileges enabling a local user to gain root access by executing a shell with root privileges",
-        "location": "/usr/bin/bash",
+        "vulnerability_name": "Writable File with Linux Capabilities",
+        "description": "The file /home/aerys/Desktop/test/pwn has the cap_setuid capability and is writable allowing an attacker to modify the file and execute it with elevated privileges",
+        "location": "/home/aerys/Desktop/test/pwn",
         "cve": "Not Found"
     },
     {
-        "vulnerability_name": "Misconfigured Sudoers Entry",
-        "description": "The user aerys is part of the sudo group which allows them to execute commands as root without providing a password enabling privilege escalation by executing any command with root privileges",
-        "location": "/etc/sudoers",
-        "cve": "Not Found"
+        "vulnerability_name": "Exploitable SUID Binary - pkexec",
+        "description": "The pkexec binary is setuid root and is known to be exploitable in certain versions for privilege escalation allowing an attacker to execute arbitrary commands as root",
+        "location": "/usr/bin/pkexec",
+        "cve": "CVE-2021-4034"
+    },
+    {
+        "vulnerability_name": "Exploitable SUID Binary - snap-confine",
+        "description": "The snap-confine binary is setuid root and is known to be exploitable for local privilege escalation in certain versions of Ubuntu allowing an attacker to gain root access",
+        "location": "/usr/lib/snapd/snap-confine",
+        "cve": "CVE-2019-7304"
     }
 ]

@@ -40,3 +40,7 @@
 .card p {
   color: #555;
 }
+
+.grope {
+  cursor: pointer;
+}

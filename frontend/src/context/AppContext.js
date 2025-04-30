@@ -46,6 +46,15 @@ export const AppProvider = ({ children }) => {
     //       '**Markdown**\n*Italic*\n`Code`\n## Heading 2\n> Blockquote\n**Bold**'
     //   }
     // ]
+    //
+    // pentest: {},
+    // pentestExploit: {},
+    // pentestPatch: {}
+    //
+    // user: {}
+    //
+    // projects: {}
+    // pentestProjects: {}
   })
 
   return (

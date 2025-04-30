@@ -325,5 +325,74 @@ def pentest_scan_patch(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+@api_view(['GET'])
 def csrf_token_view(request):
     return JsonResponse({'csrfToken': get_token(request)})
+
+@api_view(['GET'])
+def fetch_projects(request):
+    pentest_projects = PentestProject.objects.filter(submittedBy=request.user)
+    projects = Code.objects.filter(submittedBy=request.user)
+
+    pentest_projects_data = [{
+        'id': project.id,
+        'title': str(project)
+    } for project in pentest_projects]
+
+    projects_data = [{
+        'id': project.id,
+        'title': str(project)
+    } for project in projects]
+
+    return JsonResponse({
+        'result': {
+            'pentestProjects': pentest_projects_data,
+            'projects': projects_data
+        }
+    })
+
+@api_view(['GET'])
+def load_pentest_projects(request):
+    id = request.query_params.get('id')
+
+    if not id:
+        return JsonResponse({'error': 'Id not provided'}, status=400)
+    
+    project = PentestProject.objects.filter(id=id).first()
+
+    if not project:
+        return JsonResponse({'error': 'Id not valid'}, status=400)
+    
+    vulnerabilities = PentestVulnerability.objects.filter(project=project)
+
+    exploits = {}
+    patches = {}
+
+    for index in range(len(vulnerabilities)):
+        vulnerability = vulnerabilities[index]
+
+        exploit = PentestExploit.objects.filter(vulnerability=vulnerability).first()
+        if exploit:
+            exploit_serializer = PentestExploitSerializer(exploit)
+            exploits[str(index)] = exploit_serializer.data
+
+        patch = PentestPatch.objects.filter(vulnerability=vulnerability).first()
+        if patch:
+            patch_serializer = PentestPatchSerializer(patch)
+            patches[str(index)] = patch_serializer.data
+
+    vulnerabilities_serializer = PentestVulnerabilitySerializer(vulnerabilities, many=True)
+
+    return JsonResponse({
+        'result': {
+            'pentest': {
+                'host': project.host,
+                'username': project.username,
+                'option': project.scan_type,
+                'id': project.id,
+                'result': vulnerabilities_serializer.data
+            },
+            'pentestExploit': exploits,
+            'pentestPatch': patches
+        }
+    })
