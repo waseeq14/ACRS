@@ -18,332 +18,163 @@
 [1;34m                               ╔═══════════════════╗
 ═══════════════════════════════╣ [1;32mBasic information[1;34m ╠═══════════════════════════════
 [1;34m                               ╚═══════════════════╝[0m
-[1;37mOS: [0mLinux version 6.8.0-52-generic (buildd@lcy02-amd64-099) (x86_64-linux-gnu-gcc-12 (Ubuntu 12.3.0-1ubuntu1~22.04) 12.3.0, GNU ld (GNU Binutils for Ubuntu) 2.38) #53~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Wed Jan 15 19:18:46 UTC 2
-[1;37mUser & Groups: [0muid=1000(aerys) gid=1000(aerys) groups=1000(aerys),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),122(lpadmin),134(lxd),135(sambashare)
-[1;37mHostname: [0maerys-virtual-machine
+[1;37mOS: [0mLinux version 6.11+parrot-amd64 (palinuro@parrotsec.org) (x86_64-linux-gnu-gcc-12 (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Debian 6.11.5-1parrot1 (2024-12-13)
+[1;37mUser & Groups: [0muid=1000(parrot) gid=1004(parrot) groups=1004(parrot),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),108(netdev),116(bluetooth),1000(lpadmin),1001(scanner),1002(docker),1003(autologin)
+[1;37mHostname: [0mparrot
 
-[1;33m[+] [1;32m/usr/bin/ping[1;34m is available for network discovery[1;37m (LinPEAS can discover hosts, learn more with -h)
+[1;33m[+] [1;32m/usr/bin/fping[1;34m is available for network discovery[1;37m (LinPEAS can discover hosts, learn more with -h)
 [0m[1;33m[+] [1;32m/usr/bin/bash[1;34m is available for network discovery, port scanning and port forwarding[1;37m (LinPEAS can discover hosts, scan ports, and forward ports. Learn more with -h)
 [1;33m[+] [1;32m/usr/bin/nc[1;34m is available for network discovery & port scanning[1;37m (LinPEAS can discover hosts and scan ports, learn more with -h)
 [0m[1;33m[+] [1;32mnmap[1;34m is available for network discovery & port scanning, you should use it yourself
 [0m
 
+[1;34m                              ╔════════════════════╗
+══════════════════════════════╣ [1;32mSystem Information[1;34m ╠══════════════════════════════
+[1;34m                              ╚════════════════════╝[0m
+[1;34m╔══════════╣ [1;32mOperative system
+[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#kernel-exploits
+[0mLinux version 6.11+parrot-amd64 (palinuro@parrotsec.org) (x86_64-linux-gnu-gcc-12 (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Debian 6.11.5-1parrot1 (2024-12-13)
+Distributor ID:	Debian
+Description:	Parrot Security 6.3 (lorikeet)
+Release:	6.3
+Codename:	lory
+
+[1;34m╔══════════╣ [1;32mSudo version
+[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#sudo-version
+[0mSudo version 1.9.13p3
 
 
+[1;34m╔══════════╣ [1;32mPATH
+[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#writable-path-abuses
+[0m[1;31;103m/home/parrot/.nvm/versions/node[0m/v22.8.0/bin:[1;31;103m/home/parrot/.cargo/bin[0m:/usr/local/bin:/usr/bin:/bin:/usr/games:[1;31;103m/home/parrot/.rvm/bin[0m:[1;31;103m/home/parrot/go/bin[0m:[1;31;103m/home/parrot/tools/debug/pwninit[0m:[1;31;103m/home/parrot/go/bin[0m:[1;31;103m/home/parrot/.foundry/bin[0m:/snap/klee/10/usr/local/bin
 
+[1;34m╔══════════╣ [1;32mDate & uptime
+[0mWed 30 Apr 09:48:00 BST 2025
+ 09:48:00 up 8 min,  1 user,  load average: 0.71, 0.62, 0.33
 
+[1;34m╔══════════╣ [1;32mUnmounted file-system?
+[0m[1;34m╚ [1;34m[3mCheck if you can mount umounted devices
+[0mUUID=CA5E-7691                            [1;34m/boot/efi[0m      vfat    defaults,noatime,nodiratime 0 2
+[1;34mUUID=e168ae3a-2088-42c9-8a60-deba11db3c5f[0m [1;34m/[0m              btrfs   subvol=@,defaults,noatime,nodiratime,autodefrag,compress=zstd,discard 0 1
+[1;34mUUID=e168ae3a-2088-42c9-8a60-deba11db3c5f[0m [1;34m/home[0m          btrfs   subvol=@home,defaults,noatime,nodiratime,autodefrag,compress=zstd,discard 0 2
 
+[1;34m╔══════════╣ [1;32mAny sd*/disk* disk in /dev? (limit 20)
+[0mdisk
+sda
+sda1
+sda2
 
+[1;34m╔══════════╣ [1;32mEnvironment
+[0m[1;34m╚ [1;34m[3mAny private information inside environment variables?
+[0mSHELL=/bin/bash
+NVM_INC=/home/parrot/.nvm/versions/node/v22.8.0/include/node
+LC_ADDRESS=en_GB.UTF-8
+LC_NAME=en_GB.UTF-8
+LC_MONETARY=en_GB.UTF-8
+[1;31mPWD[0m=/home/parrot
+LOGNAME=parrot
+XDG_SESSION_TYPE=tty
+MOTD_SHOWN=pam
+HOME=/home/parrot
+LC_PAPER=en_GB.UTF-8
+LANG=en_GB.UTF-8
+SSH_CONNECTION=127.0.0.1 56150 127.0.0.1 22
+NVM_DIR=/home/parrot/.nvm
+XDG_SESSION_CLASS=user
+LC_IDENTIFICATION=en_GB.UTF-8
+USER=parrot
+SHLVL=2
+NVM_CD_FLAGS=
+LC_TELEPHONE=en_GB.UTF-8
+LC_MEASUREMENT=en_GB.UTF-8
+XDG_SESSION_ID=4
+XDG_RUNTIME_DIR=/run/user/1000
+SSH_CLIENT=127.0.0.1 56150 22
+LC_TIME=en_GB.UTF-8
+PATH=/home/parrot/.nvm/versions/node/v22.8.0/bin:/home/parrot/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/games:/home/parrot/.rvm/bin:/home/parrot/go/bin:/home/parrot/tools/debug/pwninit:/home/parrot/go/bin:/home/parrot/.foundry/bin:/snap/klee/10/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+NVM_BIN=/home/parrot/.nvm/versions/node/v22.8.0/bin
+LC_NUMERIC=en_GB.UTF-8
+_=/usr/bin/env
 
-
-
-
-
-
-
-
-[1;34m                      ╔════════════════════════════════════╗
-══════════════════════╣ [1;32mFiles with Interesting Permissions[1;34m ╠══════════════════════
-[1;34m                      ╚════════════════════════════════════╝[0m
-[1;34m╔══════════╣ [1;32mSUID - Check easy privesc, exploits and write perms
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#sudo-and-suid
-[0m-rwsr-xr-x 1 root root 35K فروری  21  2022 /usr/bin[1;31m/umount  --->  BSD/Linux(08-1996)[0m
--rwsr-xr-x 1 root root 227K فروری  14  2022 /usr/bin[1;31m/sudo  --->  check_if_the_sudo_version_is_vulnerable[0m
--rwsr-xr-x 1 root root 35K مارچ   23  2022 /usr/bin[1;32m/fusermount3[0m
--rwsr-xr-x 1 root root 15K دسمبر   6  2023 /usr/bin[1;32m/vmware-user-suid-wrapper[0m
--rwsr-xr-x 1 root root 72K مارچ   14  2022 /usr/bin[1;31m/chfn  --->  SuSE_9.3/10[0m
--rwsr-xr-x 1 root root 59K مارچ   14  2022 /usr/bin[1;31m/passwd  --->  Apple_Mac_OSX(03-2006)/Solaris_8/9(12-2004)/SPARC_8/9/Sun_Solaris_2.3_to_2.5.1(02-1997)[0m
--rwsr-xr-x 1 root root 31K فروری  26  2022 /usr/bin[1;31m/pkexec  --->  Linux4.10_to_5.1.17(CVE-2019-13272)/rhel_6(CVE-2011-1485)/Generic_CVE-2021-4034[0m
--rwsr-xr-x 1 root root 40K مارچ   14  2022 /usr/bin[1;31m/newgrp  --->  HP-UX_10.20[0m
--rwsr-xr-x 1 root root 47K فروری  21  2022 /usr/bin[1;31m/mount  --->  Apple_Mac_OSX(Lion)_Kernel_xnu-1699.32.7_except_xnu-1699.24.8[0m
--rwsr-xr-x 1 root root 71K مارچ   14  2022 /usr/bin[1;32m/gpasswd[0m
--rwsr-xr-x 1 root root 55K فروری  21  2022 /usr/bin[1;32m/su[0m
--rwsr-xr-x 1 root root 44K مارچ   14  2022 /usr/bin[1;32m/chsh[0m
--rwsr-xr-- 1 root dip 415K فروری  24  2022 /usr/sbin[1;31m/pppd  --->  Apple_Mac_OSX_10.4.8(05-2007)[0m
--rwsr-xr-x 1 root root 19K فروری  26  2022 /usr/libexec[1;32m/polkit-agent-helper-1[0m
--rwsr-xr-x 1 root root 136K اگست    8  2022 /usr/lib/snapd[1;31m/snap-confine  --->  Ubuntu_snapd<2.37_dirty_sock_Local_Privilege_Escalation(CVE-2019-7304)[0m
--rwsr-xr-x 1 root root 331K فروری  11 18:51 /usr/lib/openssh[1;32m/ssh-keysign[0m
--rwsr-sr-x 1 root root 15K جولائی  6  2022 /usr/lib/xorg[1;32m/Xorg.wrap[0m
--rwsr-xr-- 1 root messagebus 35K اپریل   1  2022 /usr/lib/dbus-1.0[1;32m/dbus-daemon-launch-helper[0m
--rwsr-xr-x 1 root root 84K فروری   6  2024 /snap/core20/2501/usr/bin[1;31m/chfn  --->  SuSE_9.3/10[0m
--rwsr-xr-x 1 root root 52K فروری   6  2024 /snap/core20/2501/usr/bin[1;32m/chsh[0m
--rwsr-xr-x 1 root root 87K فروری   6  2024 /snap/core20/2501/usr/bin[1;32m/gpasswd[0m
--rwsr-xr-x 1 root root 55K اپریل   9  2024 /snap/core20/2501/usr/bin[1;31m/mount  --->  Apple_Mac_OSX(Lion)_Kernel_xnu-1699.32.7_except_xnu-1699.24.8[0m
--rwsr-xr-x 1 root root 44K فروری   6  2024 /snap/core20/2501/usr/bin[1;31m/newgrp  --->  HP-UX_10.20[0m
--rwsr-xr-x 1 root root 67K فروری   6  2024 /snap/core20/2501/usr/bin[1;31m/passwd  --->  Apple_Mac_OSX(03-2006)/Solaris_8/9(12-2004)/SPARC_8/9/Sun_Solaris_2.3_to_2.5.1(02-1997)[0m
--rwsr-xr-x 1 root root 67K اپریل   9  2024 /snap/core20/2501/usr/bin[1;32m/su[0m
--rwsr-xr-x 1 root root 163K اپریل   4  2023 /snap/core20/2501/usr/bin[1;31m/sudo  --->  check_if_the_sudo_version_is_vulnerable[0m
--rwsr-xr-x 1 root root 39K اپریل   9  2024 /snap/core20/2501/usr/bin[1;31m/umount  --->  BSD/Linux(08-1996)[0m
--rwsr-xr-- 1 root systemd-resolve 51K اکتوبر 25  2022 /snap/core20/2501/usr/lib/dbus-1.0[1;32m/dbus-daemon-launch-helper[0m
--rwsr-xr-x 1 root root 467K جنوری   2  2024 /snap/core20/2501/usr/lib/openssh[1;32m/ssh-keysign[0m
--rwsr-xr-x 1 root root 84K فروری   6  2024 /snap/core20/2496/usr/bin[1;31m/chfn  --->  SuSE_9.3/10[0m
--rwsr-xr-x 1 root root 52K فروری   6  2024 /snap/core20/2496/usr/bin[1;32m/chsh[0m
--rwsr-xr-x 1 root root 87K فروری   6  2024 /snap/core20/2496/usr/bin[1;32m/gpasswd[0m
--rwsr-xr-x 1 root root 55K اپریل   9  2024 /snap/core20/2496/usr/bin[1;31m/mount  --->  Apple_Mac_OSX(Lion)_Kernel_xnu-1699.32.7_except_xnu-1699.24.8[0m
--rwsr-xr-x 1 root root 44K فروری   6  2024 /snap/core20/2496/usr/bin[1;31m/newgrp  --->  HP-UX_10.20[0m
--rwsr-xr-x 1 root root 67K فروری   6  2024 /snap/core20/2496/usr/bin[1;31m/passwd  --->  Apple_Mac_OSX(03-2006)/Solaris_8/9(12-2004)/SPARC_8/9/Sun_Solaris_2.3_to_2.5.1(02-1997)[0m
--rwsr-xr-x 1 root root 67K اپریل   9  2024 /snap/core20/2496/usr/bin[1;32m/su[0m
--rwsr-xr-x 1 root root 163K اپریل   4  2023 /snap/core20/2496/usr/bin[1;31m/sudo  --->  check_if_the_sudo_version_is_vulnerable[0m
--rwsr-xr-x 1 root root 39K اپریل   9  2024 /snap/core20/2496/usr/bin[1;31m/umount  --->  BSD/Linux(08-1996)[0m
--rwsr-xr-- 1 root systemd-resolve 51K اکتوبر 25  2022 /snap/core20/2496/usr/lib/dbus-1.0[1;32m/dbus-daemon-launch-helper[0m
--rwsr-xr-x 1 root root 467K جنوری   2  2024 /snap/core20/2496/usr/lib/openssh[1;32m/ssh-keysign[0m
--rwsr-xr-x 1 root root 177K جنوری  17 13:49 /snap/snapd/23771/usr/lib/snapd[1;31m/snap-confine  --->  Ubuntu_snapd<2.37_dirty_sock_Local_Privilege_Escalation(CVE-2019-7304)[0m
--rwsr-xr-x 1 root root 177K اپریل   6 00:10 /snap/snapd/24505/usr/lib/snapd[1;31m/snap-confine  --->  Ubuntu_snapd<2.37_dirty_sock_Local_Privilege_Escalation(CVE-2019-7304)[0m
--rwsr-xr-x 1 root root 72K فروری   6  2024 /snap/core22/1802/usr/bin[1;31m/chfn  --->  SuSE_9.3/10[0m
--rwsr-xr-x 1 root root 44K فروری   6  2024 /snap/core22/1802/usr/bin[1;32m/chsh[0m
--rwsr-xr-x 1 root root 71K فروری   6  2024 /snap/core22/1802/usr/bin[1;32m/gpasswd[0m
--rwsr-xr-x 1 root root 47K اپریل   9  2024 /snap/core22/1802/usr/bin[1;31m/mount  --->  Apple_Mac_OSX(Lion)_Kernel_xnu-1699.32.7_except_xnu-1699.24.8[0m
--rwsr-xr-x 1 root root 40K فروری   6  2024 /snap/core22/1802/usr/bin[1;31m/newgrp  --->  HP-UX_10.20[0m
--rwsr-xr-x 1 root root 59K فروری   6  2024 /snap/core22/1802/usr/bin[1;31m/passwd  --->  Apple_Mac_OSX(03-2006)/Solaris_8/9(12-2004)/SPARC_8/9/Sun_Solaris_2.3_to_2.5.1(02-1997)[0m
--rwsr-xr-x 1 root root 55K اپریل   9  2024 /snap/core22/1802/usr/bin[1;32m/su[0m
--rwsr-xr-x 1 root root 227K اپریل   3  2023 /snap/core22/1802/usr/bin[1;31m/sudo  --->  check_if_the_sudo_version_is_vulnerable[0m
--rwsr-xr-x 1 root root 35K اپریل   9  2024 /snap/core22/1802/usr/bin[1;31m/umount  --->  BSD/Linux(08-1996)[0m
--rwsr-xr-- 1 root systemd-resolve 35K اکتوبر 25  2022 /snap/core22/1802/usr/lib/dbus-1.0[1;32m/dbus-daemon-launch-helper[0m
--rwsr-xr-x 1 root root 331K جون    26  2024 /snap/core22/1802/usr/lib/openssh[1;32m/ssh-keysign[0m
--rwsr-xr-x 1 root root 19K فروری  26  2022 /snap/core22/1802/usr/libexec[1;32m/polkit-agent-helper-1[0m
--rwsr-xr-x 1 root root 72K فروری   6  2024 /snap/core22/1908/usr/bin[1;31m/chfn  --->  SuSE_9.3/10[0m
--rwsr-xr-x 1 root root 44K فروری   6  2024 /snap/core22/1908/usr/bin[1;32m/chsh[0m
--rwsr-xr-x 1 root root 71K فروری   6  2024 /snap/core22/1908/usr/bin[1;32m/gpasswd[0m
--rwsr-xr-x 1 root root 47K اپریل   9  2024 /snap/core22/1908/usr/bin[1;31m/mount  --->  Apple_Mac_OSX(Lion)_Kernel_xnu-1699.32.7_except_xnu-1699.24.8[0m
--rwsr-xr-x 1 root root 40K فروری   6  2024 /snap/core22/1908/usr/bin[1;31m/newgrp  --->  HP-UX_10.20[0m
--rwsr-xr-x 1 root root 59K فروری   6  2024 /snap/core22/1908/usr/bin[1;31m/passwd  --->  Apple_Mac_OSX(03-2006)/Solaris_8/9(12-2004)/SPARC_8/9/Sun_Solaris_2.3_to_2.5.1(02-1997)[0m
--rwsr-xr-x 1 root root 55K اپریل   9  2024 /snap/core22/1908/usr/bin[1;32m/su[0m
--rwsr-xr-x 1 root root 227K اپریل   3  2023 /snap/core22/1908/usr/bin[1;31m/sudo  --->  check_if_the_sudo_version_is_vulnerable[0m
--rwsr-xr-x 1 root root 35K اپریل   9  2024 /snap/core22/1908/usr/bin[1;31m/umount  --->  BSD/Linux(08-1996)[0m
--rwsr-xr-- 1 root systemd-resolve 35K اکتوبر 25  2022 /snap/core22/1908/usr/lib/dbus-1.0[1;32m/dbus-daemon-launch-helper[0m
--rwsr-xr-x 1 root root 331K فروری  11 18:51 /snap/core22/1908/usr/lib/openssh[1;32m/ssh-keysign[0m
--rwsr-xr-x 1 root root 19K فروری  26  2022 /snap/core22/1908/usr/libexec[1;32m/polkit-agent-helper-1[0m
-
-[1;34m╔══════════╣ [1;32mSGID
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#sudo-and-suid
-[0m-rwxr-sr-x 1 root _ssh 287K فروری  11 18:51 /usr/bin[1;32m/ssh-agent[0m
--rwxr-sr-x 1 root shadow 71K مارچ   14  2022 /usr/bin[1;32m/chage[0m
--rwxr-sr-x 1 root tty 23K فروری  21  2022 [1;31m/usr/bin/write.ul (Unknown SGID binary)[0m
-[3m-rwxr-sr-x 1 root shadow 23K مارچ   14  2022 /usr/bin[1;32m/expiry[0m
--rwxr-sr-x 1 root crontab 39K مارچ   23  2022 /usr/bin[1;32m/crontab[0m
--rwxr-sr-x 1 root tty 23K فروری  21  2022 /usr/bin[1;32m/wall[0m
--rwxr-sr-x 1 root shadow 23K مارچ   24  2022 /usr/sbin[1;32m/pam_extrausers_chkpwd[0m
--rwxr-sr-x 1 root shadow 27K مارچ   24  2022 /usr/sbin[1;32m/unix_chkpwd[0m
--rwxr-sr-x 1 root mail 23K مئی    31  2022 /usr/libexec[1;32m/camel-lock-helper-1.2[0m
--rwsr-sr-x 1 root root 15K جولائی  6  2022 /usr/lib/xorg[1;32m/Xorg.wrap[0m
--rwxr-sr-x 1 root shadow 83K فروری   6  2024 /snap/core20/2501/usr/bin[1;32m/chage[0m
--rwxr-sr-x 1 root shadow 31K فروری   6  2024 /snap/core20/2501/usr/bin[1;32m/expiry[0m
--rwxr-sr-x 1 root messagebus 343K جنوری   2  2024 /snap/core20/2501/usr/bin[1;32m/ssh-agent[0m
--rwxr-sr-x 1 root shadow 43K جنوری  10  2024 /snap/core20/2501/usr/sbin[1;32m/pam_extrausers_chkpwd[0m
--rwxr-sr-x 1 root shadow 43K جنوری  10  2024 /snap/core20/2501/usr/sbin[1;32m/unix_chkpwd[0m
--rwxr-sr-x 1 root shadow 83K فروری   6  2024 /snap/core20/2496/usr/bin[1;32m/chage[0m
--rwxr-sr-x 1 root shadow 31K فروری   6  2024 /snap/core20/2496/usr/bin[1;32m/expiry[0m
--rwxr-sr-x 1 root messagebus 343K جنوری   2  2024 /snap/core20/2496/usr/bin[1;32m/ssh-agent[0m
--rwxr-sr-x 1 root shadow 43K جنوری  10  2024 /snap/core20/2496/usr/sbin[1;32m/pam_extrausers_chkpwd[0m
--rwxr-sr-x 1 root shadow 43K جنوری  10  2024 /snap/core20/2496/usr/sbin[1;32m/unix_chkpwd[0m
--rwxr-sr-x 1 root shadow 71K فروری   6  2024 /snap/core22/1802/usr/bin[1;32m/chage[0m
--rwxr-sr-x 1 root shadow 23K فروری   6  2024 /snap/core22/1802/usr/bin[1;32m/expiry[0m
--rwxr-sr-x 1 root _ssh 287K جون    26  2024 /snap/core22/1802/usr/bin[1;32m/ssh-agent[0m
--rwxr-sr-x 1 root shadow 23K نومبر  17 15:17 /snap/core22/1802/usr/sbin[1;32m/pam_extrausers_chkpwd[0m
--rwxr-sr-x 1 root shadow 27K نومبر  17 15:17 /snap/core22/1802/usr/sbin[1;32m/unix_chkpwd[0m
--rwxr-sr-x 1 root shadow 71K فروری   6  2024 /snap/core22/1908/usr/bin[1;32m/chage[0m
--rwxr-sr-x 1 root shadow 23K فروری   6  2024 /snap/core22/1908/usr/bin[1;32m/expiry[0m
--rwxr-sr-x 1 root _ssh 287K فروری  11 18:51 /snap/core22/1908/usr/bin[1;32m/ssh-agent[0m
--rwxr-sr-x 1 root shadow 23K نومبر  17 15:17 /snap/core22/1908/usr/sbin[1;32m/pam_extrausers_chkpwd[0m
--rwxr-sr-x 1 root shadow 27K نومبر  17 15:17 /snap/core22/1908/usr/sbin[1;32m/unix_chkpwd[0m
-
-[1;34m╔══════════╣ [1;32mFiles with ACLs (limited to 50)
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#acls
-[0m[1;90mfiles with acls in searched folders Not Found
+[1;34m╔══════════╣ [1;32mSearching Signature verification failed in dmesg
+[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#dmesg-signature-verification-failed
+[0m[1;90mdmesg Not Found
 [0m
-[1;34m╔══════════╣ [1;32mCapabilities
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#capabilities
-[0m[1;34m══╣ [1;32mCurrent shell capabilities
-[0mCapInh:  0x0000000000000000=
-CapPrm:  0x0000000000000000=
-CapEff:	 0x0000000000000000=
-CapBnd:  0x000001ffffffffff=[1;31mcap_chown[0m,cap_dac_override,cap_dac_read_search,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_linux_immutable,cap_net_bind_service,cap_net_broadcast,cap_net_admin,cap_net_raw,cap_ipc_lock,cap_ipc_owner,cap_sys_module,cap_sys_rawio,cap_sys_chroot,cap_sys_ptrace,cap_sys_pacct,cap_sys_admin,cap_sys_boot,cap_sys_nice,cap_sys_resource,cap_sys_time,cap_sys_tty_config,cap_mknod,cap_lease,cap_audit_write,cap_audit_control,cap_setfcap,cap_mac_override,cap_mac_admin,cap_syslog,cap_wake_alarm,cap_block_suspend,cap_audit_read,cap_perfmon,cap_bpf,cap_checkpoint_restore
-CapAmb:  0x0000000000000000=
+[1;34m╔══════════╣ [1;32mExecuting Linux Exploit Suggester
+[0m[1;34m╚ [1;34m[3mhttps://github.com/mzet-/linux-exploit-suggester
+[0m[+] [1;31m[CVE-2022-2586] nft_object UAF[0m
 
-[1;34m╚ [1;34m[3mParent process capabilities
-[0mCapInh:	 0x0000000000000000=
-CapPrm:	 0x0000000000000000=
-CapEff:	 0x0000000000000000=
-CapBnd:	 0x000001ffffffffff=[1;31mcap_chown[0m,cap_dac_override,cap_dac_read_search,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_linux_immutable,cap_net_bind_service,cap_net_broadcast,cap_net_admin,cap_net_raw,cap_ipc_lock,cap_ipc_owner,cap_sys_module,cap_sys_rawio,cap_sys_chroot,cap_sys_ptrace,cap_sys_pacct,cap_sys_admin,cap_sys_boot,cap_sys_nice,cap_sys_resource,cap_sys_time,cap_sys_tty_config,cap_mknod,cap_lease,cap_audit_write,cap_audit_control,cap_setfcap,cap_mac_override,cap_mac_admin,cap_syslog,cap_wake_alarm,cap_block_suspend,cap_audit_read,cap_perfmon,cap_bpf,cap_checkpoint_restore
-CapAmb:	 0x0000000000000000=
+   Details: https://www.openwall.com/lists/oss-security/2022/08/29/5
+   Exposure: less probable
+   Tags: ubuntu=(20.04){kernel:5.12.13}
+   Download URL: https://www.openwall.com/lists/oss-security/2022/08/29/5/1
+   Comments: kernel.unprivileged_userns_clone=1 required (to obtain CAP_NET_ADMIN)
+
+[+] [1;31m[CVE-2021-4034] PwnKit[0m
+
+   Details: https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
+   Exposure: less probable
+   Tags: ubuntu=10|11|12|13|14|15|16|17|18|19|20|21,debian=7|8|9|10|11,fedora,manjaro
+   Download URL: https://codeload.github.com/berdav/CVE-2021-4034/zip/main
+
+[+] [1;31m[CVE-2021-3156] sudo Baron Samedit[0m
+
+   Details: https://www.qualys.com/2021/01/26/cve-2021-3156/baron-samedit-heap-based-overflow-sudo.txt
+   Exposure: less probable
+   Tags: mint=19,ubuntu=18|20, debian=10
+   Download URL: https://codeload.github.com/blasty/CVE-2021-3156/zip/main
+
+[+] [1;31m[CVE-2021-3156] sudo Baron Samedit 2[0m
+
+   Details: https://www.qualys.com/2021/01/26/cve-2021-3156/baron-samedit-heap-based-overflow-sudo.txt
+   Exposure: less probable
+   Tags: centos=6|7|8,ubuntu=14|16|17|18|19|20, debian=9|10
+   Download URL: https://codeload.github.com/worawit/CVE-2021-3156/zip/main
+
+[+] [1;31m[CVE-2021-22555] Netfilter heap out-of-bounds write[0m
+
+   Details: https://google.github.io/security-research/pocs/linux/cve-2021-22555/writeup.html
+   Exposure: less probable
+   Tags: ubuntu=20.04{kernel:5.8.0-*}
+   Download URL: https://raw.githubusercontent.com/google/security-research/master/pocs/linux/cve-2021-22555/exploit.c
+   ext-url: https://raw.githubusercontent.com/bcoles/kernel-exploits/master/CVE-2021-22555/exploit.c
+   Comments: ip_tables kernel module must be loaded
+
+[+] [1;31m[CVE-2017-5618] setuid screen v4.5.0 LPE[0m
+
+   Details: https://seclists.org/oss-sec/2017/q1/184
+   Exposure: less probable
+   Download URL: https://www.exploit-db.com/download/https://www.exploit-db.com/exploits/41154
 
 
-Files with capabilities (limited to 50):
-/usr/bin/ping [1;31mcap_net_raw[0m=ep
-/usr/bin/mtr-packet [1;31mcap_net_raw[0m=ep
-/usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-ptp-helper [1;31mcap_net_bind_service[0m,cap_net_admin=ep
-/home/aerys/Desktop/test/pwn [1;31mcap_setuid[0m=ep
-[1;31m/home/aerys/Desktop/test/pwn cap_setuid=ep is writable[0m
-/snap/core20/2501/usr/bin/ping [1;31mcap_net_raw[0m=ep
-/snap/core20/2496/usr/bin/ping [1;31mcap_net_raw[0m=ep
-/snap/core22/1802/usr/bin/ping [1;31mcap_net_raw[0m=ep
-/snap/core22/1908/usr/bin/ping [1;31mcap_net_raw[0m=ep
+[1;34m╔══════════╣ [1;32mProtections
+[0m[1;34m═╣ [1;32mAppArmor enabled? .............. [0m[0mYou do not have enough privilege to read the profile set.
+apparmor module is loaded.
+[1;34m═╣ [1;32mAppArmor profile? .............. [0m[0m[1;31munconfined[0m
+[1;34m═╣ [1;32mis linuxONE? ................... [0m[0m[1;90ms390x Not Found
+[0m[1;34m═╣ [1;32mgrsecurity present? ............ [0m[0m[1;90mgrsecurity Not Found
+[0m[1;34m═╣ [1;32mPaX bins present? .............. [0m[0m[1;90mPaX Not Found
+[0m[1;34m═╣ [1;32mExecshield enabled? ............ [0m[0m[1;90mExecshield Not Found
+[0m[1;34m═╣ [1;32mSELinux enabled? ............... [0m[0mSELinux status:                 [1;31mdisabled[0m
+[1;34m═╣ [1;32mSeccomp enabled? ............... [0m[0m[1;31mdisabled[0m
+[1;34m═╣ [1;32mUser namespace? ................ [0m[0m[1;32menabled[0m
+[1;34m═╣ [1;32mCgroup2 enabled? ............... [0m[0m[1;32menabled[0m
+[1;34m═╣ [1;32mIs ASLR enabled? ............... [0m[0m[1;32mYes[0m
+[1;34m═╣ [1;32mPrinter? ....................... [0m[0m[1;90mNo
+[0m[1;34m═╣ [1;32mIs this a virtual machine? ..... [0m[0m[1;31mYes (oracle)[0m
 
-[1;34m╔══════════╣ [1;32mUsers with capabilities
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#capabilities
-[0m
-[1;34m╔══════════╣ [1;32mChecking misconfigurations of ld.so
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#ldso
-[0m[1;32m[3m/etc/ld.so.conf
-[0mContent of /etc/ld.so.conf:
-include /etc/ld.so.conf.d/*.conf
 
-[1;32m[3m/etc/ld.so.conf.d
-[0m[1;32m[3m  /etc/ld.so.conf.d/libc.conf
-[0m[3m  - [1;32m/usr/local/lib[0m[0m
-[1;32m[3m  /etc/ld.so.conf.d/x86_64-linux-gnu.conf
-[0m[3m  - [1;32m/usr/local/lib/x86_64-linux-gnu[0m[0m
-[3m  - [1;32m/lib/x86_64-linux-gnu[0m[0m
-[3m  - [1;32m/usr/lib/x86_64-linux-gnu[0m[0m
 
-[3m[1;32m/etc/ld.so.preload
-[0m[1;34m╔══════════╣ [1;32mFiles (scripts) in /etc/profile.d/
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#profiles-files
-[0mtotal 60
-drwxr-xr-x   2 root root  4096 اگست    9  2022 .
-drwxr-xr-x 131 root root 12288 اپریل  18 00:52 ..
--rw-r--r--   1 root root    96 اکتوبر 15  2021 [1;32m01-locale-fix.sh[0m
--rw-r--r--   1 root root   835 اگست    8  2022 [1;32mapps-bin-path.sh[0m
--rw-r--r--   1 root root   726 نومبر  16  2021 [1;32mbash_completion.sh[0m
--rw-r--r--   1 root root  1003 اگست   13  2019 [1;32mcedilla-portuguese.sh[0m
--rw-------   1 root root   677 اگست    9  2022 debuginfod.csh
--rw-------   1 root root   692 اگست    9  2022 debuginfod.sh
--rw-r--r--   1 root root  1012 مارچ   22  2022 gnome-session_gnomerc.sh
--rw-r--r--   1 root root   376 نومبر  16  2021 [1;32mim-config_wayland.sh[0m
--rw-r--r--   1 root root  1908 مارچ   28  2022 [1;32mvte-2.91.sh[0m
--rw-r--r--   1 root root   967 مارچ   28  2022 [1;32mvte.csh[0m
--rw-r--r--   1 root root   954 مارچ   22  2022 [1;32mxdg_dirs_desktop_session.sh[0m
 
-[1;34m╔══════════╣ [1;32mPermissions in init, init.d, systemd, and rc.d
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#init-initd-systemd-and-rcd
-[0m
-[1;34m╔══════════╣ [1;32mAppArmor binary profiles
-[0m-rw-r--r-- 1 root root  3461 جون    21  2022 sbin.dhclient
--rw-r--r-- 1 root root 11144 جون    17  2022 usr.bin.evince
--rw-r--r-- 1 root root  3448 مارچ   18  2022 usr.bin.man
--rw-r--r-- 1 root root  1421 جون    20  2021 usr.bin.tcpdump
--rw-r--r-- 1 root root  1519 جولائی 16  2022 usr.lib.libreoffice.program.oosplash
--rw-r--r-- 1 root root  1227 جولائی 16  2022 usr.lib.libreoffice.program.senddoc
--rw-r--r-- 1 root root 10740 جولائی 16  2022 usr.lib.libreoffice.program.soffice.bin
--rw-r--r-- 1 root root  1046 جولائی 16  2022 usr.lib.libreoffice.program.xpdfimport
--rw-r--r-- 1 root root 28376 اگست    8  2022 usr.lib.snapd.snap-confine.real
--rw-r--r-- 1 root root   677 اپریل   6  2022 usr.sbin.cups-browsed
--rw-r--r-- 1 root root  6141 مئی    27  2022 usr.sbin.cupsd
--rw-r--r-- 1 root root  1592 نومبر  16  2021 usr.sbin.rsyslogd
 
-[1;34m═╣ [1;32mHashes inside passwd file? ........... [0m[1;90mNo
-[0m[1;34m═╣ [1;32mWritable passwd file? ................ [0m[1;90mNo
-[0m[1;34m═╣ [1;32mCredentials in fstab/mtab? ........... [0m[1;90mNo
-[0m[1;34m═╣ [1;32mCan I read shadow files? ............. [0m[1;90mNo
-[0m[1;34m═╣ [1;32mCan I read shadow plists? ............ [0m[1;90mNo
-[0m[1;34m═╣ [1;32mCan I write shadow plists? ........... [0m[1;90mNo
-[0m[1;34m═╣ [1;32mCan I read opasswd file? ............. [0m[1;90mNo
-[0m[1;34m═╣ [1;32mCan I write in network-scripts? ...... [0m[1;90mNo
-[0m[1;34m═╣ [1;32mCan I read root folder? .............. [0m[1;90mNo
-[0m
-[1;34m╔══════════╣ [1;32mSearching root files in home dirs (limit 30)
-[0m/home/
-/root/
 
-[1;34m╔══════════╣ [1;32mSearching folders owned by me containing others files on it (limit 100)
-[0m
-[1;34m╔══════════╣ [1;32mReadable files belonging to root and readable by me but not world readable
-[0m-rw-r----- 1 root adm 26640 اپریل  18 01:17 [1;31m/var/log/dmesg.4.gz[0m
--rw-r----- 1 root adm 138837 اپریل  29 23:11 [1;31m/var/log/dmesg.0[0m
--rw-r----- 1 root adm 7387 مارچ   28 20:59 [1;31m/var/log/apt/term.log.1.gz[0m
--rw-r----- 1 root adm 13063 اپریل  18 00:52 [1;31m/var/log/apt/term.log[0m
--rw-r----- 1 root adm 27128 اپریل  29 10:40 [1;31m/var/log/dmesg.1.gz[0m
--rw-r----- 1 root adm 27140 اپریل  28 15:53 [1;31m/var/log/dmesg.2.gz[0m
--rw-r----- 1 root adm 26754 اپریل  25 02:11 [1;31m/var/log/dmesg.3.gz[0m
--rw-r----- 1 root adm 223 اپریل  11 17:17 [1;31m/var/log/cups/access_log.6.gz[0m
--rw-r----- 1 root adm 296 اپریل  18 02:44 [1;31m/var/log/cups/access_log.4.gz[0m
--rw-r----- 1 root adm 887 اپریل  30 11:22 [1;31m/var/log/cups/access_log[0m
--rw-r----- 1 root adm 216 اپریل  28 22:36 [1;31m/var/log/cups/access_log.2.gz[0m
--rw-r----- 1 root adm 351 اپریل  15 16:24 [1;31m/var/log/cups/access_log.5.gz[0m
--rw-r----- 1 root adm 265 اپریل  11 00:00 [1;31m/var/log/cups/access_log.7.gz[0m
--rw-r----- 1 root adm 183 اپریل  25 02:14 [1;31m/var/log/cups/access_log.3.gz[0m
--rw-r----- 1 root adm 2606 اپریل  30 00:00 [1;31m/var/log/cups/access_log.1[0m
--rw-r----- 1 root adm 6252 مارچ   27 01:30 [1;31m/var/log/installer/debug[0m
--rw-r----- 1 root adm 18 مارچ   27 06:23 [1;31m/var/log/installer/version[0m
--rw-r----- 1 root adm 1537 مارچ   27 06:22 [1;31m/var/log/installer/casper.log[0m
--rw-r----- 1 root adm 144174 مارچ   27 01:25 [1;31m/var/log/installer/partman[0m
--rw-r----- 1 root adm 52 مارچ   27 01:23 [1;31m/var/log/installer/casper-md5check.json[0m
--rw-r----- 1 root adm 138431 اپریل  30 11:22 [1;31m/var/log/dmesg[0m
--rw-r----- 1 root dip 1093 اگست    9  2022 [1;31m/etc/ppp/peers/provider[0m
--rw-r----- 1 root dip 656 اگست    9  2022 [1;31m/etc/chatscripts/provider[0m
 
-[1;34m╔══════════╣ [1;32mInteresting writable files owned by me or writable by everyone (not in Home) (max 200)
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#writable-files
-[0m/dev/mqueue
-/dev/shm
-/home/aerys
-/run/lock
-/run/user/1000
-/run/user/1000/dbus-1
-/run/user/1000/dbus-1/services
-/run/user/1000/dconf
-/run/user/1000/dconf/user
-/run/user/1000/doc
-/run/user/1000/doc/by-app
-/run/user/1000/doc/by-app/snap.snapd-desktop-integration
-/run/user/1000/gnupg
-/run/user/1000/gvfs
-/run/user/1000/gvfsd
-/run/user/1000/pipewire-0.lock
-/run/user/1000/pulse
-[3m#)You_can_write_even_more_files_inside_last_directory
-[0m
-/run/user/1000/snap.snapd-desktop-integration/dconf
-/run/user/1000/systemd
-/run/user/1000/systemd/generator.late
-/run/user/1000/systemd/generator.late/app-geocluex2ddemox2dagent@autostart[1;31m.service[0m
-/run/user/1000/systemd/generator.late/app-gnomex2dinitialx2dsetupx2dfirstx2dlogin@autostart[1;31m.service[0m
-/run/user/1000/systemd/generator.late/app-gnomex2dshellx2doverridesx2dmigration@autostart[1;31m.service[0m
-/run/user/1000/systemd/generator.late/app-imx2dlaunch@autostart[1;31m.service[0m
-/run/user/1000/systemd/generator.late/app-nmx2dapplet@autostart[1;31m.service[0m
-[3m#)You_can_write_even_more_files_inside_last_directory
-[0m
-/run/user/1000/systemd/inaccessible
-/run/user/1000/systemd/inaccessible/dir
-/run/user/1000/systemd/inaccessible/reg
-/run/user/1000/systemd/units
-/snap/core20/2496/run/lock
-/snap/core20/2496/tmp
-/snap/core20/2496/var/tmp
-/snap/core20/2501/run/lock
-/snap/core20/2501/tmp
-/snap/core20/2501/var/tmp
-/snap/core22/1802/run/lock
-/snap/core22/1802/tmp
-/snap/core22/1802/var/tmp
-/snap/core22/1908/run/lock
-/snap/core22/1908/tmp
-/snap/core22/1908/var/tmp
-/test
-/tmp
-/tmp/enum_results.txt
-/tmp/.font-unix
-/tmp/.ICE-unix
-/tmp/linpeas[1;31m.sh[0m
-/tmp/run[1;31m.sh[0m
-[3m#)You_can_write_even_more_files_inside_last_directory
-[0m
-/var/crash
-/var[1;31m/lib/[0mBrlAPI
-/var/metrics
-/var/tmp
 
-[1;34m╔══════════╣ [1;32mInteresting GROUP writable files (not in Home) (max 200)
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#writable-files
-[0m  Group [1;32maerys:
-[0m/run/user/1000/pipewire-0.lock
-/run/user/1000/snap.snapd-desktop-integration/dconf
-/test
-/tmp/linpeas[1;31m.sh[0m
-/tmp/run[1;31m.sh[0m
-/tmp/enum_results.txt
-  Group [1;32mlpadmin:
-[0m/usr/share/ppd/custom
+
+
+
+
 
 
 

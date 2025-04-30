@@ -1,20 +1,14 @@
 [
     {
-        "vulnerability_name": "Writable File with Linux Capabilities",
-        "description": "The file /home/aerys/Desktop/test/pwn has the cap_setuid capability and is writable allowing an attacker to modify the file and execute it with elevated privileges",
-        "location": "/home/aerys/Desktop/test/pwn",
-        "cve": "Not Found"
+        "vulnerability_name": "Sudo Baron Samedit Vulnerability",
+        "description": "A heap-based buffer overflow vulnerability in sudo that allows a local attacker to escalate privileges to root by exploiting the flaw in the command-line parsing code",
+        "location": "Sudo version 1.9.13p3",
+        "cve": "CVE-2021-3156"
     },
     {
-        "vulnerability_name": "Exploitable SUID Binary - pkexec",
-        "description": "The pkexec binary is setuid root and is known to be exploitable in certain versions for privilege escalation allowing an attacker to execute arbitrary commands as root",
-        "location": "/usr/bin/pkexec",
+        "vulnerability_name": "PwnKit Vulnerability",
+        "description": "A local privilege escalation vulnerability in polkit's pkexec utility that allows an unprivileged user to gain root privileges due to incorrect handling of command-line arguments",
+        "location": "Polkit pkexec utility",
         "cve": "CVE-2021-4034"
-    },
-    {
-        "vulnerability_name": "Exploitable SUID Binary - snap-confine",
-        "description": "The snap-confine binary is setuid root and is known to be exploitable for local privilege escalation in certain versions of Ubuntu allowing an attacker to gain root access",
-        "location": "/usr/lib/snapd/snap-confine",
-        "cve": "CVE-2019-7304"
     }
 ]

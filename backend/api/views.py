@@ -352,7 +352,7 @@ def fetch_projects(request):
     })
 
 @api_view(['GET'])
-def load_pentest_projects(request):
+def load_pentest_project(request):
     id = request.query_params.get('id')
 
     if not id:

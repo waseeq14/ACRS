@@ -50,7 +50,7 @@ export default function DashboardHome() {
 
   const loadPentestProject = async id => {
     try {
-      const response = await api.get(`/load-pentest-projects?id=${id}`)
+      const response = await api.get(`/load-pentest-project?id=${id}`)
 
       setAppState({
         ...appState,
@@ -142,14 +142,12 @@ export default function DashboardHome() {
               <h2>Code Analysis Projects</h2>
               <table>
                 <tbody>
-                  <tr>
                   {appState.projects && appState.projects.map(project => (
-                    <tr className={styles.grope} key={project.id}>
+                    <tr className={styles.grope} key={project.id} onClick={() => loadProject(project.id)}>
                       <td>{project.title}</td>
                     </tr>
                   ))}
-                  </tr>
-                </tbody>
+                 </tbody>
               </table>
             </div>
             <div className={styles.card}>

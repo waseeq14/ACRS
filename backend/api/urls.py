@@ -14,7 +14,7 @@ from .views import (
     pentest_scan_patch,
     csrf_token_view,
     fetch_projects,
-    load_pentest_projects
+    load_pentest_project
 )
 
 urlpatterns = [
@@ -27,7 +27,7 @@ urlpatterns = [
     path('pentest-patch/', pentest_scan_patch, name="pentest-scan-patch"),
     path('register/', register_user, name="register"),
     path('projects/', fetch_projects, name='fetch-projects'),
-    path('load-pentest-projects/', load_pentest_projects, name='load-pentest-projects'),
+    path('load-pentest-project/', load_pentest_project, name='load-pentest-project'),
     path('login/', login_user, name="login"),
     path('is-authenticated/', is_authenticated, name="is-authenticated"),
     path('logout/', logout_user, name='logout'),
