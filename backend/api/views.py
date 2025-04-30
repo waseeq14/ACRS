@@ -396,3 +396,55 @@ def load_pentest_project(request):
             'pentestPatch': patches
         }
     })
+
+@api_view(['GET'])
+def load_project(request):
+    id = request.query_params.get('id')
+
+    if not id:
+        return JsonResponse({'error': 'Id not provided'}, status=400)
+    
+    project = Code.objects.filter(id=id).first()
+
+    if not project:
+        return JsonResponse({'error': 'Id not valid'}, status=400)
+
+    project_folder = f'{os.path.dirname(os.getcwd())}/projects/{project.id}'
+
+    file_path = f'{project_folder}/code.{project.language}'
+    file_content = project.code
+
+    klee_result = Vulnerability.objects.filter(code=project, analysis_type='symbolic').first()
+    klee_result_obj = {}
+    if klee_result:
+        klee_result_obj = { 'analysis': klee_result.description, 'code': f'{project_folder}/code_klee.{project.language}' }
+    
+    advanced_klee_result = Vulnerability.objects.filter(code=project, analysis_type='symbolic2').first()
+    advanced_klee_result_obj = {}
+    if advanced_klee_result:
+        advanced_klee_result_obj = { 'analysis': advanced_klee_result.description, segments: [] }
+
+    fuzzer_result = Vulnerability.objects.filter(code=project, analysis_type='asan').first()
+    fuzzer_result_obj = {}
+    if fuzzer_result:
+        fuzzer_result_obj = { 
+            'analysis': fuzzer_result.description,
+            'code': f'{project_folder}/code_fuzz.{project.language}',
+            'seeds': ''
+        }
+
+    rules_result = Vulnerability.objects.filter(code=project, analysis_type='rules').first()
+    rules_result_obj = {}
+    if rules_result:
+        rules_result_obj = rules_result.description
+
+    return JsonResponse({
+        'result': {
+            'filePath': file_path,
+            'fileContent': file_content,
+            'kleeResult': klee_result_obj,
+            'advancedKleeResult': advanced_klee_result_obj,
+            'fuzzerResult': fuzzer_result_obj,
+            'rulesResult': rules_result_obj,
+        }
+    })

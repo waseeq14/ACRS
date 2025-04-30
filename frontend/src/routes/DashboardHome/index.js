@@ -65,6 +65,29 @@ export default function DashboardHome() {
     }
   }
 
+  const loadProject = async id => {
+    try {
+      const response = await api.get(`/load-project?id=${id}`)
+
+      setAppState({
+        ...appState,
+        filePath: response.data.result.filePath,
+        fileContent: response.data.result.fileContent,
+        kleeResult:  response.data.result.kleeResult,
+        advancedKleeResult: response.data.result.advancedKleeResult,
+        fuzzerResult: response.data.result.fuzzerResult,
+        rulesResult: response.data.result.rulesResult,
+      })
+
+      console.log(response.data)
+
+      navigate('/dashboard/va')
+    } catch (e) {
+      console.log(e)
+      console.error('An error occurred.')
+    }
+  }
+
   useEffect(() => {
     fetchProjects()
   }, [])
@@ -143,7 +166,7 @@ export default function DashboardHome() {
               <table>
                 <tbody>
                   {appState.projects && appState.projects.map(project => (
-                    <tr className={styles.grope} key={project.id}>
+                    <tr className={styles.grope} key={project.id} onClick={() => loadProject(project.id)}>
                       <td>{project.title}</td>
                     </tr>
                   ))}
