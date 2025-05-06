@@ -63,7 +63,7 @@ class Vulnerability(models.Model):
     )
 
     def __str__(self):
-        return f"{self.cweId} - {self.severity} (Score: {self.cvssScore if self.cvssScore is not None else 'N/A'})"
+        return f"{self.cweId} - {self.code.language})"
 
 
 class Exploit(models.Model):

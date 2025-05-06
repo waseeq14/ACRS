@@ -77,6 +77,8 @@ export default function DashboardHome() {
         advancedKleeResult: response.data.result.advancedKleeResult,
         fuzzerResult: response.data.result.fuzzerResult,
         rulesResult: response.data.result.rulesResult,
+        exploitResult: response.data.result.exploitResult,
+        patchResult: response.data.result.patchResult,
       })
 
       console.log(response.data)
