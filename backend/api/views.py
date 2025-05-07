@@ -527,8 +527,6 @@ def get_pentest_report(request):
                     .replace('###SCAN_TYPE###', scan_types[project.scan_type])\
                     .replace('###VULNERABILITIES###', ''.join(vuln_templates))
             
-            print(template)
-            
             return HttpResponse(template, content_type='text/html')
     except Exception:
         return JsonResponse({'error': 'An unexpected error occurred'}, status=500)
