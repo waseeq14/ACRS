@@ -1,7 +1,7 @@
 import sys
 import os
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import importlib.util
@@ -468,3 +468,69 @@ def load_project(request):
         result_obj['patchResult'] = patch_result_obj
 
     return JsonResponse({'result': result_obj})
+
+@api_view(['GET'])
+def get_pentest_report(request):
+    id = request.query_params.get('id')
+
+    if not id:
+        return JsonResponse({'error': 'Id not provided'}, status=400)
+    
+    project = PentestProject.objects.filter(id=id).first()
+
+    if not project:
+        return JsonResponse({'error': 'Id not valid'}, status=400)
+    
+    vulnerabilities = PentestVulnerability.objects.filter(project=project)
+
+    # Data Loaded, now to build the template.
+
+    scan_types = {
+        'system_information': 'System Information',
+        'container': 'Container',
+        'cloud': 'Cloud',
+        'procs_crons_timers_srvcs_sockets': 'Procs Crons Timers and Sockets',
+        'network_information': 'Network Information',
+        'users_information': 'Users Information',
+        'software_information': 'Software Information',
+        'interesting_perms_files': 'File Permissions',
+        'interesting_files': 'Interesting Files',
+        'api_keys_regex': 'API Keys'
+    }
+
+    try:
+        with open('api/reports/pentest-report-template.html', 'r') as template_file:
+            with open('api/reports/pentest-report-vuln-template.html', 'r') as vuln_template_file:
+                vuln_template = vuln_template_file.read()
+
+            vuln_templates = []
+            for vulnerability in vulnerabilities:
+                exploit = PentestExploit.objects.filter(vulnerability=vulnerability).first()
+                patch = PentestPatch.objects.filter(vulnerability=vulnerability).first()
+
+                exploit_exists = exploit is not None
+                patch_exists = patch is not None
+
+                new_vuln_template = vuln_template.replace('###NAME###', vulnerability.name)\
+                                                 .replace('###DESCRIPTION###', vulnerability.description)\
+                                                 .replace('###EXPLOIT###', exploit.description.replace('`', '\`') if exploit_exists else '')\
+                                                 .replace('###PATCH###', patch.description.replace('`', '\`') if patch_exists else '')
+                
+                vuln_templates.append(new_vuln_template)
+
+            template = template_file.read()
+
+            template = template.replace('###TITLE###', f'ACRS - Pentest Report - {project.host} ({scan_types[project.scan_type]})')\
+                    .replace('###DATE###', project.createdAt.strftime('%d/%m/%Y'))\
+                    .replace('###HOST###', project.host)\
+                    .replace('###USERNAME###', project.username)\
+                    .replace('###SCAN_TYPE###', scan_types[project.scan_type])\
+                    .replace('###VULNERABILITIES###', ''.join(vuln_templates))
+            
+            print(template)
+            
+            return HttpResponse(template, content_type='text/html')
+    except Exception:
+        return JsonResponse({'error': 'An unexpected error occurred'}, status=500)
+
+    

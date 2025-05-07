@@ -168,6 +168,7 @@ class PentestProject(models.Model):
         max_length=100,
         help_text="The scan type performed by the user"
     )
+    createdAt = models.DateField(auto_now=True)
     submittedBy = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
