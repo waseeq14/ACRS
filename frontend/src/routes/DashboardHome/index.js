@@ -1,8 +1,9 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import api from '../../utils/api'
 import { AppContext } from '../../context/AppContext'
 import { Chart } from 'react-google-charts'
 import { useNavigate } from 'react-router'
+import classNames from 'classnames'
 
 import styles from './styles.module.css'
 
@@ -11,13 +12,15 @@ export default function DashboardHome() {
 
   const { appState, setAppState } = useContext(AppContext)
 
-  const data = [
-    ['Vulnerability', 'Occurances'],
-    ['Use After Free', 7],
-    ['Out-of-bounds Read', 2],
-    ['Improper Validation of Array Index', 2],
-    ['Buffer Overflow', 5]
-  ]
+  const [data, setData] = useState([])
+
+  // const data = [
+  //   ['Vulnerability', 'Occurances'],
+  //   ['Use After Free', 7],
+  //   ['Out-of-bounds Read', 2],
+  //   ['Improper Validation of Array Index', 2],
+  //   ['Buffer Overflow', 5]
+  // ]
 
   const options = {
     title: 'Vulnerability Occurance',
@@ -34,15 +37,28 @@ export default function DashboardHome() {
     colors: ['#810002', '#D91B1E', '#D46061', '#EDAFB0']
   }
 
+  const fetchStats = async () => {
+    try {
+      const response = await api.get('/get-dashboard-stats/')
+
+      setAppState(prevState => ({
+        ...appState,
+        dashboardStats: response.data.result
+      }))
+    } catch (e) {
+      console.error('An error occurred.')
+    }
+  }
+
   const fetchProjects = async () => {
     try {
       const response = await api.get('/projects/')
 
-      setAppState({
-        ...appState,
+      setAppState(prevState => ({
+        ...prevState,
         pentestProjects: response.data.result.pentestProjects,
         projects: response.data.result.projects
-      })
+      }));
     } catch (e) {
       console.error('An error occurred.')
     }
@@ -52,12 +68,12 @@ export default function DashboardHome() {
     try {
       const response = await api.get(`/load-pentest-project?id=${id}`)
 
-      setAppState({
-        ...appState,
+      setAppState(prevState => ({
+        ...prevState,
         pentest: response.data.result.pentest,
         pentestExploit: response.data.result.pentestExploit,
         pentestPatch: response.data.result.pentestPatch
-      })
+      }))
 
       navigate('/dashboard/pentester-mode')
     } catch (e) {
@@ -91,23 +107,59 @@ export default function DashboardHome() {
   }
 
   useEffect(() => {
+    fetchStats()
     fetchProjects()
   }, [])
 
+  useEffect(() => {
+    if (appState.dashboardStats && appState.dashboardStats.vulnerabilities) {
+      setData([
+        ['Vulnerability', 'Occurances'],
+        ...appState.dashboardStats.vulnerabilities
+      ])
+    }
+  }, [appState.dashboardStats])
+
   return (
     <>
+      {data.length !== 0 && (
+        <>
+          <div className={styles.card}>
+            <h2>Last Scan</h2>
+            <Chart
+              chartType='PieChart'
+              data={data}
+              options={options}
+              width={'100%'}
+              height={'400px'}
+            />
+          </div>
+          <div style={{ height: '1rem' }}></div>
+        </>
+      )}
+      
       <div className={styles.card}>
-        <h2>Last Scan</h2>
-        <Chart
-          chartType='PieChart'
-          data={data}
-          options={options}
-          width={'100%'}
-          height={'400px'}
-        />
+        <h2>Pentester Mode Stats</h2>
+        <table>
+          <thead>
+              <tr>
+                <th>Number of Devices Scanned</th>
+                <th>Vulnerabilities Identified</th>
+                <th>Exploit Paths Suggested</th>
+                <th>Patches Suggested</th>
+              </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.big}>{appState.dashboardStats ? appState.dashboardStats.pentestProjects : 0}</td>
+              <td className={styles.big}>{appState.dashboardStats ? appState.dashboardStats.pentestVulns : 0}</td>
+              <td className={styles.big}>{appState.dashboardStats ? appState.dashboardStats.pentestExploits : 0}</td>
+              <td className={styles.big}>{appState.dashboardStats ? appState.dashboardStats.pentestPatches : 0}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div style={{ height: '1rem' }}></div>
-      <div className={styles.cards}>
+      {/* <div className={styles.cards}>
         <div className={styles.card}>
           <h2>Recent Activity</h2>
           <table>
@@ -158,7 +210,7 @@ export default function DashboardHome() {
             </tbody>
           </table>
         </div>
-      </div>
+      </div> */}
       {(appState.pentestProjects || appState.projects) && (
         <>
           <div style={{ height: '1rem' }}></div>
@@ -168,8 +220,12 @@ export default function DashboardHome() {
               <table>
                 <tbody>
                   {appState.projects && appState.projects.map(project => (
-                    <tr className={styles.grope} key={project.id} onClick={() => loadProject(project.id)}>
-                      <td>{project.title}</td>
+                    <tr 
+                      className={classNames(styles.whiteUnderline, styles.grope)}
+                      key={project.id}
+                      onClick={() => loadProject(project.id)}
+                    >
+                      <td className={styles.whiteUnderline}>{project.title}</td>
                     </tr>
                   ))}
                  </tbody>
@@ -180,8 +236,12 @@ export default function DashboardHome() {
               <table>
                 <tbody>
                   {appState.pentestProjects && appState.pentestProjects.map(project => (
-                    <tr className={styles.grope} key={project.id} onClick={() => loadPentestProject(project.id)}>
-                      <td>{project.title}</td>
+                    <tr
+                      className={classNames(styles.whiteUnderline, styles.grope)}
+                      key={project.id}
+                      onClick={() => loadPentestProject(project.id)}
+                    >
+                      <td className={styles.whiteUnderline}>{project.title}</td>
                     </tr>
                   ))}
                 </tbody>

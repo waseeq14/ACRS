@@ -28,9 +28,12 @@
   background-color: #2b2a28;
   color: white;
   border: none;
-  border-bottom: 1px solid #ddd;
   padding: 0.5rem;
   text-align: left;
+}
+
+.card table th.whiteUnderline, .card table td.whiteUnderline {
+  border-bottom: 1px solid #ddd;
 }
 
 .card table th {
@@ -43,4 +46,9 @@
 
 .grope {
   cursor: pointer;
+}
+
+.big {
+  font-size: 24px;
+  font-weight: bold;
 }

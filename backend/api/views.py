@@ -556,4 +556,30 @@ def get_pentest_report(request):
     except Exception:
         return JsonResponse({'error': 'An unexpected error occurred'}, status=500)
 
-    
+@api_view(['GET'])
+def load_dashboard_stats(request):
+	vuln_names = VulnerabilityNames.objects.order_by('-count')[:5]
+
+	vuln_names_obj = None
+
+	if len(vuln_names) != 0:
+		vuln_names_obj = []
+		for vuln in vuln_names:
+			vuln_names_obj.append([vuln.name, vuln.count])
+
+	pentest_projects = PentestProject.objects.count()
+	pentest_vulns = PentestVulnerability.objects.count()
+	pentest_exploits = PentestExploit.objects.count()
+	pentest_patches = PentestPatch.objects.count()
+
+	result_obj = {
+		'pentestProjects': pentest_projects,
+		'pentestVulns': pentest_vulns,
+		'pentestExploits': pentest_exploits,
+		'pentestPatches': pentest_patches,
+	}
+
+	if vuln_names_obj:
+		result_obj['vulnerabilities'] = vuln_names_obj
+
+	return JsonResponse({'result': result_obj})
