@@ -25,7 +25,8 @@ from .models import (
     PentestProject,
     PentestVulnerability,
     PentestExploit,
-    PentestPatch
+    PentestPatch,
+    VulnerabilityNames
 )
 from django.contrib.auth.decorators import login_required
 from pentest.pentest import Pentest
@@ -145,16 +146,40 @@ def run_analysis(request):
 		code = Code.objects.get(id=code_id)
 
 		if analysis_type == 'symbolic':
-			Vulnerability.objects.create(cweId="", description=result[0], code=code, analysis_type=analysis_type)
-			return JsonResponse({"result": result[0], 'code': result[1]})
+			Vulnerability.objects.create(cweId="", vuln_names=str(result[1]), description=result[0], code=code, analysis_type=analysis_type)
+			vuln_names = result[1]
+			for name in vuln_names:
+				vuln = VulnerabilityNames.objects.filter(name=name).first()
+				if vuln:
+					vuln.count += 1
+					vuln.save()
+				else:
+					VulnerabilityNames.objects.create(name=name)
+			return JsonResponse({"result": result[0], 'code': result[2]})
 
 		if analysis_type == 'symbolic2':
-			Vulnerability.objects.create(cweId="", description=result[0], code=code, analysis_type=analysis_type)
-			return JsonResponse({"result": result[0], 'segments': result[1]})
+			Vulnerability.objects.create(cweId="", vuln_names=str(result[1]), description=result[0], code=code, analysis_type=analysis_type)
+			vuln_names = result[1]
+			for name in vuln_names:
+				vuln = VulnerabilityNames.objects.filter(name__iexact=name).first()
+				if vuln:
+					vuln.count += 1
+					vuln.save()
+				else:
+					VulnerabilityNames.objects.create(name=name)
+			return JsonResponse({"result": result[0], 'segments': result[2]})
 
 		if analysis_type == 'asan':
-			Vulnerability.objects.create(cweId="", description=result[0], code=code, analysis_type=analysis_type)
-			return JsonResponse({"result": result[0], 'code': result[1], 'seeds': result[2]})
+			Vulnerability.objects.create(cweId="", vuln_names=str(result[1]), description=result[0], code=code, analysis_type=analysis_type)
+			vuln_names = result[1]
+			for name in vuln_names:
+				vuln = VulnerabilityNames.objects.filter(name__iexact=name).first()
+				if vuln:
+					vuln.count += 1
+					vuln.save()
+				else:
+					VulnerabilityNames.objects.create(name=name)
+			return JsonResponse({"result": result[0], 'code': result[2], 'seeds': result[3]})
 
 		# return render(request, "run_analysis.html", {"result": result})
 		Vulnerability.objects.create(cweId="", description=result, code=code, analysis_type=analysis_type)

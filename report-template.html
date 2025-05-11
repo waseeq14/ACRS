@@ -383,7 +383,7 @@
                     vulnDiv.className = 'vulnerability';
                     vulnDiv.innerHTML = `
                         <h3>${vuln.name}</h3>
-                        <p>${vuln.description}</p>
+                        ${vuln.description !== undefined ? `<p>${vuln.description}</p>` : ''}
                     `;
                     container.appendChild(vulnDiv);
                 });
@@ -789,6 +789,9 @@ int main(int argc, char **argv) {
 
             // Set vulnerabilities
             setVulnerabilities([
+                {
+                    name: "Buffer Overflow Vulnerability",
+                },
                 {
                     name: "Buffer Overflow Vulnerability",
                     description: "The function 'process_user_input' uses strcpy without bounds checking, which can lead to buffer overflow if input exceeds 64 bytes."

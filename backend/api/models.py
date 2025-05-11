@@ -42,6 +42,9 @@ class Vulnerability(models.Model):
         editable=False,
         help_text="Primary Key"
     )
+    vuln_names = models.TextField(
+        help_text="List of Vulnerability Names"
+    )
     cweId = models.CharField(
         max_length=50,
         help_text="CWE (Common Weakness Enumeration) identifier associated with this vulnerability"
@@ -248,3 +251,19 @@ class PentestPatch(models.Model):
     )
     def __str__(self):
         return f"Patch for {self.vulnerability.name}"
+
+class VulnerabilityNames(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text="Primary Key"
+    )
+    name = models.CharField(
+        max_length=150,
+        help_text="Name of the vulnerability"
+    )
+    count = models.IntegerField(
+        default=1,
+        null=False
+    )
