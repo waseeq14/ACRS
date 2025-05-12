@@ -251,7 +251,7 @@ class PentestReport(models.Model):
         help_text="The content of the report"
     )
     project = models.ForeignKey(
-        Code,
+        PentestProject,
         on_delete=models.CASCADE,
         related_name="reports",
         help_text="Foreign Key of Pentest project"

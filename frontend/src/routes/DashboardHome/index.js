@@ -42,7 +42,7 @@ export default function DashboardHome() {
       const response = await api.get('/get-dashboard-stats/')
 
       setAppState(prevState => ({
-        ...appState,
+        ...prevState,
         dashboardStats: response.data.result
       }))
     } catch (e) {

@@ -1,0 +1,393 @@
+/* Retro Theme Elements */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap');
+
+.retro-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.retro-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.2;
+}
+
+.retro-panel {
+  background-color: #2b2a28;
+  border-radius: 8px;
+  border: 1px solid rgba(208, 55, 57, 0.3);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.retro-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #d03739, transparent);
+  box-shadow: 0 0 10px rgba(208, 55, 57, 0.8);
+}
+
+.retro-header {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(208, 55, 57, 0.3);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.retro-header h2 {
+  color: white;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.2rem;
+  margin: 0;
+  margin-left: 0.75rem;
+  letter-spacing: 1px;
+  text-shadow: 0 0 5px rgba(208, 55, 57, 0.5);
+}
+
+.retro-header-icon {
+  color: #d03739;
+  filter: drop-shadow(0 0 3px rgba(208, 55, 57, 0.7));
+}
+
+.retro-content {
+  padding: 1.25rem;
+}
+
+.retro-input {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(208, 55, 57, 0.3);
+  border-radius: 4px;
+  color: white;
+  font-family: 'Share Tech Mono', monospace;
+  padding: 0.75rem;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.retro-input:focus {
+  outline: none;
+  border-color: #d03739;
+  box-shadow: 0 0 10px rgba(208, 55, 57, 0.3);
+}
+
+.retro-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.retro-button {
+  background: linear-gradient(to bottom, #bb3537, #a52f31);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.retro-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 100%
+  );
+  transition: left 0.5s ease;
+}
+
+.retro-button:hover {
+  background: linear-gradient(to bottom, #c93a3c, #bb3537);
+  box-shadow: 0 0 15px rgba(208, 55, 57, 0.5);
+  transform: translateY(-2px);
+}
+
+.retro-button:hover::before {
+  left: 100%;
+}
+
+.retro-button:disabled {
+  background: #555555;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.retro-checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+
+.retro-checkbox {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin-right: 0.75rem;
+}
+
+.retro-checkbox input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.retro-checkbox-mark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(208, 55, 57, 0.5);
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.retro-checkbox input:checked ~ .retro-checkbox-mark {
+  background-color: rgba(208, 55, 57, 0.8);
+  box-shadow: 0 0 10px rgba(208, 55, 57, 0.5);
+}
+
+.retro-checkbox-mark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.retro-checkbox input:checked ~ .retro-checkbox-mark:after {
+  display: block;
+}
+
+.retro-checkbox-label {
+  color: white;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1rem;
+}
+
+.retro-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.25rem;
+}
+
+.retro-loading {
+  height: 8px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.retro-loading-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #bb3537, #d03739);
+  border-radius: 4px;
+  position: absolute;
+  animation: retro-loading 2s infinite linear;
+  width: 30%;
+}
+
+@keyframes retro-loading {
+  0% {
+    left: -30%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.retro-status {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  margin-right: 0.5rem;
+}
+
+.retro-status.critical {
+  background-color: #800000;
+  color: white;
+  box-shadow: 0 0 10px rgba(128, 0, 0, 0.5);
+  animation: pulse 2s infinite;
+}
+
+.retro-status.high {
+  background-color: #e74c3c;
+  color: white;
+  box-shadow: 0 0 5px rgba(231, 76, 60, 0.5);
+}
+
+.retro-status.medium {
+  background-color: #f39c12;
+  color: white;
+  box-shadow: 0 0 5px rgba(243, 156, 18, 0.5);
+}
+
+.retro-status.low {
+  background-color: #3498db;
+  color: white;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(208, 55, 57, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
+  }
+}
+
+.retro-vuln-item {
+  background-color: rgba(43, 42, 40, 0.8);
+  border: 1px solid rgba(208, 55, 57, 0.3);
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.retro-vuln-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border-color: rgba(208, 55, 57, 0.5);
+}
+
+.retro-vuln-item.selected {
+  border-color: #d03739;
+  box-shadow: 0 0 15px rgba(208, 55, 57, 0.3);
+}
+
+.retro-vuln-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.retro-vuln-title {
+  display: flex;
+  align-items: center;
+}
+
+.retro-vuln-name {
+  color: white;
+  font-family: 'Share Tech Mono', monospace;
+  margin: 0;
+  margin-left: 0.5rem;
+}
+
+.retro-vuln-content {
+  padding: 1rem;
+  border-top: 1px solid rgba(208, 55, 57, 0.2);
+}
+
+.retro-vuln-detail {
+  margin-bottom: 0.5rem;
+}
+
+.retro-vuln-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+}
+
+.retro-vuln-value {
+  color: white;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.retro-terminal {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(208, 55, 57, 0.3);
+  border-radius: 6px;
+  padding: 1rem;
+  font-family: 'Share Tech Mono', monospace;
+  color: white;
+  line-height: 1.5;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.retro-terminal pre {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.retro-terminal code {
+  color: #d03739;
+}
+
+.retro-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.retro-badge {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.retro-badge.critical {
+  background-color: #800000;
+  box-shadow: 0 0 10px rgba(128, 0, 0, 0.5);
+  animation: pulse 2s infinite;
+}
+
+.retro-badge.high {
+  background-color: #e74c3c;
+  box-shadow: 0 0 5px rgba(231, 76, 60, 0.5);
+}
+
+.retro-badge.medium {
+  background-color: #f39c12;
+  box-shadow: 0 0 5px rgba(243, 156, 18, 0.5);
+}
+
+.retro-badge.low {
+  background-color: #3498db;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
