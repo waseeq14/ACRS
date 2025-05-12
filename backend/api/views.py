@@ -26,7 +26,8 @@ from .models import (
     PentestVulnerability,
     PentestExploit,
     PentestPatch,
-    VulnerabilityNames
+    VulnerabilityNames,
+    PentestReport
 )
 from django.contrib.auth.decorators import login_required
 from pentest.pentest import Pentest
@@ -551,6 +552,8 @@ def get_pentest_report(request):
                     .replace('###USERNAME###', project.username)\
                     .replace('###SCAN_TYPE###', scan_types[project.scan_type])\
                     .replace('###VULNERABILITIES###', ''.join(vuln_templates))
+            
+            PentestReport.objects.create(content=template, project=project)
             
             return HttpResponse(template, content_type='text/html')
     except Exception:

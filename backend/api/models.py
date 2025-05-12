@@ -117,13 +117,6 @@ class Patch(models.Model):
 
 
 class Report(models.Model):
-    FORMAT_CHOICES = [
-        ('PDF', 'PDF'),
-        ('HTML', 'HTML'),
-        ('Markdown', 'Markdown'),
-        ('Text', 'Text')
-    ]
-
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -133,11 +126,6 @@ class Report(models.Model):
     content = models.TextField(
         help_text="The content of the report"
     )
-    format = models.CharField(
-        max_length=20,
-        choices=FORMAT_CHOICES,
-        help_text="The format in which the report is generated (e.g., PDF, HTML, Markdown, Text)"
-    )
     code = models.ForeignKey(
         Code,
         on_delete=models.CASCADE,
@@ -146,7 +134,7 @@ class Report(models.Model):
     )
 
     def __str__(self):
-        return f"Report for Code ID: {self.code.id} - Format: {self.format}"
+        return f"Report for Code ID: {self.code.id}"
 
 class PentestProject(models.Model):
     id = models.UUIDField(
@@ -251,6 +239,26 @@ class PentestPatch(models.Model):
     )
     def __str__(self):
         return f"Patch for {self.vulnerability.name}"
+    
+class PentestReport(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text="Primary Key"
+    )
+    content = models.TextField(
+        help_text="The content of the report"
+    )
+    project = models.ForeignKey(
+        Code,
+        on_delete=models.CASCADE,
+        related_name="reports",
+        help_text="Foreign Key of Pentest project"
+    )
+
+    def __str__(self):
+        return f"Report for Pentest Project ID: {self.project.id}"
 
 class VulnerabilityNames(models.Model):
     id = models.UUIDField(
