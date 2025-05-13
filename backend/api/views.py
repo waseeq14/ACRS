@@ -343,7 +343,7 @@ def pentest_scan_patch(request):
     pentest.setupEnv()
 
     try:
-        result = pentest.generate_patch(exploit.description)
+        result = pentest.generate_patch(exploit.description, vulnerability)
 
         patch = PentestPatch.objects.create(description=result, vulnerability=vulnerability)
         serializer = PentestPatchSerializer(patch)
