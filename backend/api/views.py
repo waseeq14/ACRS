@@ -264,7 +264,7 @@ def pentest_scan(request):
         if pentest.ssh_client is None:
             return JsonResponse({'error': 'SSH connection failed'}, status=500)
 
-        pentest.run_enum_scripts(option)
+        pentest.run_enum_scripts(option, ssh_pass)
         pentest.download_file("/tmp/enum_results.txt", "enum_results.txt")
         pentest.setupEnv()
         result = pentest.analyze_vulns("enum_results.txt")
