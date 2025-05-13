@@ -8,7 +8,7 @@ import styles from './styles.module.css'
 export default function RunKLEE() {
   const { appState } = useContext(AppContext)
   const [selectedIndex, setSelectedIndex] = useState(0)
-
+  console.log(appState)
   return (
     <>
       <div className={styles.card}>
