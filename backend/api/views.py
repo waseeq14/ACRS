@@ -32,7 +32,8 @@ from .models import (
 from django.contrib.auth.decorators import login_required
 from pentest.pentest import Pentest
 from pentest.exploit import PentestExploitAI
-from .utils import read_file_content, read_segments, read_seeds
+from .utils import read_file_content, read_segments, read_seeds, extract_vuln_names
+import re
 
 
 @api_view(["POST"])
@@ -557,6 +558,129 @@ def get_pentest_report(request):
             
             return HttpResponse(template, content_type='text/html')
     except Exception:
+        return JsonResponse({'error': 'An unexpected error occurred'}, status=500)
+    
+@api_view(['GET'])
+def get_report(request):
+    id = request.query_params.get('id')
+
+    if not id:
+        return JsonResponse({'error': 'Id not provided'}, status=400)
+    
+    project = Code.objects.filter(id=id).first()
+
+    if not project:
+        return JsonResponse({'error': 'Id not valid'}, status=400)
+
+    project_folder = f'{os.path.dirname(os.getcwd())}/projects/{project.id}'
+    
+    vulnerabilities = Vulnerability.objects.filter(code=project)
+    
+    exploit = Exploit.objects.filter(code=project).first()
+    patch = Patch.objects.filter(code=project).first()
+
+    # Data Loaded, now to build the template.
+    
+    analysis_types_options = {
+        'rules': 'Static Rules',
+        'symbolic': 'Symbolic Execution',
+        'symbolic2': 'Prioritize code paths',
+        'asan': 'Fuzz'
+    }
+    
+    vuln_names = []
+    analysis_types = []
+    
+    for vuln in vulnerabilities:
+        vuln_names.extend(extract_vuln_names(vuln.description))
+        if vuln.analysis_type not in analysis_types:
+            analysis_types.append(analysis_types_options[vuln.analysis_type])
+
+    try:
+        with open('api/reports/report-template.html', 'r') as template_file:
+            # All Vulnerabilties
+            with open('api/reports/report-vuln-template.html', 'r') as vuln_template_file:
+                vuln_template = vuln_template_file.read()
+                
+            vuln_templates = []
+            for vuln in vuln_names:
+                new_vuln_template = vuln_template.replace('###NAME###', vuln)
+                vuln_templates.append(new_vuln_template)
+                
+            analysis_type_templates = []
+            for analysis_type in analysis_types:
+                analysis_type_templates.append(f'"{analysis_type}", ')
+            
+            rules = ''
+            klee_friendly_code = ''
+            klee_analysis = ''
+            advanced_klee_segments = []
+            advanced_klee_analysis = ''
+            fuzzer_code = ''
+            fuzzer_seeds = ''
+            fuzzer_analysis = []
+            for vuln in vulnerabilities:
+                # Rules
+                if vuln.analysis_type == 'rules':
+                    with open('api/reports/report-semgrep-template.html', 'r') as rules_template_file:
+                        rules_template = rules_template_file.read()
+                        # To be continued
+                        
+                # Klee
+                if vuln.analysis_type == 'symbolic':
+                    klee_friendly_code = read_file_content(f'{project_folder}/code_klee.{project.language}').replace('\\', '\\\\')
+                    klee_analysis = vuln.description.replace('`', '\`')
+                    
+                # Advanced Klee
+                if vuln.analysis_type == 'symbolic2':
+                    segments = read_segments(project_folder, project.language)
+                    for segment in segments:
+                        segment = segment.replace('\\', '\\\\')
+                        advanced_klee_segments.append(f'`{segment}`, ')
+                    advanced_klee_analysis = vuln.description.replace('`', '\`')
+                    
+                # Fuzzer
+                if vuln.analysis_type == 'asan':
+                    fuzzer_code = read_file_content(f'{project_folder}/code_fuzz.{project.language}').replace('\\', '\\\\')
+                    seeds = read_seeds(project_folder).splitlines()
+                    for index in range(len(seeds)):
+                        seed = seeds[index]
+                        if seed.strip() != '':
+                            fuzzer_seeds += f'{{ name: "Seed {index + 1}", content: "{seed}" }}, '
+                    analysis = eval(vuln.description)
+                    for each_analysis in analysis:
+                        each_analysis = each_analysis.replace('`', '\`')
+                        pattern = r'\[\*\] (Analysis for id:[^:]+:.*?)\s*\**Explanation:\**\s*(.*)'
+                        match = re.search(pattern, each_analysis, re.DOTALL)
+                        heading = match.group(1).strip()
+                        explanation = match.group(2).strip()
+                        fuzzer_analysis.append(f'{{ title: `{heading}`, content: `{explanation}` }}, ')
+                        
+            template = template_file.read()
+
+            template = template.replace('###TITLE###', f'ACRS - Code Analysis Report')\
+                    .replace('###DATE###', project.createdAt.strftime('%d/%m/%Y'))\
+                    .replace('###ORIGINAL_CODE###', project.code.replace('\\', '\\\\'))\
+                    .replace('###EXPLOIT_PATH###', exploit.description.replace('`', '\`') if exploit else '')\
+                    .replace('###PATCH_SUGGESTION###', patch.description.replace('`', '\`') if patch else '')\
+                    .replace('###VULNERABILITIES###', ''.join(vuln_templates))\
+                    .replace('###ANALYSIS_TYPES###', ''.join(analysis_type_templates))\
+                    .replace('###RULES###', rules)\
+                    .replace('###KLEE_FRIENDLY_CODE###', klee_friendly_code)\
+                    .replace('###KLEE_ANALYSIS###', klee_analysis)\
+                    .replace('###ADVANCED_KLEE_SEGMENTS###', ''.join(advanced_klee_segments))\
+                    .replace('###ADVANCED_KLEE_ANALYSIS###', advanced_klee_analysis)\
+                    .replace('###FUZZER_CODE###', fuzzer_code)\
+                    .replace('###FUZZER_SEEDS###', fuzzer_seeds)\
+                    .replace('###FUZZER_ANALYSIS###', ''.join(fuzzer_analysis))
+                    
+            print(template)
+                    
+            # Report.objects.create(content=template, code=project)
+            
+            return HttpResponse(template, content_type='text/html')
+    except Exception as e:
+        print(e)
         return JsonResponse({'error': 'An unexpected error occurred'}, status=500)
 
 @api_view(['GET'])

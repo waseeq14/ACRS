@@ -22,6 +22,7 @@ class Code(models.Model):
         on_delete=models.CASCADE,
         help_text="Foreign Key of the User"
     )
+    createdAt = models.DateField(auto_now=True)
 
     # TODO: Fix this. Change this to be a foreign key of the model Report.
     generatedReport = models.CharField(

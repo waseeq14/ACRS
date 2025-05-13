@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>###TITLE###</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #bb3537;
+            --secondary-color: #9a2c2e;
+            --accent-color: #ef4444;
+            --light-bg: #f3f4f6;
+            --dark-bg: #1f2937;
+            --text-color: #374151;
+            --light-text: #f9fafb;
+            --border-color: #d1d5db;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        header h1 {
+            color: var(--light-text);
+            margin-bottom: 0;
+        }
+
+        .date-info {
+            font-size: 1.1rem;
+            color: var(--light-text);
+        }
+
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .section-title h2 {
+            margin-bottom: 0;
+        }
+
+        .section-title .badge {
+            margin-left: 15px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .code-block {
+            background-color: #282c34;
+            border-radius: 6px;
+            padding: 15px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        .code-block pre {
+            color: #abb2bf;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+
+        .code-snippet {
+            margin-bottom: 15px;
+            border-left: 3px solid var(--primary-color);
+            padding-left: 15px;
+        }
+
+        .vulnerability {
+            background-color: #fee2e2;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .vulnerability h3 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .analysis-section {
+            background-color: #f8fafc;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .analysis-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .markdown-content {
+            line-height: 1.7;
+        }
+
+        .markdown-content h1, 
+        .markdown-content h2, 
+        .markdown-content h3 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .markdown-content pre {
+            background-color: #f1f5f9;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        .markdown-content code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f1f5f9;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .markdown-content ul, 
+        .markdown-content ol {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        .analysis-type {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .seed-item {
+            background-color: #f1f5f9;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .seed-item h4 {
+            margin-bottom: 10px;
+        }
+
+        .path-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .path-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-box {
+            background-color: #dbeafe;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .patch-suggestion {
+            background-color: #dcfce7;
+            border-left: 4px solid #22c55e;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .no-display {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo-title">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo_transparent-Qrj3gXE9kg1udQ130NwnEgr910J4GR.png" alt="Automated Cyber Reasoning System Logo" class="logo">
+                <h1>Automated Cyber Reasoning System</h1>
+            </div>
+            <div class="date-info">
+                Analysis Date: <span id="analysis-date">May 6, 2025</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Original Code Section -->
+        <div class="section">
+            <div class="section-title">
+                <h2>Original Code</h2>
+            </div>
+            <div class="code-block">
+                <pre id="original-code">// Original code will be displayed here</pre>
+            </div>
+        </div>
+
+        <!-- Vulnerability Detection Section -->
+        <div class="section">
+            <div class="section-title">
+                <h2>Vulnerability Detection</h2>
+            </div>
+            <div id="vulnerabilities-container">
+                <!-- Vulnerabilities will be displayed here -->
+                <div class="vulnerability">
+                    <h3>Buffer Overflow Vulnerability</h3>
+                    <p>Description of the vulnerability...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analysis Section -->
+        <div class="section">
+            <div class="section-title">
+                <h2>Analysis Results</h2>
+                <span class="badge" id="analysis-type">Applying Rules</span>
+            </div>
+
+            <!-- Analysis Type Container -->
+            <div id="analysis-container">
+                <!-- This section will be dynamically populated based on analysis type -->
+            </div>
+        </div>
+
+        <!-- Exploit Path Section -->
+        <div class="section">
+            <div class="section-title">
+                <h2>Exploit Path</h2>
+            </div>
+            <div class="analysis-section">
+                <div class="markdown-content" id="exploit-path">
+                    <!-- Exploit path markdown will be rendered here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Patch Suggestion Section -->
+        <div class="section">
+            <div class="section-title">
+                <h2>Patch Suggestion</h2>
+            </div>
+            <div class="patch-suggestion">
+                <div class="markdown-content" id="patch-suggestion">
+                    <!-- Patch suggestion markdown will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Generated by Automated Cyber Reasoning System &copy; 2025</p>
+        </div>
+    </footer>
+
+    <script>
+        // Function to render markdown content
+        function renderMarkdown(elementId, markdownContent) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = marked.parse(markdownContent);
+            }
+        }
+
+        // Function to set the analysis date
+        function setAnalysisDate(dateString) {
+            const dateElement = document.getElementById('analysis-date');
+            if (dateElement) {
+                dateElement.textContent = dateString;
+            }
+        }
+
+        // Function to set original code
+        function setOriginalCode(code) {
+            const codeElement = document.getElementById('original-code');
+            if (codeElement) {
+                codeElement.textContent = code;
+            }
+        }
+
+        // Function to set vulnerabilities
+        function setVulnerabilities(vulnerabilities) {
+            const container = document.getElementById('vulnerabilities-container');
+            if (container) {
+                container.innerHTML = '';
+                vulnerabilities.forEach(vuln => {
+                    const vulnDiv = document.createElement('div');
+                    vulnDiv.className = 'vulnerability';
+                    vulnDiv.innerHTML = `
+                        <h3>${vuln.name}</h3>
+                        ${vuln.description !== undefined ? `<p>${vuln.description}</p>` : ''}
+                    `;
+                    container.appendChild(vulnDiv);
+                });
+            }
+        }
+
+        // Function to set analysis type
+        function setAnalysisType(type) {
+            const typeElement = document.getElementById('analysis-type');
+            if (typeElement) {
+                typeElement.textContent = type;
+            }
+
+            // Clear previous analysis content
+            const container = document.getElementById('analysis-container');
+            if (container) {
+                container.innerHTML = '';
+            }
+
+            // Generate appropriate analysis content based on type
+            generateAnalysisContent(type);
+        }
+
+        // Function to generate analysis content based on type
+        function generateAnalysisContent(type) {
+            const container = document.getElementById('analysis-container');
+            if (!container) return;
+
+            switch (type) {
+                case 'Static Rules':
+                    generateRulesAnalysis(container);
+                    break;
+                case 'Symbolic Execution':
+                    generateKleeAnalysis(container);
+                    break;
+                case 'Prioritize code paths':
+                    generatePathsAnalysis(container);
+                    break;
+                case 'Fuzz':
+                    generateFuzzerAnalysis(container);
+                    break;
+                default:
+                    container.innerHTML = '<p>No analysis data available.</p>';
+            }
+        }
+
+        // Generate content for "Applying Rules" analysis
+        function generateRulesAnalysis(container) {
+            container.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code Snippet</th>
+                            <th>LLM Analysis</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rules-table-body">
+                        <!-- Table rows will be added here -->
+                    </tbody>
+                </table>
+            `;
+
+            // Example data - replace with actual data
+            const snippets = [
+                ###RULES###
+            ];
+
+            const tableBody = document.getElementById('rules-table-body');
+            if (tableBody) {
+                snippets.forEach(snippet => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            <div class="code-block">
+                                <pre>${snippet.code}</pre>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="markdown-content">${marked.parse(snippet.analysis)}</div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+        }
+
+        // Generate content for "Run KLEE" analysis
+        function generateKleeAnalysis(container) {
+            container.innerHTML = `
+                <h3>KLEE Friendly Code</h3>
+                <div class="code-block">
+                    <pre id="klee-code">// KLEE friendly code will be displayed here</pre>
+                </div>
+                
+                <h3>KLEE Analysis</h3>
+                <div class="analysis-section">
+                    <div class="markdown-content" id="klee-analysis">
+                        <!-- KLEE analysis markdown will be rendered here -->
+                    </div>
+                </div>
+            `;
+
+            // Example data - replace with actual data
+            const kleeCode = `###KLEE_FRIENDLY_CODE###`;
+
+            const kleeAnalysis = `###KLEE_ANALYSIS###`;
+
+            // Set KLEE code and analysis
+            document.getElementById('klee-code').textContent = kleeCode;
+            renderMarkdown('klee-analysis', kleeAnalysis);
+        }
+
+        // Generate content for "Prioritize code paths" analysis
+        function generatePathsAnalysis(container) {
+            container.innerHTML = `
+                <h3>Code Path Analysis</h3>
+                <div id="code-paths-container">
+                    <!-- Code paths will be added here -->
+                </div>
+                
+                <h3>Path Analysis</h3>
+                <div class="analysis-section">
+                    <div class="markdown-content" id="paths-analysis">
+                        <!-- Path analysis markdown will be rendered here -->
+                    </div>
+                </div>
+            `;
+
+            // Example data - replace with actual data
+            const codePaths = [###ADVANCED_KLEE_SEGMENTS###];
+
+            const pathsAnalysis = `###ADVANCED_KLEE_ANALYSIS###`;
+
+            // Add code paths
+            const pathsContainer = document.getElementById('code-paths-container');
+            if (pathsContainer) {
+                codePaths.forEach((path, index) => {
+                    const pathDiv = document.createElement('div');
+                    pathDiv.className = 'path-item';
+                    pathDiv.innerHTML = `
+                        <h4>Path ${index + 1}</h4>
+                        <div class="code-block">
+                            <pre>${path}</pre>
+                        </div>
+                    `;
+                    pathsContainer.appendChild(pathDiv);
+                });
+            }
+
+            // Set paths analysis
+            renderMarkdown('paths-analysis', pathsAnalysis);
+        }
+
+        // Generate content for "Run Fuzzer" analysis
+        function generateFuzzerAnalysis(container) {
+            container.innerHTML = `
+                <h3>AFL Friendly Code</h3>
+                <div class="code-block">
+                    <pre id="afl-code">// AFL friendly code will be displayed here</pre>
+                </div>
+                
+                <h3>Seeds</h3>
+                <div id="seeds-container">
+                    <!-- Seeds will be added here -->
+                </div>
+                
+                <h3>Fuzzing Analysis</h3>
+                <div id="fuzzing-analysis-container">
+                    <!-- Fuzzing analysis will be added here -->
+                </div>
+            `;
+
+            // Example data - replace with actual data
+            const aflCode = `###FUZZER_CODE###`;
+
+            const seeds = [
+                ###FUZZER_SEEDS###
+            ];
+
+            const fuzzingAnalyses = [
+                ###FUZZER_ANALYSIS###
+            ];
+
+            // Set AFL code
+            document.getElementById('afl-code').textContent = aflCode;
+
+            // Add seeds
+            const seedsContainer = document.getElementById('seeds-container');
+            if (seedsContainer) {
+                seeds.forEach(seed => {
+                    const seedDiv = document.createElement('div');
+                    seedDiv.className = 'seed-item';
+                    seedDiv.innerHTML = `
+                        <h4>${seed.name}</h4>
+                        <div class="code-block">
+                            <pre>${seed.content}</pre>
+                        </div>
+                    `;
+                    seedsContainer.appendChild(seedDiv);
+                });
+            }
+
+            // Add fuzzing analyses
+            const analysisContainer = document.getElementById('fuzzing-analysis-container');
+            if (analysisContainer) {
+                fuzzingAnalyses.forEach(analysis => {
+                    const analysisDiv = document.createElement('div');
+                    analysisDiv.className = 'analysis-section';
+                    analysisDiv.innerHTML = `
+                        <h4>${analysis.title}</h4>
+                        <div class="markdown-content">${marked.parse(analysis.content)}</div>
+                    `;
+                    analysisContainer.appendChild(analysisDiv);
+                });
+            }
+        }
+
+        // Function to set exploit path
+        function setExploitPath(markdownContent) {
+            if (markdownContent === '') {
+                document.getElementById('exploit-path').parentElement.parentElement.classList.add('no-display')
+                return
+            }
+            renderMarkdown('exploit-path', markdownContent);
+        }
+
+        // Function to set patch suggestion
+        function setPatchSuggestion(markdownContent) {
+            if (markdownContent === '') {
+                document.getElementById('patch-suggestion').parentElement.parentElement.classList.add('no-display')
+                return
+            }
+            renderMarkdown('patch-suggestion', markdownContent);
+        }
+
+        // Example data - replace with actual data in your implementation
+        document.addEventListener('DOMContentLoaded', function() {
+            const analysisTypes = [###ANALYSIS_TYPES###];
+
+            // Set analysis date
+            setAnalysisDate('###DATE###');
+
+            // Set original code
+            setOriginalCode(`###ORIGINAL_CODE###`);
+
+            // Set vulnerabilities
+            setVulnerabilities([
+                ###VULNERABILITIES###
+            ]);
+
+            // Set analysis type (default to "Applying Rules")
+            setAnalysisType(analysisTypes[0]);
+
+            // Set exploit path
+            setExploitPath(`###EXPLOIT_PATH###`);
+
+            // Set patch suggestion
+            setPatchSuggestion(`###PATCH_SUGGESTION###`);
+
+            // Add event listeners for analysis type selection
+            
+            // Create analysis type selector
+            const selectorDiv = document.createElement('div');
+            selectorDiv.style.marginBottom = '20px';
+            selectorDiv.innerHTML = `
+                <label for="analysis-selector" style="margin-right: 10px; font-weight: bold;">Select Analysis Type:</label>
+                <select id="analysis-selector" style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color);">
+                    ${analysisTypes.map(type => `<option value="${type}">${type}</option>`).join('')}
+                </select>
+            `;
+            
+            const analysisContainer = document.getElementById('analysis-container');
+            if (analysisContainer) {
+                analysisContainer.parentNode.insertBefore(selectorDiv, analysisContainer);
+            }
+            
+            // Add event listener for analysis type selector
+            const selector = document.getElementById('analysis-selector');
+            if (selector) {
+                selector.addEventListener('change', function() {
+                    setAnalysisType(this.value);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

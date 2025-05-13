@@ -32,3 +32,45 @@ def read_seeds(project_folder):
             break
 
     return seeds
+
+def extract_vuln_names(description):
+    if description[0] == '[':
+        description_list = eval(description)
+        
+        vulnerabilities = []
+        
+        for desc in description_list:
+            lines = desc.splitlines()
+            start_extracting = False
+
+            for line in lines:
+                if "Vulnerability Names:" in line or "Vulnerability Types:" in line:
+                    start_extracting = True
+                    continue
+                if start_extracting:
+                    line = line.strip()
+                    if line.startswith("- "):
+                        vuln = line[2:].strip()
+                        if vuln not in vulnerabilities:
+                            vulnerabilities.append(vuln)
+                    elif line == "":
+                        break
+
+        return vulnerabilities
+    else:  
+        lines = description.splitlines()
+        vulnerabilities = []
+        start_extracting = False
+
+        for line in lines:
+            if "Vulnerability Names:" in line or "Vulnerability Types:" in line:
+                start_extracting = True
+                continue
+            if start_extracting:
+                line = line.strip()
+                if line.startswith("- "):
+                    vulnerabilities.append(line[2:].strip())
+                elif line == "":
+                    break
+
+        return vulnerabilities
