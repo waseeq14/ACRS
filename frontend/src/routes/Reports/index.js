@@ -10,8 +10,6 @@ export default function Reports() {
     try {
       const response = await api.get('/fetch-reports/')
 
-      console.log(response)
-
       setReports({
         pentestReports: response.data.result.pentestReports,
         reports: response.data.result.reports
@@ -37,6 +35,36 @@ export default function Reports() {
     )
   }
 
+  const deleteReport = async id => {
+    try {
+      await api.delete('/delete-report/', {
+        data: { id }
+      })
+
+      setReports(prevState => ({
+        ...prevState,
+        reports: prevState.reports.filter(report => report.id !== id)
+      }));
+    } catch (e) {
+      console.error('An error occurred.')
+    }
+  }
+
+  const deletePentestReport = async id => {
+    try {
+      await api.delete('/delete-pentest-report/', {
+        data: { id }
+      })
+
+      setReports(prevState => ({
+        ...prevState,
+        pentestReports: prevState.pentestReports.filter(report => report.id !== id)
+      }));
+    } catch (e) {
+      console.error('An error occurred.')
+    }
+  }
+
   useEffect(() => {
     fetchReports()
   }, [])
@@ -50,6 +78,7 @@ export default function Reports() {
             <tr>
               <th>Name</th>
               <th>Time</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -59,6 +88,14 @@ export default function Reports() {
               <tr style={{ cursor: 'pointer' }} onClick={() => loadReport(report.id)}>
                 <td>{report.title}</td>
                 <td>{report.time}</td>
+                <td style={{ width: '1%' }}>
+                  <button onClick={e => {
+                    e.stopPropagation()
+                    deleteReport(report.id)
+                  }}>
+                    Delete
+                  </button>
+                </td>
               </tr>
             )))}
           </tbody>
@@ -71,6 +108,7 @@ export default function Reports() {
             <tr>
               <th>Name</th>
               <th>Time</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -80,6 +118,14 @@ export default function Reports() {
               <tr style={{ cursor: 'pointer' }} onClick={() => loadPentestReport(report.id)}>
                 <td>{report.title}</td>
                 <td>{report.time}</td>
+                <td style={{ width: '1%' }}>
+                  <button onClick={e => {
+                    e.stopPropagation()
+                    deletePentestReport(report.id)
+                  }}>
+                    Delete
+                  </button>
+                </td>
               </tr>
             )))}
           </tbody>

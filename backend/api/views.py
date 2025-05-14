@@ -592,9 +592,9 @@ def get_report(request):
     
     # Load existing report
     
-    # report = Report.objects.filter(code=project).first()
-    # if report:
-    #     return HttpResponse(report.content, content_type='text/html')
+    report = Report.objects.filter(code=project).first()
+    if report:
+        return HttpResponse(report.content, content_type='text/html')
     
     # Or else
 
@@ -776,3 +776,35 @@ def fetch_reports(request):
             'reports': reports_data
         }
     })
+    
+@api_view(['DELETE'])
+def delete_report(request):
+    id = request.data.get('id')
+
+    if not id:
+        return JsonResponse({'error': 'Id not provided'}, status=400)
+    
+    project = Code.objects.filter(id=id).first()
+
+    if not project:
+        return JsonResponse({'error': 'Id not valid'}, status=400)
+    
+    Report.objects.filter(code__id=id).delete()
+    
+    return JsonResponse({'result': 'Report Deleted!'})
+
+@api_view(['DELETE'])
+def delete_pentest_report(request):
+    id = request.data.get('id')
+
+    if not id:
+        return JsonResponse({'error': 'Id not provided'}, status=400)
+    
+    project = PentestProject.objects.filter(id=id).first()
+
+    if not project:
+        return JsonResponse({'error': 'Id not valid'}, status=400)
+    
+    PentestReport.objects.filter(project__id=id).delete()
+    
+    return JsonResponse({'result': 'Report Deleted!'})
