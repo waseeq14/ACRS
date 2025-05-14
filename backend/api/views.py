@@ -209,10 +209,11 @@ def apply_patch(request):
         patch.setupEnv()
 
         patched_code = patch.generate_patched_code()
+        description = patch.patch_descriptor(patched_code)
 
-        Patch.objects.create(patchedCode=patched_code, code=code, description="")
+        Patch.objects.create(patchedCode=patched_code, code=code, description=description)
 
-        return JsonResponse({"result": patched_code})
+        return JsonResponse({"result": {'code': patched_code, 'description': description}})
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
 
@@ -650,10 +651,14 @@ def get_report(request):
                     analysis = eval(vuln.description)
                     for each_analysis in analysis:
                         each_analysis = each_analysis.replace('`', '\`')
-                        pattern = r'\[\*\] (Analysis for id:[^:]+:.*?)\s*\**Explanation:\**\s*(.*)'
+                        pattern = r'\[\*\] ((?:LLM )?Analysis for id:[^:]+:.*?)\s*\**Explanation:\**\s*(.*)'
                         match = re.search(pattern, each_analysis, re.DOTALL)
-                        heading = match.group(1).strip()
-                        explanation = match.group(2).strip()
+                        if match:
+                            heading = match.group(1).strip()
+                            explanation = match.group(2).strip()
+                        else:
+                            heading = ''
+                            explanation = each_analysis
                         fuzzer_analysis.append(f'{{ title: `{heading}`, content: `{explanation}` }}, ')
                         
             template = template_file.read()
@@ -674,7 +679,7 @@ def get_report(request):
                     .replace('###FUZZER_SEEDS###', fuzzer_seeds)\
                     .replace('###FUZZER_ANALYSIS###', ''.join(fuzzer_analysis))
                     
-            print(template)
+            print(project.id)
                     
             # Report.objects.create(content=template, code=project)
             
