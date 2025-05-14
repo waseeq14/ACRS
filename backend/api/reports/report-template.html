@@ -339,6 +339,11 @@
                 <h2>Patch Suggestion</h2>
             </div>
             <div class="patch-suggestion">
+                <div class="code-block">
+                    <pre id="patch-code">
+                        <!-- Patch code here -->
+                    </pre>
+                </div>
                 <div class="markdown-content" id="patch-suggestion">
                     <!-- Patch suggestion markdown will be rendered here -->
                 </div>
@@ -381,6 +386,10 @@
         function setVulnerabilities(vulnerabilities) {
             const container = document.getElementById('vulnerabilities-container');
             if (container) {
+                if (vulnerabilities.length == 0) {
+                    container.parentElement.classList.add('no-display')
+                    return
+                }
                 container.innerHTML = '';
                 vulnerabilities.forEach(vuln => {
                     const vulnDiv = document.createElement('div');
@@ -615,12 +624,17 @@
         }
 
         // Function to set patch suggestion
-        function setPatchSuggestion(markdownContent) {
+        function setPatchSuggestion(markdownContent, patchCode) {
             if (markdownContent === '') {
                 document.getElementById('patch-suggestion').parentElement.parentElement.classList.add('no-display')
                 return
             }
             renderMarkdown('patch-suggestion', markdownContent);
+
+            const codeElement = document.getElementById('patch-code');
+            if (codeElement) {
+                codeElement.textContent = patchCode;
+            }
         }
 
         // Example data - replace with actual data in your implementation
@@ -645,7 +659,7 @@
             setExploitPath(`###EXPLOIT_PATH###`);
 
             // Set patch suggestion
-            setPatchSuggestion(`###PATCH_SUGGESTION###`);
+            setPatchSuggestion(`###PATCH_SUGGESTION###`, `###PATCH_CODE###`);
 
             // Add event listeners for analysis type selection
             

@@ -9,6 +9,12 @@ class Code(models.Model):
         editable=False,
         help_text="Primary Key"
     )
+    name = models.CharField(
+        blank=False,
+        null=False,
+        max_length=150,
+        help_text="Project Name"
+    )
     code = models.TextField(
         help_text="Code content"
     )
@@ -22,18 +28,11 @@ class Code(models.Model):
         on_delete=models.CASCADE,
         help_text="Foreign Key of the User"
     )
-    createdAt = models.DateField(auto_now=True)
-
-    # TODO: Fix this. Change this to be a foreign key of the model Report.
-    generatedReport = models.CharField(
-        max_length=100,
-        null=True,
-        blank=True,
-        help_text="Foreign Key of the Report"
-    )
+    createdAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Code by {self.submittedBy.username} - {self.language or 'Unknown Language'}"
+        # return f"Code by {self.submittedBy.username} - {self.language or 'Unknown Language'}"
+        return self.name
 
 
 class Vulnerability(models.Model):
@@ -133,6 +132,7 @@ class Report(models.Model):
         related_name="reports",
         help_text="Foreign Key of Code"
     )
+    createdAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Report for Code ID: {self.code.id}"
@@ -160,7 +160,7 @@ class PentestProject(models.Model):
         max_length=100,
         help_text="The scan type performed by the user"
     )
-    createdAt = models.DateField(auto_now=True)
+    createdAt = models.DateTimeField(auto_now=True)
     submittedBy = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -257,6 +257,7 @@ class PentestReport(models.Model):
         related_name="reports",
         help_text="Foreign Key of Pentest project"
     )
+    createdAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Report for Pentest Project ID: {self.project.id}"

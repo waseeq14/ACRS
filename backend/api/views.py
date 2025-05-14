@@ -22,6 +22,7 @@ from .models import (
     Vulnerability,
     Patch,
     Exploit,
+    Report,
     PentestProject,
     PentestVulnerability,
     PentestExploit,
@@ -34,6 +35,7 @@ from pentest.pentest import Pentest
 from pentest.exploit import PentestExploitAI
 from .utils import read_file_content, read_segments, read_seeds, extract_vuln_names
 import re
+import ast
 
 
 @api_view(["POST"])
@@ -120,6 +122,7 @@ def file_save(request):
 
 		file_ext = request.POST.get('ext')
 		file_contents = request.POST.get("contents")
+		name = request.POST.get('name')
 		folder_name = "/home/parrot/Desktop/fyp/projects/"+str(id)
 		os.makedirs(folder_name, exist_ok=True)
 		file_path = os.path.join(folder_name,f"code.{file_ext}")
@@ -127,7 +130,7 @@ def file_save(request):
 			file.write(file_contents)
 		print(file_path)
 
-		Code.objects.create(id=id, code=file_contents, language=file_ext, submittedBy=request.user)
+		Code.objects.create(id=id, name=name, code=file_contents, language=file_ext, submittedBy=request.user)
 
 		return JsonResponse({"result":True, "file_path":file_path})
 			
@@ -365,12 +368,15 @@ def fetch_projects(request):
 
     pentest_projects_data = [{
         'id': project.id,
-        'title': str(project)
+        'title': str(project),
+        'time': project.createdAt.strftime("%b %d, %Y @ %H:%M:%S")
     } for project in pentest_projects]
 
     projects_data = [{
         'id': project.id,
-        'title': str(project)
+        'title': str(project),
+        'time': project.createdAt.strftime("%b %d, %Y @ %H:%M:%S"),
+        'language': {'c': 'C', 'cpp': 'C++'}[project.language]
     } for project in projects]
 
     return JsonResponse({
@@ -465,7 +471,10 @@ def load_project(request):
     rules_result = Vulnerability.objects.filter(code=project, analysis_type='rules').first()
     rules_result_obj = None
     if rules_result:
-        rules_result_obj = rules_result.description
+        try:
+            rules_result_obj = eval(rules_result.description)
+        except Exception:
+            rules_result_obj = rules_result.description
 
     exploit_result = Exploit.objects.filter(code=project).first()
     exploit_result_obj = None
@@ -508,6 +517,14 @@ def get_pentest_report(request):
 
     if not project:
         return JsonResponse({'error': 'Id not valid'}, status=400)
+    
+    # Load existing report
+    
+    report = PentestReport.objects.filter(project=project).first()
+    if report:
+        return HttpResponse(report.content, content_type='text/html')
+    
+    # Or else
     
     vulnerabilities = PentestVulnerability.objects.filter(project=project)
 
@@ -572,6 +589,14 @@ def get_report(request):
 
     if not project:
         return JsonResponse({'error': 'Id not valid'}, status=400)
+    
+    # Load existing report
+    
+    # report = Report.objects.filter(code=project).first()
+    # if report:
+    #     return HttpResponse(report.content, content_type='text/html')
+    
+    # Or else
 
     project_folder = f'{os.path.dirname(os.getcwd())}/projects/{project.id}'
     
@@ -593,7 +618,8 @@ def get_report(request):
     analysis_types = []
     
     for vuln in vulnerabilities:
-        vuln_names.extend(extract_vuln_names(vuln.description))
+        if vuln.analysis_type != 'rules':
+            vuln_names.extend(extract_vuln_names(vuln.description))
         if vuln.analysis_type not in analysis_types:
             analysis_types.append(analysis_types_options[vuln.analysis_type])
 
@@ -612,7 +638,7 @@ def get_report(request):
             for analysis_type in analysis_types:
                 analysis_type_templates.append(f'"{analysis_type}", ')
             
-            rules = ''
+            rules = []
             klee_friendly_code = ''
             klee_analysis = ''
             advanced_klee_segments = []
@@ -625,7 +651,17 @@ def get_report(request):
                 if vuln.analysis_type == 'rules':
                     with open('api/reports/report-semgrep-template.html', 'r') as rules_template_file:
                         rules_template = rules_template_file.read()
-                        # To be continued
+                        
+                        try:
+                            rules_result = ast.literal_eval(vuln.description)
+                            
+                            for result in rules_result:
+                                new_template = rules_template.replace('###CODE_SNIPPET###', result['snippet'])
+                                new_template = new_template.replace('###ANALYSIS###', result['ai_analysis'].replace('`', '\`'))
+                                rules.append(new_template)
+                                
+                        except Exception:
+                            pass
                         
                 # Klee
                 if vuln.analysis_type == 'symbolic':
@@ -668,9 +704,10 @@ def get_report(request):
                     .replace('###ORIGINAL_CODE###', project.code.replace('\\', '\\\\'))\
                     .replace('###EXPLOIT_PATH###', exploit.description.replace('`', '\`') if exploit else '')\
                     .replace('###PATCH_SUGGESTION###', patch.description.replace('`', '\`') if patch else '')\
+                    .replace('###PATCH_CODE###', patch.patchedCode.replace('\\', '\\\\'))\
                     .replace('###VULNERABILITIES###', ''.join(vuln_templates))\
                     .replace('###ANALYSIS_TYPES###', ''.join(analysis_type_templates))\
-                    .replace('###RULES###', rules)\
+                    .replace('###RULES###', ''.join(rules))\
                     .replace('###KLEE_FRIENDLY_CODE###', klee_friendly_code)\
                     .replace('###KLEE_ANALYSIS###', klee_analysis)\
                     .replace('###ADVANCED_KLEE_SEGMENTS###', ''.join(advanced_klee_segments))\
@@ -681,7 +718,7 @@ def get_report(request):
                     
             print(project.id)
                     
-            # Report.objects.create(content=template, code=project)
+            Report.objects.create(content=template, code=project)
             
             return HttpResponse(template, content_type='text/html')
     except Exception as e:
@@ -715,3 +752,27 @@ def load_dashboard_stats(request):
 		result_obj['vulnerabilities'] = vuln_names_obj
 
 	return JsonResponse({'result': result_obj})
+
+@api_view(['GET'])
+def fetch_reports(request):
+    pentest_reports = PentestReport.objects.filter(project__submittedBy=request.user)
+    reports = Report.objects.filter(code__submittedBy=request.user)
+
+    pentest_reports_data = [{
+        'id': report.project.id,
+        'title': str(report.project),
+        'time': report.createdAt.strftime("%b %d, %Y @ %H:%M:%S")
+    } for report in pentest_reports]
+
+    reports_data = [{
+        'id': report.code.id,
+        'title': str(report.code),
+        'time': report.createdAt.strftime("%b %d, %Y @ %H:%M:%S")
+    } for report in reports]
+
+    return JsonResponse({
+        'result': {
+            'pentestReports': pentest_reports_data,
+            'reports': reports_data
+        }
+    })

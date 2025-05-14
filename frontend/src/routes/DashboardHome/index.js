@@ -218,6 +218,13 @@ export default function DashboardHome() {
             <div className={styles.card}>
               <h2>Code Analysis Projects</h2>
               <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Time</th>
+                    <th>Language</th>
+                  </tr>
+                </thead>
                 <tbody>
                   {appState.projects && appState.projects.map(project => (
                     <tr 
@@ -226,6 +233,8 @@ export default function DashboardHome() {
                       onClick={() => loadProject(project.id)}
                     >
                       <td className={styles.whiteUnderline}>{project.title}</td>
+                      <td className={styles.whiteUnderline}>{project.time}</td>
+                      <td className={styles.whiteUnderline}>{project.language}</td>
                     </tr>
                   ))}
                  </tbody>
@@ -234,6 +243,12 @@ export default function DashboardHome() {
             <div className={styles.card}>
               <h2>Pentest Projects</h2>
               <table>
+              <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
                 <tbody>
                   {appState.pentestProjects && appState.pentestProjects.map(project => (
                     <tr
@@ -242,6 +257,7 @@ export default function DashboardHome() {
                       onClick={() => loadPentestProject(project.id)}
                     >
                       <td className={styles.whiteUnderline}>{project.title}</td>
+                      <td className={styles.whiteUnderline}>{project.time}</td>
                     </tr>
                   ))}
                 </tbody>

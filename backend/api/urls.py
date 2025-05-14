@@ -18,7 +18,8 @@ from .views import (
     load_project,
     get_pentest_report,
     load_dashboard_stats,
-    get_report
+    get_report,
+    fetch_reports
 )
 
 urlpatterns = [
@@ -40,5 +41,6 @@ urlpatterns = [
     path('get-csrf-token/', csrf_token_view),
     path('get-pentest-report/', get_pentest_report, name='get-pentest-report'),
     path('get-dashboard-stats/', load_dashboard_stats, name='load-dashboard-stats'),
-    path('get-report/', get_report, name='get-report')
+    path('get-report/', get_report, name='get-report'),
+    path('fetch-reports/', fetch_reports, name='fetch-reports')
 ]
