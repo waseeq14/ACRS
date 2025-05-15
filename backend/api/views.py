@@ -128,7 +128,7 @@ def file_save(request):
 		file_path = os.path.join(folder_name,f"code.{file_ext}")
 		with open(file_path,"w") as file:
 			file.write(file_contents)
-		print(file_path)
+		# print(file_path)
 
 		Code.objects.create(id=id, name=name, code=file_contents, language=file_ext, submittedBy=request.user)
 
@@ -141,8 +141,8 @@ def run_analysis(request):
 		file_path = request.POST.get("file_path") 
 		analysis_type = request.POST.get("analysis_type")
 		fuzzer_time = request.POST.get("fuzzer_time")
-		print(file_path)
-		print(analysis_type)
+		# print(file_path)
+		# print(analysis_type)
 		folder_path = os.path.dirname(file_path)
 		va = VA(file_path, folder_path, fuzzer_time if fuzzer_time else None)
 		va.setupEnv()
@@ -489,7 +489,9 @@ def load_project(request):
 
     result_obj = {
         'filePath': file_path,
-        'fileContent': file_content
+        'fileContent': file_content,
+        'selectedLanguage': project.language,
+        'projectName': project.name
     }
 
     if klee_result_obj is not None:
@@ -717,8 +719,6 @@ def get_report(request):
                     .replace('###FUZZER_SEEDS###', fuzzer_seeds)\
                     .replace('###FUZZER_ANALYSIS###', ''.join(fuzzer_analysis))
                     
-            print(project.id)
-                    
             Report.objects.create(content=template, code=project)
             
             return HttpResponse(template, content_type='text/html')
@@ -809,3 +809,35 @@ def delete_pentest_report(request):
     PentestReport.objects.filter(project__id=id).delete()
     
     return JsonResponse({'result': 'Report Deleted!'})
+
+@api_view(['DELETE'])
+def delete_project(request):
+    id = request.data.get('id')
+
+    if not id:
+        return JsonResponse({'error': 'Id not provided'}, status=400)
+    
+    project = Code.objects.filter(id=id).first()
+
+    if not project:
+        return JsonResponse({'error': 'Id not valid'}, status=400)
+    
+    Code.objects.filter(id=id).delete()
+    
+    return JsonResponse({'result': 'Project Deleted!'})
+
+@api_view(['DELETE'])
+def delete_pentest_project(request):
+    id = request.data.get('id')
+
+    if not id:
+        return JsonResponse({'error': 'Id not provided'}, status=400)
+    
+    project = PentestProject.objects.filter(id=id).first()
+
+    if not project:
+        return JsonResponse({'error': 'Id not valid'}, status=400)
+    
+    PentestProject.objects.filter(id=id).delete()
+    
+    return JsonResponse({'result': 'Project Deleted!'})

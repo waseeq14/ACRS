@@ -23,5 +23,7 @@ urlpatterns = [
     path('get-report/', views.get_report, name='get-report'),
     path('fetch-reports/', views.fetch_reports, name='fetch-reports'),
     path('delete-report/', views.delete_report, name='delete-report'),
-    path('delete-pentest-report/', views.delete_pentest_report, name='delete-pentest-report')
+    path('delete-pentest-report/', views.delete_pentest_report, name='delete-pentest-report'),
+    path('delete-project/', views.delete_project, name='delete-project'),
+    path('delete-pentest-project/', views.delete_pentest_project, name='delete-pentest-project')
 ]

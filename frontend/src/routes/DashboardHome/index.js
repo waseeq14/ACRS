@@ -14,6 +14,12 @@ export default function DashboardHome() {
 
   const [data, setData] = useState([])
 
+  const [openMenuId, setOpenMenuId] = useState(null);
+
+  const toggleMenu = (id) => {
+    setOpenMenuId(openMenuId === id ? null : id);
+  };
+
   // const data = [
   //   ['Vulnerability', 'Occurances'],
   //   ['Use After Free', 7],
@@ -89,6 +95,8 @@ export default function DashboardHome() {
         ...appState,
         filePath: response.data.result.filePath,
         fileContent: response.data.result.fileContent,
+        selectedLanguage: response.data.result.selectedLanguage,
+        projectName: response.data.result.projectName,
         kleeResult:  response.data.result.kleeResult,
         advancedKleeResult: response.data.result.advancedKleeResult,
         fuzzerResult: response.data.result.fuzzerResult,
@@ -102,6 +110,36 @@ export default function DashboardHome() {
       navigate('/dashboard/va')
     } catch (e) {
       console.log(e)
+      console.error('An error occurred.')
+    }
+  }
+
+  const deleteProject = async id => {
+    try {
+      await api.delete('/delete-project/', {
+        data: { id }
+      })
+
+      setAppState(prevState => ({
+        ...prevState,
+        projects: prevState.projects.filter(project => project.id !== id)
+      }));
+    } catch (e) {
+      console.error('An error occurred.')
+    }
+  }
+
+  const deletePentestProject = async id => {
+    try {
+      await api.delete('/delete-pentest-project/', {
+        data: { id }
+      })
+
+      setAppState(prevState => ({
+        ...prevState,
+        pentestProjects: prevState.pentestProjects.filter(project => project.id !== id)
+      }));
+    } catch (e) {
       console.error('An error occurred.')
     }
   }
@@ -235,6 +273,14 @@ export default function DashboardHome() {
                       <td className={styles.whiteUnderline}>{project.title}</td>
                       <td className={styles.whiteUnderline}>{project.time}</td>
                       <td className={styles.whiteUnderline}>{project.language}</td>
+                      <td className={styles.whiteUnderline}>
+                        <div onClick={e => {
+                          e.stopPropagation()
+                          deleteProject(project.id)
+                        }}>
+                          &times;
+                        </div>
+                      </td>
                     </tr>
                   ))}
                  </tbody>
@@ -258,6 +304,14 @@ export default function DashboardHome() {
                     >
                       <td className={styles.whiteUnderline}>{project.title}</td>
                       <td className={styles.whiteUnderline}>{project.time}</td>
+                      <td className={styles.whiteUnderline}>
+                        <div onClick={e => {
+                          e.stopPropagation()
+                          deletePentestProject(project.id)
+                        }}>
+                          &times;
+                        </div>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
