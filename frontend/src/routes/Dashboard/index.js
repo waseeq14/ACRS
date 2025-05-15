@@ -4,11 +4,12 @@ import { AppContext } from '../../context/AppContext'
 import api from '../../utils/api'
 
 import styles from './styles.module.css'
+import { ModalProvider } from '../../utils/ModalManager'
 
 export default function Dashboard({ navigationLinks }) {
   const navigate = useNavigate()
 
-  const { appState, setAppState } = useContext(AppContext)
+  const { appState, setAppState, showFuzzModal, setShowFuzzModal } = useContext(AppContext)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
@@ -107,7 +108,9 @@ export default function Dashboard({ navigationLinks }) {
         </div>
   
         <div className={styles.content}>
-          <Outlet />
+          <ModalProvider>
+            <Outlet />
+          </ModalProvider>
         </div>
       </>
     )

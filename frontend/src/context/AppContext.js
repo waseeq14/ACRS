@@ -56,9 +56,10 @@ export const AppProvider = ({ children }) => {
     // projects: {}
     // pentestProjects: {}
   })
+  const [showFuzzModal, setShowFuzzModal] = useState(false)
 
   return (
-    <AppContext.Provider value={{ appState, setAppState }}>
+    <AppContext.Provider value={{ appState, setAppState, showFuzzModal, setShowFuzzModal }}>
       {children}
     </AppContext.Provider>
   )

@@ -140,10 +140,11 @@ def run_analysis(request):
 	if request.method == "POST":
 		file_path = request.POST.get("file_path") 
 		analysis_type = request.POST.get("analysis_type")
+		fuzzer_time = request.POST.get("fuzzer_time")
 		print(file_path)
 		print(analysis_type)
 		folder_path = os.path.dirname(file_path)
-		va = VA(file_path, folder_path)
+		va = VA(file_path, folder_path, fuzzer_time if fuzzer_time else None)
 		va.setupEnv()
 		result = va.startAnalysis(analysis_type)
 
