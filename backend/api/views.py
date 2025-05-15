@@ -663,9 +663,10 @@ def get_report(request):
                                 new_template = new_template.replace('###ANALYSIS###', result['ai_analysis'].replace('`', '\`'))
                                 rules.append(new_template)
                                 
-                        except Exception:
-                            pass
-                        
+                        except Exception as e:
+                            rules_result = vuln.description.replace('`', '\`')
+                            rules.append(f'`{rules_result}`')
+
                 # Klee
                 if vuln.analysis_type == 'symbolic':
                     klee_friendly_code = read_file_content(f'{project_folder}/code_klee.{project.language}').replace('\\', '\\\\')
@@ -707,7 +708,7 @@ def get_report(request):
                     .replace('###ORIGINAL_CODE###', project.code.replace('\\', '\\\\'))\
                     .replace('###EXPLOIT_PATH###', exploit.description.replace('`', '\`') if exploit else '')\
                     .replace('###PATCH_SUGGESTION###', patch.description.replace('`', '\`') if patch else '')\
-                    .replace('###PATCH_CODE###', patch.patchedCode.replace('\\', '\\\\'))\
+                    .replace('###PATCH_CODE###', patch.patchedCode.replace('\\', '\\\\') if patch else '')\
                     .replace('###VULNERABILITIES###', ''.join(vuln_templates))\
                     .replace('###ANALYSIS_TYPES###', ''.join(analysis_type_templates))\
                     .replace('###RULES###', ''.join(rules))\

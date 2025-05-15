@@ -464,22 +464,35 @@
                 ###RULES###
             ];
 
-            const tableBody = document.getElementById('rules-table-body');
-            if (tableBody) {
-                snippets.forEach(snippet => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>
-                            <div class="code-block">
-                                <pre>${snippet.code}</pre>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="markdown-content">${marked.parse(snippet.analysis)}</div>
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
-                });
+            if (typeof snippets[0] === 'string') {
+                container.innerHTML = `
+                    <h3>Rules Result</h3>
+                    <div class="analysis-section">
+                        <div class="markdown-content" id="rules-analysis">
+                            <!-- Rules analysis markdown will be rendered here -->
+                        </div>
+                    </div>
+                `;
+
+                renderMarkdown('rules-analysis', snippets[0]);
+            } else {
+                const tableBody = document.getElementById('rules-table-body');
+                if (tableBody) {
+                    snippets.forEach(snippet => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>
+                                <div class="code-block">
+                                    <pre>${snippet.code}</pre>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="markdown-content">${marked.parse(snippet.analysis)}</div>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                }
             }
         }
 
