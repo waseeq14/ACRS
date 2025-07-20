@@ -1,0 +1,8 @@
+KLEE: WARNING: undefined reference to function: __ubsan_handle_divrem_overflow
+KLEE: WARNING: undefined reference to function: __ubsan_handle_nonnull_arg
+KLEE: WARNING: undefined reference to function: __ubsan_handle_out_of_bounds
+KLEE: WARNING: undefined reference to function: __ubsan_handle_pointer_overflow
+KLEE: WARNING: undefined reference to function: __ubsan_handle_type_mismatch_v1
+KLEE: WARNING ONCE: calling external: syscall(16, 0, 21505, 138962528108544) at src/runtime/POSIX/fd.c:997 10
+KLEE: WARNING ONCE: Alignment of memory from call "malloc" is not modelled. Using alignment of 8.
+KLEE: WARNING ONCE: calling __klee_posix_wrapped_main with extra arguments.

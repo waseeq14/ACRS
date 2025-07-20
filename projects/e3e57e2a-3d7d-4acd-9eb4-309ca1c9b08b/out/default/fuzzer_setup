@@ -1,0 +1,4 @@
+# environment variables:
+AFL_KILL_SIGNAL=9
+# command line:
+'afl-fuzz' '-i' '/home/parrot/Desktop/fyp/projects/e3e57e2a-3d7d-4acd-9eb4-309ca1c9b08b/in' '-o' '/home/parrot/Desktop/fyp/projects/e3e57e2a-3d7d-4acd-9eb4-309ca1c9b08b/out' '-V' '100' '-m' 'none' '--' '/home/parrot/Desktop/fyp/projects/e3e57e2a-3d7d-4acd-9eb4-309ca1c9b08b/code.cpp_binary' '@@'

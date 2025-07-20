@@ -1,0 +1,6 @@
+array r[4] : w32 -> w8 = symbolic
+(query [(Eq false
+             (Eq 0
+                 (URem w32 (ReadLSB w32 0 r)
+                           50)))]
+        false)

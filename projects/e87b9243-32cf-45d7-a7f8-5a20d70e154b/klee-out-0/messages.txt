@@ -1,0 +1,11 @@
+KLEE: Using STP solver backend
+KLEE: SAT solver: MiniSat
+KLEE: Deterministic allocator: Using quarantine queue size 8
+KLEE: Deterministic allocator: globals (start-address=0x7f24c1800000 size=10 GiB)
+KLEE: Deterministic allocator: constants (start-address=0x7f2241800000 size=10 GiB)
+KLEE: Deterministic allocator: heap (start-address=0x7e2241800000 size=1024 GiB)
+KLEE: Deterministic allocator: stack (start-address=0x7e0241800000 size=128 GiB)
+KLEE: ERROR: projects/e87b9243-32cf-45d7-a7f8-5a20d70e154b/code_klee.c:13: concretized symbolic size
+KLEE: NOTE: now ignoring this error at this location
+KLEE: ERROR: projects/e87b9243-32cf-45d7-a7f8-5a20d70e154b/code_klee.c:18: memory error: out of bound pointer
+KLEE: NOTE: now ignoring this error at this location

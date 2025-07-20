@@ -1,0 +1,9 @@
+KLEE: Using STP solver backend
+KLEE: SAT solver: MiniSat
+KLEE: Deterministic allocator: Using quarantine queue size 8
+KLEE: Deterministic allocator: globals (start-address=0x7f67e8000000 size=10 GiB)
+KLEE: Deterministic allocator: constants (start-address=0x7f6568000000 size=10 GiB)
+KLEE: Deterministic allocator: heap (start-address=0x7e6568000000 size=1024 GiB)
+KLEE: Deterministic allocator: stack (start-address=0x7e4568000000 size=128 GiB)
+KLEE: ERROR: projects/25894b22-a758-44d4-9f0f-80af22cdb721/code_klee.c:21: external call with symbolic argument: __ubsan_handle_out_of_bounds
+KLEE: NOTE: now ignoring this error at this location

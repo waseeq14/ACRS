@@ -1,0 +1,14 @@
+Error: memory error: use after free
+File: projects/e6c64198-dcd9-4d15-91b5-4b826cca721e/code_klee.c
+Line: 14
+assembly.ll line: 8064
+State: 1
+Stack: 
+	#000008064 in __klee_posix_wrapped_main() at projects/e6c64198-dcd9-4d15-91b5-4b826cca721e/code_klee.c:14
+	#100006083 in __user_main(1, 140703854231552, 140703854231568) at src/runtime/POSIX/klee_init_env.c:245
+	#200000537 in __uClibc_main(140688075259904, 1, 140703854231552, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
+	#300000702 in main(1, 140703854231552)
+Info: 
+	address: 140032228720640
+	next: object at 139458313715712 of size 4
+		MO7525[4] allocated at __klee_posix_wrapped_main():  %1 = alloca i32, align 4

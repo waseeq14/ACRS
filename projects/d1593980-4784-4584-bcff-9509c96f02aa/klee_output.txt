@@ -1,0 +1,19 @@
+Vulnerability: Buffer Overflow
+Test Case Name: /home/parrot/Desktop/fyp/projects/d1593980-4784-4584-bcff-9509c96f02aa/klee-last/test000001.ktest
+Input that triggered it: 
+- args: ['/home/parrot/Desktop/fyp/projects/d1593980-4784-4584-bcff-9509c96f02aa/output.bc']
+- num objects: 1
+- object 0: name: 'r'
+- object 0: size: 4
+- object 0: data: b'\x81\xff\xff\xff'
+- object 0: hex: 0x81ffffff
+- object 0: int: -127
+- object 0: uint: 4294967169
+- object 0: text: ....
+
+Likely Vulnerable Line(s): 21
+
+Vulnerability Names:
+- Buffer Overflow
+
+The vulnerability in the code is a buffer overflow caused by the `plop()` function, which returns a value that can exceed the bounds of the `buffer` array. The `plop()` function uses `getRand()` to generate a random number, which is then used as an index to write into the `buffer` array. Since `getRand()` can return a value that, when modulo 256 and added to 127, exceeds the size of the `buffer` (256), it can lead to writing outside the bounds of the array, causing a buffer overflow.

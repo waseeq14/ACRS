@@ -1,0 +1,16 @@
+Error: concretized symbolic size
+File: projects/e87b9243-32cf-45d7-a7f8-5a20d70e154b/code_klee.c
+Line: 13
+assembly.ll line: 7816
+State: 2
+Stack: 
+	#000007816 in rand_text() at projects/e87b9243-32cf-45d7-a7f8-5a20d70e154b/code_klee.c:13
+	#100007976 in __klee_posix_wrapped_main() at projects/e87b9243-32cf-45d7-a7f8-5a20d70e154b/code_klee.c:29
+	#200006069 in __user_main(1, 139803895005184, 139803895005200) at src/runtime/POSIX/klee_init_env.c:245
+	#300000523 in __uClibc_main(139788116033536, 1, 139803895005184, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
+	#400000688 in main(1, 139803895005184)
+Info: 
+  size expr: (ZExt w64 (URem w32 (ReadLSB w32 0 r)
+                                  50))
+  concretization : 0
+  unbound example: 1

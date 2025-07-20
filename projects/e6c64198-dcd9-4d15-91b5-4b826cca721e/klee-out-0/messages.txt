@@ -1,0 +1,9 @@
+KLEE: Using STP solver backend
+KLEE: SAT solver: MiniSat
+KLEE: Deterministic allocator: Using quarantine queue size 8
+KLEE: Deterministic allocator: globals (start-address=0x7ff64b400000 size=10 GiB)
+KLEE: Deterministic allocator: constants (start-address=0x7ff3cb400000 size=10 GiB)
+KLEE: Deterministic allocator: heap (start-address=0x7ef3cb400000 size=1024 GiB)
+KLEE: Deterministic allocator: stack (start-address=0x7ed3cb400000 size=128 GiB)
+KLEE: ERROR: projects/e6c64198-dcd9-4d15-91b5-4b826cca721e/code_klee.c:14: memory error: use after free
+KLEE: NOTE: now ignoring this error at this location

@@ -1,0 +1,10 @@
+Error: external call with symbolic argument: __ubsan_handle_out_of_bounds
+File: projects/023ddac2-7a86-4862-9f74-079f3361f16d/code_klee.c
+Line: 21
+assembly.ll line: 7836
+State: 2
+Stack: 
+	#000007836 in __klee_posix_wrapped_main() at projects/023ddac2-7a86-4862-9f74-079f3361f16d/code_klee.c:21
+	#100006071 in __user_main(1, 139717397970944, 139717397970960) at src/runtime/POSIX/klee_init_env.c:245
+	#200000525 in __uClibc_main(139701618999296, 1, 139717397970944, 0, 0, 0, 0) at libc/misc/internals/__uClibc_main.c:401
+	#300000690 in main(1, 139717397970944)

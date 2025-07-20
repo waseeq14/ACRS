@@ -18,161 +18,131 @@
 [1;34m                               ╔═══════════════════╗
 ═══════════════════════════════╣ [1;32mBasic information[1;34m ╠═══════════════════════════════
 [1;34m                               ╚═══════════════════╝[0m
-[1;37mOS: [0mLinux version 6.11+parrot-amd64 (palinuro@parrotsec.org) (x86_64-linux-gnu-gcc-12 (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Debian 6.11.5-1parrot1 (2024-12-13)
-[1;37mUser & Groups: [0muid=1000(parrot) gid=1004(parrot) groups=1004(parrot),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),108(netdev),116(bluetooth),1000(lpadmin),1001(scanner),1002(docker),1003(autologin)
-[1;37mHostname: [0mparrot
+[1;37mOS: [0mLinux version 4.15.0-101-generic (buildd@lgw01-amd64-003) (gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04)) #102-Ubuntu SMP Mon May 11 10:07:26 UTC 2020
+[1;37mUser & Groups: [0muid=1001(alice) gid=1001(alice) groups=1001(alice)
+[1;37mHostname: [0mwonderland
 
-[1;33m[+] [1;32m/usr/bin/fping[1;34m is available for network discovery[1;37m (LinPEAS can discover hosts, learn more with -h)
-[0m[1;33m[+] [1;32m/usr/bin/bash[1;34m is available for network discovery, port scanning and port forwarding[1;37m (LinPEAS can discover hosts, scan ports, and forward ports. Learn more with -h)
-[1;33m[+] [1;32m/usr/bin/nc[1;34m is available for network discovery & port scanning[1;37m (LinPEAS can discover hosts and scan ports, learn more with -h)
-[0m[1;33m[+] [1;32mnmap[1;34m is available for network discovery & port scanning, you should use it yourself
+[1;33m[+] [1;32m/bin/ping[1;34m is available for network discovery[1;37m (LinPEAS can discover hosts, learn more with -h)
+[0m[1;33m[+] [1;32m/bin/bash[1;34m is available for network discovery, port scanning and port forwarding[1;37m (LinPEAS can discover hosts, scan ports, and forward ports. Learn more with -h)
+[1;33m[+] [1;32m/bin/nc[1;34m is available for network discovery & port scanning[1;37m (LinPEAS can discover hosts and scan ports, learn more with -h)
 [0m
 
-[1;34m                              ╔════════════════════╗
-══════════════════════════════╣ [1;32mSystem Information[1;34m ╠══════════════════════════════
-[1;34m                              ╚════════════════════╝[0m
-[1;34m╔══════════╣ [1;32mOperative system
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#kernel-exploits
-[0mLinux version 6.11+parrot-amd64 (palinuro@parrotsec.org) (x86_64-linux-gnu-gcc-12 (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Debian 6.11.5-1parrot1 (2024-12-13)
-Distributor ID:	Debian
-Description:	Parrot Security 6.3 (lorikeet)
-Release:	6.3
-Codename:	lory
-
-[1;34m╔══════════╣ [1;32mSudo version
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#sudo-version
-[0mSudo version 1.9.13p3
 
 
-[1;34m╔══════════╣ [1;32mPATH
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#writable-path-abuses
-[0m[1;31;103m/home/parrot/.nvm/versions/node[0m/v22.8.0/bin:[1;31;103m/home/parrot/.cargo/bin[0m:/usr/local/bin:/usr/bin:/bin:/usr/games:[1;31;103m/home/parrot/.rvm/bin[0m:[1;31;103m/home/parrot/go/bin[0m:[1;31;103m/home/parrot/tools/debug/pwninit[0m:[1;31;103m/home/parrot/go/bin[0m:[1;31;103m/home/parrot/.foundry/bin[0m:/snap/klee/10/usr/local/bin
 
-[1;34m╔══════════╣ [1;32mDate & uptime
-[0mWed 30 Apr 09:48:00 BST 2025
- 09:48:00 up 8 min,  1 user,  load average: 0.71, 0.62, 0.33
 
-[1;34m╔══════════╣ [1;32mUnmounted file-system?
-[0m[1;34m╚ [1;34m[3mCheck if you can mount umounted devices
-[0mUUID=CA5E-7691                            [1;34m/boot/efi[0m      vfat    defaults,noatime,nodiratime 0 2
-[1;34mUUID=e168ae3a-2088-42c9-8a60-deba11db3c5f[0m [1;34m/[0m              btrfs   subvol=@,defaults,noatime,nodiratime,autodefrag,compress=zstd,discard 0 1
-[1;34mUUID=e168ae3a-2088-42c9-8a60-deba11db3c5f[0m [1;34m/home[0m          btrfs   subvol=@home,defaults,noatime,nodiratime,autodefrag,compress=zstd,discard 0 2
 
-[1;34m╔══════════╣ [1;32mAny sd*/disk* disk in /dev? (limit 20)
-[0mdisk
-sda
-sda1
-sda2
 
-[1;34m╔══════════╣ [1;32mEnvironment
-[0m[1;34m╚ [1;34m[3mAny private information inside environment variables?
-[0mSHELL=/bin/bash
-NVM_INC=/home/parrot/.nvm/versions/node/v22.8.0/include/node
-LC_ADDRESS=en_GB.UTF-8
-LC_NAME=en_GB.UTF-8
-LC_MONETARY=en_GB.UTF-8
-[1;31mPWD[0m=/home/parrot
-LOGNAME=parrot
-XDG_SESSION_TYPE=tty
-MOTD_SHOWN=pam
-HOME=/home/parrot
-LC_PAPER=en_GB.UTF-8
-LANG=en_GB.UTF-8
-SSH_CONNECTION=127.0.0.1 56150 127.0.0.1 22
-NVM_DIR=/home/parrot/.nvm
-XDG_SESSION_CLASS=user
-LC_IDENTIFICATION=en_GB.UTF-8
-USER=parrot
-SHLVL=2
-NVM_CD_FLAGS=
-LC_TELEPHONE=en_GB.UTF-8
-LC_MEASUREMENT=en_GB.UTF-8
-XDG_SESSION_ID=4
-XDG_RUNTIME_DIR=/run/user/1000
-SSH_CLIENT=127.0.0.1 56150 22
-LC_TIME=en_GB.UTF-8
-PATH=/home/parrot/.nvm/versions/node/v22.8.0/bin:/home/parrot/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/games:/home/parrot/.rvm/bin:/home/parrot/go/bin:/home/parrot/tools/debug/pwninit:/home/parrot/go/bin:/home/parrot/.foundry/bin:/snap/klee/10/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin
-DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
-NVM_BIN=/home/parrot/.nvm/versions/node/v22.8.0/bin
-LC_NUMERIC=en_GB.UTF-8
-_=/usr/bin/env
 
-[1;34m╔══════════╣ [1;32mSearching Signature verification failed in dmesg
-[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#dmesg-signature-verification-failed
-[0m[1;90mdmesg Not Found
+
+
+
+[1;34m                               ╔═══════════════════╗
+═══════════════════════════════╣ [1;32mUsers Information[1;34m ╠═══════════════════════════════
+[1;34m                               ╚═══════════════════╝[0m
+[1;34m╔══════════╣ [1;32mMy user
+[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#users
+[0muid=1001([1;96m[1;95malice[0m[0m) gid=1001([1;96m[1;95malice[0m[0m) groups=1001([1;96m[1;95malice[0m[0m)
+
+[1;34m╔══════════╣ [1;32mDo I have PGP keys?
+[0m/usr/bin/gpg
+[1;90mnetpgpkeys Not Found
+[0m[1;90mnetpgp Not Found
 [0m
-[1;34m╔══════════╣ [1;32mExecuting Linux Exploit Suggester
-[0m[1;34m╚ [1;34m[3mhttps://github.com/mzet-/linux-exploit-suggester
-[0m[+] [1;31m[CVE-2022-2586] nft_object UAF[0m
+[1;34m╔══════════╣ [1;32mChecking 'sudo -l', /etc/sudoers, and /etc/sudoers.d
+[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#sudo-and-suid
+[0mMatching Defaults entries for [1;31malice[0m on wonderland:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
 
-   Details: https://www.openwall.com/lists/oss-security/2022/08/29/5
-   Exposure: less probable
-   Tags: ubuntu=(20.04){kernel:5.12.13}
-   Download URL: https://www.openwall.com/lists/oss-security/2022/08/29/5/1
-   Comments: kernel.unprivileged_userns_clone=1 required (to obtain CAP_NET_ADMIN)
-
-[+] [1;31m[CVE-2021-4034] PwnKit[0m
-
-   Details: https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
-   Exposure: less probable
-   Tags: ubuntu=10|11|12|13|14|15|16|17|18|19|20|21,debian=7|8|9|10|11,fedora,manjaro
-   Download URL: https://codeload.github.com/berdav/CVE-2021-4034/zip/main
-
-[+] [1;31m[CVE-2021-3156] sudo Baron Samedit[0m
-
-   Details: https://www.qualys.com/2021/01/26/cve-2021-3156/baron-samedit-heap-based-overflow-sudo.txt
-   Exposure: less probable
-   Tags: mint=19,ubuntu=18|20, debian=10
-   Download URL: https://codeload.github.com/blasty/CVE-2021-3156/zip/main
-
-[+] [1;31m[CVE-2021-3156] sudo Baron Samedit 2[0m
-
-   Details: https://www.qualys.com/2021/01/26/cve-2021-3156/baron-samedit-heap-based-overflow-sudo.txt
-   Exposure: less probable
-   Tags: centos=6|7|8,ubuntu=14|16|17|18|19|20, debian=9|10
-   Download URL: https://codeload.github.com/worawit/CVE-2021-3156/zip/main
-
-[+] [1;31m[CVE-2021-22555] Netfilter heap out-of-bounds write[0m
-
-   Details: https://google.github.io/security-research/pocs/linux/cve-2021-22555/writeup.html
-   Exposure: less probable
-   Tags: ubuntu=20.04{kernel:5.8.0-*}
-   Download URL: https://raw.githubusercontent.com/google/security-research/master/pocs/linux/cve-2021-22555/exploit.c
-   ext-url: https://raw.githubusercontent.com/bcoles/kernel-exploits/master/CVE-2021-22555/exploit.c
-   Comments: ip_tables kernel module must be loaded
-
-[+] [1;31m[CVE-2017-5618] setuid screen v4.5.0 LPE[0m
-
-   Details: https://seclists.org/oss-sec/2017/q1/184
-   Exposure: less probable
-   Download URL: https://www.exploit-db.com/download/https://www.exploit-db.com/exploits/41154
+User [1;31malice[0m may run the following commands on wonderland:
+    (rabbit) /usr/bin/python3.6 /home/[1;31malice[0m/walrus_and_the_carpenter.py
+[1;31mSudoers file: /etc/sudoers.d/alice is readable[0m
+[1;31malice[0m [1;31mALL[0m = (rabbit) /usr/bin/python3.6 /home/[1;31malice[0m/walrus_and_the_carpenter.py
 
 
-[1;34m╔══════════╣ [1;32mProtections
-[0m[1;34m═╣ [1;32mAppArmor enabled? .............. [0m[0mYou do not have enough privilege to read the profile set.
-apparmor module is loaded.
-[1;34m═╣ [1;32mAppArmor profile? .............. [0m[0m[1;31munconfined[0m
-[1;34m═╣ [1;32mis linuxONE? ................... [0m[0m[1;90ms390x Not Found
-[0m[1;34m═╣ [1;32mgrsecurity present? ............ [0m[0m[1;90mgrsecurity Not Found
-[0m[1;34m═╣ [1;32mPaX bins present? .............. [0m[0m[1;90mPaX Not Found
-[0m[1;34m═╣ [1;32mExecshield enabled? ............ [0m[0m[1;90mExecshield Not Found
-[0m[1;34m═╣ [1;32mSELinux enabled? ............... [0m[0mSELinux status:                 [1;31mdisabled[0m
-[1;34m═╣ [1;32mSeccomp enabled? ............... [0m[0m[1;31mdisabled[0m
-[1;34m═╣ [1;32mUser namespace? ................ [0m[0m[1;32menabled[0m
-[1;34m═╣ [1;32mCgroup2 enabled? ............... [0m[0m[1;32menabled[0m
-[1;34m═╣ [1;32mIs ASLR enabled? ............... [0m[0m[1;32mYes[0m
-[1;34m═╣ [1;32mPrinter? ....................... [0m[0m[1;90mNo
-[0m[1;34m═╣ [1;32mIs this a virtual machine? ..... [0m[0m[1;31mYes (oracle)[0m
+[1;34m╔══════════╣ [1;32mChecking sudo tokens
+[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#reusing-sudo-tokens
+[0mptrace protection [1;32mis enabled[0m (1)
 
+[1;34m╔══════════╣ [1;32mChecking Pkexec policy
+[0m[1;34m╚ [1;34m[3mhttps://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/interesting-groups-linux-pe/index.html#pe---method-2
+[0m
+[Configuration]
+AdminIdentities=unix-user:0
+[Configuration]
+AdminIdentities=unix-group:sudo;unix-group:admin
 
+[1;34m╔══════════╣ [1;32mSuperusers
+[0m[1;31mroot[0m:x:0:0:root:/root:/bin/bash
 
+[1;34m╔══════════╣ [1;32mUsers with console
+[0m[1;96m[1;95malice[0m[0m:x:1001:1001:Alice Liddell,,,:/home/alice:/bin/bash
+[1;96mhatter[0m:x:1003:1003:Mad Hatter,,,:/home/hatter:/bin/bash
+[1;96mrabbit[0m:x:1002:1002:White Rabbit,,,:/home/rabbit:/bin/bash
+[1;31mroot[0m:x:0:0:root:/root:/bin/bash
+[1;96mtryhackme[0m:x:1000:1000:tryhackme:/home/tryhackme:/bin/bash
 
+[1;34m╔══════════╣ [1;32mAll users & groups
+[0muid=0[1;31m([1;31mroot[0m)[0m gid=0[1;31m(root)[0m groups=0[1;31m(root)[0m
+uid=1([1;34m[1;32mdaemon[0m[0m) gid=1([1;34m[1;32mdaemon[0m[0m) groups=1([1;34m[1;32mdaemon[0m[0m)
+uid=10([1;34muucp[0m) gid=10([1;34muucp[0m) groups=10([1;34muucp[0m)
+uid=100([1;34msystemd-network[0m) gid=102([1;34msystemd-network[0m) groups=102([1;34msystemd-network[0m)
+uid=1000([1;96mtryhackme[0m) gid=1000([1;96mtryhackme[0m) groups=1000([1;96mtryhackme[0m),4[1;31m(adm)[0m,24[1;32m(cdrom)[0m,27[1;31m(sudo)[0m,30(dip),46[1;32m(plugdev)[0m,108[1;31m([1;34mlxd[0m)[0m
+uid=1001([1;96m[1;95malice[0m[0m) gid=1001([1;96m[1;95malice[0m[0m) groups=1001([1;96m[1;95malice[0m[0m)
+uid=1002([1;96mrabbit[0m) gid=1002([1;96mrabbit[0m) groups=1002([1;96mrabbit[0m)
+uid=1003([1;96mhatter[0m) gid=1003([1;96mhatter[0m) groups=1003([1;96mhatter[0m)
+uid=101([1;34msystemd-resolve[0m) gid=103([1;34msystemd-resolve[0m) groups=103([1;34msystemd-resolve[0m)
+uid=102([1;34m[1;32msyslog[0m[0m) gid=106([1;34m[1;32msyslog[0m[0m) groups=106([1;34m[1;32msyslog[0m[0m),4[1;31m(adm)[0m
+uid=103([1;34mmessagebus[0m) gid=107([1;34mmessagebus[0m) groups=107([1;34mmessagebus[0m)
+uid=104([1;34m_apt[0m) gid=65534[1;32m(nogroup)[0m groups=65534[1;32m(nogroup)[0m
+uid=105[1;31m([1;34mlxd[0m)[0m gid=65534[1;32m(nogroup)[0m groups=65534[1;32m(nogroup)[0m
+uid=106([1;34muuidd[0m) gid=110([1;34muuidd[0m) groups=110([1;34muuidd[0m)
+uid=107([1;34mdnsmasq[0m) gid=65534[1;32m(nogroup)[0m groups=65534[1;32m(nogroup)[0m
+uid=108([1;34mlandscape[0m) gid=112([1;34mlandscape[0m) groups=112([1;34mlandscape[0m)
+uid=109([1;34mpollinate[0m) gid=1([1;34m[1;32mdaemon[0m[0m) groups=1([1;34m[1;32mdaemon[0m[0m)
+uid=110([1;34msshd[0m) gid=65534[1;32m(nogroup)[0m groups=65534[1;32m(nogroup)[0m
+uid=13([1;34mproxy[0m) gid=13([1;34mproxy[0m) groups=13([1;34mproxy[0m)
+uid=2(bin) gid=2(bin) groups=2(bin)
+uid=3([1;34msys[0m) gid=3([1;34msys[0m) groups=3([1;34msys[0m)
+uid=33([1;34m[1;32mwww-data[0m[0m) gid=33([1;34m[1;32mwww-data[0m[0m) groups=33([1;34m[1;32mwww-data[0m[0m)
+uid=34([1;34mbackup[0m) gid=34([1;34mbackup[0m) groups=34([1;34mbackup[0m)
+uid=38([1;34mlist[0m) gid=38([1;34mlist[0m) groups=38([1;34mlist[0m)
+uid=39([1;34mirc[0m) gid=39([1;34mirc[0m) groups=39([1;34mirc[0m)
+uid=4([1;34msync[0m) gid=65534[1;32m(nogroup)[0m groups=65534[1;32m(nogroup)[0m
+uid=41([1;34mgnats[0m) gid=41([1;34mgnats[0m) groups=41([1;34mgnats[0m)
+uid=5([1;34mgames[0m) gid=60([1;34mgames[0m) groups=60([1;34mgames[0m)
+uid=6([1;34mman[0m) gid=12([1;34mman[0m) groups=12([1;34mman[0m)
+uid=65534([1;34mnobody[0m) gid=65534[1;32m(nogroup)[0m groups=65534[1;32m(nogroup)[0m
+uid=7([1;34mlp[0m) gid=7([1;34mlp[0m) groups=7([1;34mlp[0m)
+uid=8([1;34m[1;32mmail[0m[0m) gid=8([1;34m[1;32mmail[0m[0m) groups=8([1;34m[1;32mmail[0m[0m)
+uid=9([1;34mnews[0m) gid=9([1;34mnews[0m) groups=9([1;34mnews[0m)
 
+[1;34m╔══════════╣ [1;32mLogin now
+[0m 08:02:30 up 1 min,  0 users,  load average: 0.31, 0.18, 0.07
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
 
+[1;34m╔══════════╣ [1;32mLast logons
+[0mreboot   [1;31msys[0mtem boot  Mon May 25 18:13:33 2020 - Mon May 25 18:30:17 2020  (00:16)     0.0.0.0
+[1;96m[1;95malice[0m[0m    pts/1        Mon May 25 16:37:21 2020 - Mon May 25 18:07:15 2020  (01:29)     192.168.170.1
+[1;96mtryhackme[0m pts/0        Mon May 25 16:36:44 2020 - Mon May 25 18:07:10 2020  (01:30)     192.168.170.1
+reboot   [1;31msys[0mtem boot  Mon May 25 16:26:29 2020 - Mon May 25 18:07:22 2020  (01:40)     0.0.0.0
+[1;96mtryhackme[0m pts/0        Mon May 25 00:22:10 2020 - Mon May 25 03:53:07 2020  (03:30)     192.168.170.1
+[1;96mtryhackme[0m tty1         Mon May 25 00:21:49 2020 - Mon May 25 00:22:14 2020  (00:00)     0.0.0.0
+reboot   [1;31msys[0mtem boot  Mon May 25 00:21:03 2020 - Mon May 25 03:53:23 2020  (03:32)     0.0.0.0
+reboot   [1;31msys[0mtem boot  Mon May 25 00:20:26 2020 - Mon May 25 00:20:40 2020  (00:00)     0.0.0.0
 
+wtmp begins Mon May 25 00:20:26 2020
 
+[1;34m╔══════════╣ [1;32mLast time logon each user
+[0mUsername         Port     From             Latest
+[1;96mtryhackme[0m        pts/0    10.8.6.110       Fri Jun  5 22:28:57 +0000 2020
+[1;96m[1;95malice[0m[0m            pts/1    192.168.170.1    Mon May 25 16:37:21 +0000 2020
 
-
+[1;34m╔══════════╣ [1;32mDo not forget to test 'su' as any other user with shell: without password and with their names as password (I don't do it in FAST mode...)
+[0m
+[0m[1;34m╔══════════╣ [1;32mDo not forget to execute 'sudo -l' without password or with valid password (if you know it)!!
+[0m
+[0m
 
 
 

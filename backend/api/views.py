@@ -364,8 +364,8 @@ def csrf_token_view(request):
 
 @api_view(['GET'])
 def fetch_projects(request):
-    pentest_projects = PentestProject.objects.filter(submittedBy=request.user)
-    projects = Code.objects.filter(submittedBy=request.user)
+    pentest_projects = PentestProject.objects.filter(submittedBy=request.user).order_by('-createdAt')
+    projects = Code.objects.filter(submittedBy=request.user).order_by('-createdAt')
 
     pentest_projects_data = [{
         'id': project.id,
@@ -757,8 +757,8 @@ def load_dashboard_stats(request):
 
 @api_view(['GET'])
 def fetch_reports(request):
-    pentest_reports = PentestReport.objects.filter(project__submittedBy=request.user)
-    reports = Report.objects.filter(code__submittedBy=request.user)
+    pentest_reports = PentestReport.objects.filter(project__submittedBy=request.user).order_by('-createdAt')
+    reports = Report.objects.filter(code__submittedBy=request.user).order_by('-createdAt')
 
     pentest_reports_data = [{
         'id': report.project.id,

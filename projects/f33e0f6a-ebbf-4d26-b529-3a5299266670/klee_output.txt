@@ -1,0 +1,18 @@
+Vulnerability:  
+The vulnerability is a buffer overflow caused by writing to an out-of-bounds index in the `buffer` array. The function `plop()` generates a random index that can exceed the bounds of the `buffer` array, leading to undefined behavior.
+
+Test Case Name:  
+`/home/parrot/Desktop/fyp/projects/f33e0f6a-ebbf-4d26-b529-3a5299266670/klee-last/test000001.ktest`
+
+Input that triggered it:  
+- `object 0: int : -127`
+- `object 0: uint: 4294967169`
+
+Likely Vulnerable Line(s):  
+- Line 21 in `code_klee.c`: `buffer[plop()] = '!';`
+
+Vulnerability Names:  
+- Buffer Overflow
+
+Unordered List of Vulnerability Names:
+- Buffer Overflow
