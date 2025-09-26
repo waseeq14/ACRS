@@ -1,4 +1,4 @@
-# ACRS — Automated Code Review & Exploit System
+# ACRS — Automated Cyber Reasoning System
 
 *ACRS* is a Final Year Project that combines different security analysis techniques into one automated framework.  
 It is designed to *find vulnerabilities, generate exploits, and even provide mitigation steps* — making it useful for both offensive and defensive security research.
