@@ -3,6 +3,7 @@
 *ACRS* is a Final Year Project that combines different security analysis techniques into one automated framework.  
 It is designed to *find vulnerabilities, generate exploits, and even provide mitigation steps* — making it useful for both offensive and defensive security research.
 
+Demonstration: https://youtu.be/ym0mpNBknpw
 ---
 
 ## 🚀 Project Overview
@@ -63,6 +64,14 @@ Each run produces:
 •⁠  ⁠*Red Teamers* → quickly find and simulate exploits.  
 •⁠  ⁠*Blue Teamers* → get patch recommendations and hardening guidance.  
 •⁠  ⁠*CI/CD Pipelines* → integrate automated vulnerability detection into development workflow.  
+
+---
+
+## ⚙️ Deployment & Running
+ 
+Instructions for deploying and running ACRS are **under development**.  
+Since the project integrates multiple tools (Semgrep, KLEE, AFL++, LLMs, etc.), it requires careful environment setup and configuration.  
+A step-by-step deployment guide will be added soon.
 
 ---
 
