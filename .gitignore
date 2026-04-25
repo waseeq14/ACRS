@@ -9,6 +9,9 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+lib64/
+lib/
+
 
 .env
 
@@ -16,6 +19,8 @@ __pycache__/
 backend/vulnerability_analysis/testing/
 backend/vulnerability_analysis/final_tc/
 testFiles/
+Exploit/
+testing/
 
 # Projects (runtime generated)
 projects/

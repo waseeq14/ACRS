@@ -92,5 +92,10 @@ Final Year Project
 BS CyberSec. 
 Comsats University Islamabad
 
+## Acknowledgements
 
+This project uses Semgrep rules from:
+- https://github.com/0xdea/semgrep-rules
+
+All credit for the rules goes to the original author.
 ---
