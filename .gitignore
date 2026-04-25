@@ -11,6 +11,7 @@ __pycache__/
 *.pyd
 lib64/
 lib/
+lib64
 
 
 .env
